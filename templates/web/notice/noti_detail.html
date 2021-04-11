@@ -84,23 +84,21 @@
                                 <th>순번</th>
                                 <td>{{noti.noti_seq}}</td>
                             </tr>
-                            
+
                             <tr>
                                 <th>제목</th>
                                 <td>{{noti.noti_title}}</td>
                             </tr>
-                            
+
+                            {% if noti.attach_file %}
                             <tr>
                                 <th>이미지</th>
                                 <td>
-                                {% if noti.attach_file %}
 	                                <img src="noti_download?attach_file={{noti.attach_file}}&attach_path={{noti.attach_path}}" width="300px" height="300px">
-                                {% else %}
-                                	파일 없음
-                                {% endif %}
                                 </td>
                             </tr>
-                            
+                                {% endif %}
+
                             <tr>
                                 <th>내용</th>
                                 <td id="noti_content">{{noti.noti_content}}</td>

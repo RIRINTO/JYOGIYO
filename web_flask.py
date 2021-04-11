@@ -226,7 +226,7 @@ def noti_mod():
         attach_path, attach_file = saveFile(noti_file)
 
     cnt = daoNotice.update(noti_seq, noti_title, noti_content, attach_path, attach_file, owner_id)
-    print(cnt)
+
     if cnt:
         return redirect("noti_detail?noti_seq=" + noti_seq)
     return '<script>alert("공지사항 수정에 실패하였습니다.");history.back()</script>'
