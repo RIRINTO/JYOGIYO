@@ -44,7 +44,7 @@ def register():
     owner_pwd = request.form["owner_pwd"]
     owner_str_name = request.form["owner_str_name"]
     owner_str_num = request.form["owner_str_num"].replace("-", "")
-    owner_str_tel = request.form["owner_str_tel"].replace("-", "")
+    owner_str_tel = request.form["owner_str_tel"]
 
     owner_add1 = request.form["owner_add1"]
     owner_add2 = request.form["owner_add2"]
@@ -52,16 +52,11 @@ def register():
     owner_seq = daoOwner.owner_seq_gen()
 
     logo = request.files["logo"]
-    upload_dir = DIR_UPLOAD + '/' + str(owner_seq)
-    os.makedirs(upload_dir, exist_ok=True)
 
-    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(logo.filename)
-    logo.save(os.path.join(upload_dir, attach_file))
+    attach_path, attach_file = saveFile(logo)
 
     try:
-        cnt = daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, upload_dir, attach_file, "in_date", owner_id, "up_date", owner_id)
-        print('cnt', cnt)
-        if cnt:
+        if daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, attach_path, attach_file):
             return redirect("login.html")
     except:
         pass
@@ -76,7 +71,7 @@ def id_check_ajax():
 
 @app.route('/owner_str_num_check.ajax', methods=['POST'])
 def owner_str_num_check_ajax():
-    owner_str_num = request.form['owner_str_num']
+    owner_str_num = request.form['owner_str_num'].replace('-', '')
     return jsonify({'cnt': daoOwner.owner_str_num_check(owner_str_num)})
 
 
@@ -91,6 +86,8 @@ def login():
         session["owner_id"] = obj["owner_id"]
         session["admin_yn"] = obj["admin_yn"]
         session["owner_name"] = obj["owner_name"]
+        session["logo_path"] = obj["logo_path"]
+        session["logo_file"] = obj["logo_file"]
         return render_template('web/dashboard/dashboard.html', obj=obj)
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
@@ -106,7 +103,7 @@ def account_manage():
         return redirect('login.html')
     owner_seq = session["owner_seq"]
     obj = daoOwner.select(owner_seq)
-    if obj:
+    if obj and obj['owner_str_num']:
         owner_str_num = list(obj['owner_str_num'])
         owner_str_num.insert(3, '-')
         owner_str_num.insert(6, '-')
@@ -120,12 +117,13 @@ def account_show():
         return redirect('login.html')
     owner_seq = session["owner_seq"]
     obj = daoOwner.select(owner_seq)
-    if obj:
+    if obj and obj['owner_str_num']:
         owner_str_num = list(obj['owner_str_num'])
         owner_str_num.insert(3, '-')
         owner_str_num.insert(6, '-')
         obj['owner_str_num'] = ''.join(owner_str_num)
     return render_template('web/account/account_show.html', owner=obj)
+
 
 @app.route('/account_mod_form', methods=["POST"])
 def account_mod_form():
@@ -139,8 +137,7 @@ def account_mod_form():
 
     owner_add1 = request.form["owner_add1"]
     owner_add2 = request.form["owner_add2"]
-    cnt = daoOwner.update(owner_seq,owner_name,owner_pwd)
-
+    cnt = daoOwner.update(owner_seq, owner_name, owner_pwd)
 
 
 ##################   notice   ######################
@@ -291,7 +288,7 @@ def cate_detail():
         return redirect('login.html')
     owner_seq = escape(session['owner_seq'])
     cate_seq = request.args.get('cate_seq')
-    obj = daoCategory.myselect(owner_seq, cate_seq)
+    obj = daoCategory.select(owner_seq, cate_seq)
     return render_template('web/category/cate_detail.html', cate=obj)
 
 
@@ -303,27 +300,14 @@ def cate_add():
     cate_name = request.form['cate_name']
     cate_content = request.form['cate_content']
     cate_display_yn = request.form['cate_display_yn']
+    attach_path, attach_file = '', ''
 
     cate_file = request.files['cate_file']
-    upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
-    attach_file_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(cate_file.filename)
-    os.makedirs(upload_dir, exist_ok=True)
-    cate_file.save(os.path.join(upload_dir, attach_file_temp))
-
-    attach_path = ""
-    attach_file = ""
     if cate_file:
-        attach_path = upload_dir
-        attach_file = attach_file_temp
-        print("file O")
-    else:
-        print("file X")
-
-    print('attach_path', attach_path)
-    print('attach_file', attach_file)
+        attach_path, attach_file = saveFile(cate_file)
 
     try:
-        cnt = daoCategory.myinsert(0, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, None, "in_user_id", None, "up_user_id")
+        cnt = daoCategory.myinsert(owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file)
         if cnt:
             return redirect('cate_list')
     except:
@@ -333,10 +317,8 @@ def cate_add():
 
 @app.route('/cate_mod', methods=['POST'])
 def cate_mod():
-    if 'owner_seq' not in session:
-        return redirect('login.html')
-    owner_seq = escape(session['owner_seq'])
     cate_seq = request.form['cate_seq']
+    owner_seq = session['owner_seq']
     cate_name = request.form['cate_name']
     cate_content = request.form['cate_content']
     cate_display_yn = request.form['cate_display_yn']
@@ -349,7 +331,7 @@ def cate_mod():
         attach_path = ""
 
     cate_file = request.files['cate_file']
-    upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
+    upload_dir = DIR_UPLOAD + '/' + escape(session['cate_seq'])
     attach_file_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(cate_file.filename)
     os.makedirs(upload_dir, exist_ok=True)
     cate_file.save(os.path.join(upload_dir, attach_file_temp))
@@ -365,7 +347,7 @@ def cate_mod():
         attach_file = attach_file
         print("file X")
 
-    cnt = daoCategory.myupdate(cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, "up_user_id")
+    cnt = daoCategory.myupdate(owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, "up_user_id")
     print(cnt)
     if cnt:
         return redirect("cate_detail?cate_seq=" + cate_seq)

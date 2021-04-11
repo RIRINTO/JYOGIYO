@@ -31,8 +31,8 @@
                UP_DATE,
                UP_USER_ID
         FROM CATEGORY
-        WHERE CATE_SEQ = :V_CATE_SEQ
-          AND OWNER_SEQ = :V_OWNER_SEQ
+        WHERE OWNER_SEQ = :V_OWNER_SEQ
+          AND CATE_SEQ = :V_CATE_SEQ
     </select>
     
 <!-- ################## insert ################## -->

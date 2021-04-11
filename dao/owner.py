@@ -50,9 +50,9 @@ class DaoOwner:
                    'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]}
         return obj
 
-    def insert(self, owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, in_date, in_user_id, up_date, up_user_id):
+    def insert(self, owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, owner_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
@@ -78,12 +78,12 @@ class DaoOwner:
     def id_check(self, owner_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "id_check")
         self.cs.execute(sql, (owner_id,))
-        return self.cs.rowcount
+        return self.cs.fetchone()[0]
 
     def owner_str_num_check(self, owner_str_num):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "owner_str_num_check")
         self.cs.execute(sql, (owner_str_num,))
-        return self.cs.rowcount
+        return self.cs.fetchone()[0]
 
 
 if __name__ == '__main__':

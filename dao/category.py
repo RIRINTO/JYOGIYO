@@ -31,14 +31,14 @@ class DaoCategory:
         self.cs.execute(sql, (owner_seq,))
         return list(map(categorySort, self.cs.fetchall()))
 
-    def myselect(self, cate_seq, owner_seq):
+    def select(self, owner_seq, cate_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select")
-        self.cs.execute(sql, (cate_seq, owner_seq))
+        self.cs.execute(sql, (owner_seq, cate_seq))
         return categorySort(self.cs.fetchone())
 
-    def myinsert(self, cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def myinsert(self, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, owner_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

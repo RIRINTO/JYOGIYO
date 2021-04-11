@@ -154,22 +154,7 @@
 
     <select id="id_check">
     select
-			owner_seq,
-			owner_name,
-			owner_id,
-			owner_pwd,
-			owner_str_name,
-			owner_str_num,
-			owner_str_tel,
-			owner_add1,
-			owner_add2,
-			logo_path,
-			logo_file,
-			admin_yn,
-			in_date,
-			in_user_id,
-			up_date,
-			up_user_id
+			count(*)
  	 from
  			owner
      where
@@ -179,22 +164,7 @@
 
     <select id="owner_str_num_check">
     select
-			owner_seq,
-			owner_name,
-			owner_id,
-			owner_pwd,
-			owner_str_name,
-			owner_str_num,
-			owner_str_tel,
-			owner_add1,
-			owner_add2,
-			logo_path,
-			logo_file,
-			admin_yn,
-			in_date,
-			in_user_id,
-			up_date,
-			up_user_id
+			count(*)
  	 from
  			owner
      where
