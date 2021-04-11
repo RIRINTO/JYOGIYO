@@ -89,6 +89,7 @@ def login():
     if obj:
         session["owner_seq"] = obj["owner_seq"]
         session["owner_id"] = obj["owner_id"]
+        session["admin_yn"] = obj["admin_yn"]
         return render_template('web/dashboard/dashboard.html', obj=obj)
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
@@ -118,10 +119,10 @@ def account_show():
 def noti_list():
     if 'owner_seq' not in session:
         return redirect('login.html')
-
+    admin_yn = escape(session["admin_yn"])
+    print("admin_yn" , admin_yn)
     list = DaoNotice().selectlist()
-    print(list)
-    return render_template('web/notice/noti_list.html', list=list)
+    return render_template('web/notice/noti_list.html', list=list, admin_yn = admin_yn)
 
 
 @app.route('/noti_detail')
