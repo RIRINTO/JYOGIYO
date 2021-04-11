@@ -77,10 +77,10 @@ def login():
     owner_pwd = request.form["owner_pwd"]
     
     obj = daoOwner.select_login(owner_id, owner_pwd)
-    
-    if len(obj) > 0 :
+    if obj:
         session["owner_seq"] = obj["owner_seq"] 
-    return render_template('web/dashboard/dashboard.html', obj=obj)
+        return render_template('web/dashboard/dashboard.html', obj=obj)
+    return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
 @app.route('/dashboard')
 def dashboard():
