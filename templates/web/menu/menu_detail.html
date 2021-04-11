@@ -77,6 +77,13 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <form action="menu_mod_form" method="post" enctype="multipart/form-data">
+                {% if menu.attach_file %}
+                <input type="hidden" name="attach_path" value="{{menu.attach_path}}">
+                <input type="hidden" name="attach_file" value="{{menu.attach_file}}">
+                {% else %}
+                <input type="hidden" name="attach_path" value="">
+                <input type="hidden" name="attach_file" value="">
+                {% endif %}
                 <div class="modal-header">
                     <h5 class="modal-title" id="MenuModModalLabel">메뉴 수정</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -113,6 +120,7 @@
                                     <div class="col-6">
                                         <div class="card">
                                             <img class="card-img-top" src="{{menu.attach_path}}/{{menu.attach_file}}">
+                                            <input type="file" class="form-control-file border invisible" name="file">
                                         </div>
                                     </div>
                                     {% else %}

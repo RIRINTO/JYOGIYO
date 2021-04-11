@@ -271,19 +271,31 @@ def menu_detail():
 
 @app.route('/menu_mod_form', methods=['POST'])
 def menu_mod_form():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
     menu_seq = request.form['menu_seq']
+    owner_seq = escape(session['owner_seq'])
     cate_seq = request.form['cate_seq']
     menu_name = request.form['menu_name']
     menu_price = request.form['menu_price']
     menu_content = request.form['menu_content']
     menu_display_yn = request.form['menu_display_yn']
-    up_user_id = request.form['up_user_id']
+    attach_path = request.form['attach_path']
+    attach_file = request.form['attach_file']
 
     file = request.files['file']
     if file:
-        attach_path = request.form['']
-        attach_file = request.files['']
-    return None
+        attach_path = upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
+        attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(file.filename)
+        os.makedirs(upload_dir, exist_ok=True)
+        file.save(os.path.join(attach_path, attach_file))
+    try:
+        if daoMenu.update(cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq, menu_seq):
+            return f"<script>alert('성공적으로 수정되었습니다.');location.href='menu_detail?menu_seq={menu_seq}'</script>"
+    except:
+        pass
+
+    return "<script>alert('수정에 실패하였습니다.');history.back()</script>"
 
 
 ##################    event     ######################
