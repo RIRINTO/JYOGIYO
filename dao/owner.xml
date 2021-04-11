@@ -124,25 +124,18 @@
     </update>
 
     <update id="update">
-    	update
-    			owner
-    	   set
-				owner_name		=:1,
-				owner_pwd		=:2,
-				owner_str_name	=:3,
-				owner_str_num   =:4,
-
-				owner_str_tel	=:5,
-				owner_add1		=:6,
-				owner_add2		=:7,
-				logo_path		=:8,
-						
-				logo_file		=:9,
-    	     	up_date			=to_char(sysdate, 'YYYYMMDD.HH24MISS'),
-    	     	up_user_id		=:10
-    	 where
-    	 		owner_seq =:11
-
+		UPDATE OWNER
+		SET OWNER_NAME     = :V_OWNER_NAME,
+			OWNER_PWD      = :V_OWNER_PWD,
+			OWNER_STR_NAME = :V_OWNER_STR_NAME,
+			OWNER_STR_TEL  = :V_OWNER_STR_TEL,
+			OWNER_ADD1     = :V_OWNER_ADD1,
+			OWNER_ADD2     = :V_OWNER_ADD2,
+			LOGO_PATH      = :V_LOGO_PATH,
+			LOGO_FILE      = :V_LOGO_FILE,
+			UP_DATE        = TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+			UP_USER_ID     = :V_OWNER_SEQ
+		WHERE OWNER_SEQ = :V_OWNER_SEQ
     </update>
 
     <update id="delete">

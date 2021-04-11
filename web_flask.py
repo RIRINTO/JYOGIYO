@@ -52,7 +52,6 @@ def register():
     owner_seq = daoOwner.owner_seq_gen()
 
     logo = request.files["logo"]
-
     attach_path, attach_file = saveFile(logo)
 
     try:
@@ -134,10 +133,25 @@ def account_mod_form():
     owner_pwd = request.form["owner_pwd"]
     owner_str_name = request.form["owner_str_name"]
     owner_str_tel = request.form["owner_str_tel"]
-
     owner_add1 = request.form["owner_add1"]
     owner_add2 = request.form["owner_add2"]
-    cnt = daoOwner.update(owner_seq, owner_name, owner_pwd)
+    logo_path = request.form["logo_path"]
+    logo_file = request.form["logo_file"]
+
+    logo = request.files["logo"]
+    if logo:
+        logo_path, logo_file = saveFile(logo)
+
+    try:
+        if daoOwner.update(owner_name, owner_pwd, owner_str_name, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, owner_seq):
+            session["owner_seq"] = owner_seq
+            session["owner_name"] = owner_name
+            session["logo_path"] = logo_path
+            session["logo_file"] = logo_file
+            return "<script>alert('정보 수정 완료');location.href='account_show'</script>"
+    except:
+        pass
+    return "<script>alert('정보 수정 완료');history.back()</script>"
 
 
 ##################   notice   ######################
@@ -203,32 +217,15 @@ def noti_mod():
     noti_seq = request.form['noti_seq']
     noti_title = request.form['noti_title']
     noti_content = request.form['noti_content']
-    attach_path_old = request.form['attach_path']
-    attach_file_old = request.form['attach_file']
-    print(noti_seq)
-
-    if attach_file_old == 'None':
-        attach_file_old = ""
-        attach_path_old = ""
-
+    attach_path = request.form['attach_path']
+    attach_file = request.form['attach_file']
+    owner_id = escape(session["owner_id"])
     noti_file = request.files['noti_file']
-    upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
-    attach_file_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(noti_file.filename)
-    os.makedirs(upload_dir, exist_ok=True)
-    noti_file.save(os.path.join(upload_dir, attach_file_temp))
 
-    attach_path = ""
-    attach_file = ""
     if noti_file:
-        attach_path = upload_dir
-        attach_file = attach_file_temp
-        print("file O")
-    else:
-        attach_path = attach_path_old
-        attach_file = attach_file_old
-        print("file X")
+        attach_path, attach_file = saveFile(noti_file)
 
-    cnt = daoNotice.update(noti_seq, noti_title, noti_content, attach_path, attach_file, "up_user_id")
+    cnt = daoNotice.update(noti_seq, noti_title, noti_content, attach_path, attach_file, owner_id)
     print(cnt)
     if cnt:
         return redirect("noti_detail?noti_seq=" + noti_seq)
@@ -777,7 +774,7 @@ def k_menu():
 
 def saveFile(file):
     attach_path = DIR_UPLOAD + '/' + escape(session['owner_seq'])
-    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + str(random.random())
+    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + str(random.random()) + '.' + secure_filename(file.filename).split('.')[-1]
     os.makedirs('static/' + attach_path, exist_ok=True)
     file.save(os.path.join('static/' + attach_path, attach_file))
     return attach_path, attach_file

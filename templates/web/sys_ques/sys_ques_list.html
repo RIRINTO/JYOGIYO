@@ -47,14 +47,15 @@
                         <div style="text-align: right">
                             <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#sys_qna_add">추가</button>
                         </div>
+                        <br>
                         <table class="table table-hover" style="text-align: center">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th>순번</th>
-                                <th>제목</th>
-                                <th>작성일</th>
-                                <th>답변일</th>
-                            </tr>
+                            <thead class="bg-warning font-weight-bold text-light">
+                                <tr>
+                                    <th>순번</th>
+                                    <th>제목</th>
+                                    <th>작성일</th>
+                                    <th>답변일</th>
+                                </tr>
                             </thead>
                             <tbody>
                             {% for i in list %}

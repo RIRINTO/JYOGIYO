@@ -57,9 +57,9 @@ class DaoOwner:
         cnt = self.cs.rowcount
         return cnt
 
-    def update(self, owner_seq, owner_name, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, up_date, up_user_id):
+    def update(self, owner_name, owner_pwd, owner_str_name, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, owner_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
-        self.cs.execute(sql, (owner_name, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, up_user_id, owner_seq))
+        self.cs.execute(sql, (owner_name, owner_pwd, owner_str_name, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, owner_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
