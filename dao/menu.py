@@ -39,9 +39,9 @@ class DaoMenu:
         self.cs.execute(sql, (menu_seq, owner_seq))
         return menuSort(self.cs.fetchone())
 
-    def insert(self, owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, in_user_id, up_user_id):
+    def insert(self, owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq, owner_seq))
         self.conn.commit()
         return self.cs.rowcount
 

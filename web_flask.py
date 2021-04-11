@@ -1,4 +1,5 @@
 import os
+import random
 
 from datetime import datetime
 from flask import Flask, render_template, redirect, request, session, escape
@@ -22,7 +23,7 @@ daoOwner = DaoOwner()
 daoSysQues = DaoSysQues()
 daoSysAns = DaoSysAns()
 
-DIR_UPLOAD = "static/upload_file"
+DIR_UPLOAD = "upload_file"
 
 app = Flask(__name__, static_url_path="", static_folder="static/")
 app.secret_key = 'hello'
@@ -42,8 +43,8 @@ def register():
     owner_id = request.form["owner_id"]
     owner_pwd = request.form["owner_pwd"]
     owner_str_name = request.form["owner_str_name"]
-    owner_str_num = request.form["owner_str_num"].replace("-","")
-    owner_str_tel = request.form["owner_str_tel"].replace("-","")
+    owner_str_num = request.form["owner_str_num"].replace("-", "")
+    owner_str_tel = request.form["owner_str_tel"].replace("-", "")
 
     owner_add1 = request.form["owner_add1"]
     owner_add2 = request.form["owner_add2"]
@@ -59,7 +60,7 @@ def register():
 
     try:
         cnt = daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, upload_dir, attach_file, "in_date", owner_id, "up_date", owner_id)
-        print('cnt',cnt)
+        print('cnt', cnt)
         if cnt:
             return redirect("login.html")
     except:
@@ -236,12 +237,98 @@ def noti_download():
 
 @app.route('/cate_list')
 def cate_list():
-    return render_template('web/category/cate_list.html')
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session['owner_seq'])
+    list = daoCategory.selectAll(owner_seq)
+    return render_template('web/category/cate_list.html', list=list)
 
 
 @app.route('/cate_detail')
 def cate_detail():
-    return render_template('web/category/cate_detail.html')
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session['owner_seq'])
+    cate_seq = request.args.get('cate_seq')
+    obj = daoCategory.myselect(owner_seq, cate_seq)
+    return render_template('web/category/cate_detail.html', cate=obj)
+
+
+@app.route('/cate_add', methods=['POST'])
+def cate_add():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session['owner_seq'])
+    cate_name = request.form['cate_name']
+    cate_content = request.form['cate_content']
+    cate_display_yn = request.form['cate_display_yn']
+
+    cate_file = request.files['cate_file']
+    upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
+    attach_file_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(cate_file.filename)
+    os.makedirs(upload_dir, exist_ok=True)
+    cate_file.save(os.path.join(upload_dir, attach_file_temp))
+
+    attach_path = ""
+    attach_file = ""
+    if cate_file:
+        attach_path = upload_dir
+        attach_file = attach_file_temp
+        print("file O")
+    else:
+        print("file X")
+
+    print('attach_path', attach_path)
+    print('attach_file', attach_file)
+
+    try:
+        cnt = daoCategory.myinsert(0, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, None, "in_user_id", None, "up_user_id")
+        if cnt:
+            return redirect('cate_list')
+    except:
+        pass
+    return '<script>alert("카테고리 작성에 실패하였습니다.");history.back()</script>'
+
+
+@app.route('/cate_mod', methods=['POST'])
+def cate_mod():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session['owner_seq'])
+    cate_seq = request.form['cate_seq']
+    cate_name = request.form['cate_name']
+    cate_content = request.form['cate_content']
+    cate_display_yn = request.form['cate_display_yn']
+    attach_path = request.form['attach_path']
+    attach_file = request.form['attach_file']
+    print(cate_seq)
+
+    if attach_file == 'None':
+        attach_file = ""
+        attach_path = ""
+
+    cate_file = request.files['cate_file']
+    upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
+    attach_file_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(cate_file.filename)
+    os.makedirs(upload_dir, exist_ok=True)
+    cate_file.save(os.path.join(upload_dir, attach_file_temp))
+
+    attach_path = ""
+    attach_file = ""
+    if cate_file:
+        attach_path = upload_dir
+        attach_file = attach_file_temp
+        print("file O")
+    else:
+        attach_path = attach_path
+        attach_file = attach_file
+        print("file X")
+
+    cnt = daoCategory.myupdate(cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, "up_user_id")
+    print(cnt)
+    if cnt:
+        return redirect("cate_detail?cate_seq=" + cate_seq)
+    return '<script>alert("수정에 실패하였습니다.");history.back()</script>'
 
 
 ##################     menu     ######################
@@ -269,6 +356,32 @@ def menu_detail():
     return '<script>alert("권한이 없습니다.");history.back()</script>'
 
 
+@app.route('/menu_add_form', methods=['POST'])
+def menu_add_form():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session['owner_seq'])
+    cate_seq = request.form['cate_seq']
+    menu_name = request.form['menu_name']
+    menu_price = request.form['menu_price']
+    menu_content = request.form['menu_content']
+    menu_display_yn = request.form['menu_display_yn']
+    attach_path = ''
+    attach_file = ''
+
+    file = request.files['file']
+    if file:
+        attach_path, attach_file = saveFile(file)
+
+    try:
+        if daoMenu.insert(owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file):
+            return "<script>alert('성공적으로 추가되었습니다.');location.href='menu_list'</script>"
+    except:
+        pass
+
+    return "<script>alert('추가에 실패하였습니다.');history.back()</script>"
+
+
 @app.route('/menu_mod_form', methods=['POST'])
 def menu_mod_form():
     if 'owner_seq' not in session:
@@ -285,10 +398,8 @@ def menu_mod_form():
 
     file = request.files['file']
     if file:
-        attach_path = upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
-        attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(file.filename)
-        os.makedirs(upload_dir, exist_ok=True)
-        file.save(os.path.join(attach_path, attach_file))
+        attach_path, attach_file = saveFile(file)
+
     try:
         if daoMenu.update(cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq, menu_seq):
             return f"<script>alert('성공적으로 수정되었습니다.');location.href='menu_detail?menu_seq={menu_seq}'</script>"
@@ -639,6 +750,14 @@ def k_home():
 @app.route('/k_menu')
 def k_menu():
     return render_template('kiosk/k_menu.html')
+
+
+def saveFile(file):
+    attach_path = DIR_UPLOAD + '/' + escape(session['owner_seq'])
+    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + str(random.random())
+    os.makedirs('static/' + attach_path, exist_ok=True)
+    file.save(os.path.join('static/' + attach_path, attach_file))
+    return attach_path, attach_file
 
 
 if __name__ == '__main__':

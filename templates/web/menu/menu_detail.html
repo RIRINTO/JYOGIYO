@@ -16,6 +16,12 @@
             }
         });
     });
+
+    function del_images() {
+        $('input[name=attach_path]').val('');
+        $('input[name=attach_file]').val('');
+        $('#image_card').html('<input type="file" name="file" class="form-control-file border">');
+    }
 </script>
 
 <!-- Begin Page Content -->
@@ -115,17 +121,20 @@
                                     <div class="col-6"><input type="number" class="form-control" name="menu_price" value="{{menu.menu_price}}" min="0" required></div>
                                     <div class="col-6"><p>설명</p></div>
                                     <div class="col-6"><textarea class="form-control" name="menu_content" rows="5" cols="100" required>{{menu.menu_content}}</textarea></div>
-                                    {% if menu.attach_file %}
                                     <div class="col-6"><p>이미지</p></div>
                                     <div class="col-6">
-                                        <div class="card">
+                                        <div class="card" id="image_card">
+                                            {% if menu.attach_file %}
                                             <img class="card-img-top" src="{{menu.attach_path}}/{{menu.attach_file}}">
+                                            <button type="button" class="close" aria-label="Close" onclick="del_images()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                             <input type="file" class="form-control-file border invisible" name="file">
+                                            {% else %}
+                                            <input type="file" name="file" class="form-control-file border">
+                                            {% endif %}
                                         </div>
                                     </div>
-                                    {% else %}
-                                    <input type="file" name="file" class="form-control-file border" required>
-                                    {% endif %}
                                     <div class="col-6"><p>공개여부</p></div>
                                     {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
                                     <div class="col-3">
@@ -136,10 +145,10 @@
                                     </div>
                                     {% else %}
                                     <div class="col-3">
-                                        <label><input type="radio" name="menu_display_yn" value="y" checked> 공개</label>
+                                        <label><input type="radio" name="menu_display_yn" value="y" required> 공개</label>
                                     </div>
                                     <div class="col-3">
-                                        <label><input type="radio" name="menu_display_yn" value="n" required required> 비공개</label>
+                                        <label><input type="radio" name="menu_display_yn" value="n" checked required> 비공개</label>
                                     </div>
                                     {% endif %}
                                 </div>
