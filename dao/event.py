@@ -47,9 +47,9 @@ class DaoEvent:
         cnt = self.cs.rowcount
         return cnt
 
-    def del_img(self, owner_seq, event_seq, up_user_id):
+    def del_img(self, owner_seq, event_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "del_img")
-        self.cs.execute(sql, (up_user_id, owner_seq, event_seq))
+        self.cs.execute(sql, (owner_seq, event_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

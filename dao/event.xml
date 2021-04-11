@@ -98,12 +98,11 @@
        	set
 	        attach_path			= '',
 	        attach_file			= '',
-	        up_date				=to_char(sysdate, 'YYYYMMDD.HHMISS'),
-	        up_user_id			=:1
+	        up_date				=to_char(sysdate, 'YYYYMMDD.HHMISS')
          where
-         	owner_seq=:2
+         	owner_seq=:1
          and
-            event_seq=:3
+            event_seq=:2
 
     </update>
     <update id="delete">

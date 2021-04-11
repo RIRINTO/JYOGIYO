@@ -161,7 +161,6 @@ def noti_list():
     if 'owner_seq' not in session:
         return redirect('login.html')
     admin_yn = escape(session["admin_yn"])
-    print("admin_yn", admin_yn)
     list = DaoNotice().selectlist()
     return render_template('web/notice/noti_list.html', list=list)
 
@@ -217,10 +216,11 @@ def noti_mod():
     noti_seq = request.form['noti_seq']
     noti_title = request.form['noti_title']
     noti_content = request.form['noti_content']
+    owner_id = escape(session["owner_id"])
+
+    noti_file = request.files['noti_file']
     attach_path = request.form['attach_path']
     attach_file = request.form['attach_file']
-    owner_id = escape(session["owner_id"])
-    noti_file = request.files['noti_file']
 
     if noti_file:
         attach_path, attach_file = saveFile(noti_file)
@@ -495,29 +495,16 @@ def event_modact():
     event_content = request.form["event_content"]
     event_start = request.form["event_start"]
     event_end = request.form["event_end"]
-    attach_path_old = request.form['attach_path']
-    attach_file_old = request.form['attach_file']
-
-    if attach_file_old == 'None':
-        attach_file_old = ""
-        attach_path_old = ""
-
+    attach_path = request.form['attach_path']
+    attach_file = request.form['attach_file']
     event_file = request.files['event_file']
-    upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
-    attach_file_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(event_file.filename)
-    os.makedirs(upload_dir, exist_ok=True)
-    event_file.save(os.path.join(upload_dir, attach_file_temp))
 
-    attach_path = ""
-    attach_file = ""
+    if attach_file == 'None':
+        attach_path = ""
+        attach_file = ""
+
     if event_file:
-        attach_path = upload_dir
-        attach_file = attach_file_temp
-        print("file O")
-    else:
-        attach_path = attach_path_old
-        attach_file = attach_file_old
-        print("file X")
+        attach_path, attach_file = saveFile(event_file)
 
     try:
         cnt = daoEvent.update(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, 'in_user_id', None, 'up_user_id')
@@ -543,10 +530,9 @@ def event_delact():
 
 @app.route("/event_del.ajax", methods=['POST'])
 def event_del_img():
-    up_user_id = 'up_user_id'
     owner_seq = request.form['owner_seq']
     event_seq = request.form['event_seq']
-    cnt = daoEvent.del_img(owner_seq, event_seq, up_user_id)
+    cnt = daoEvent.del_img(owner_seq, event_seq)
     print('cnt', cnt)
     msg = ""
     if cnt == 1:
