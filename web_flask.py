@@ -90,6 +90,7 @@ def login():
         session["owner_seq"] = obj["owner_seq"]
         session["owner_id"] = obj["owner_id"]
         session["admin_yn"] = obj["admin_yn"]
+        session["owner_name"] = obj["owner_name"]
         return render_template('web/dashboard/dashboard.html', obj=obj)
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
@@ -101,15 +102,35 @@ def dashboard():
 
 @app.route('/account_manage')
 def account_manage():
-    owner_seq = "3"
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session["owner_seq"])
     obj = daoOwner.select(owner_seq)
+    if obj:
+        owner_str_num = list(obj['owner_str_num'])
+        print(owner_str_num)
+        owner_str_num.insert(3, '-')
+        print(owner_str_num)
+        owner_str_num.insert(6, '-')
+        print(owner_str_num)
+        obj['owner_str_num'] = ''.join(owner_str_num)
     return render_template('web/account/account_manage.html', owner=obj)
 
 
 @app.route('/account_show')
 def account_show():
-    owner_seq = "3"
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = escape(session["owner_seq"])
     obj = daoOwner.select(owner_seq)
+    if obj:
+        owner_str_num = list(obj['owner_str_num'])
+        print(owner_str_num)
+        owner_str_num.insert(3, '-')
+        print(owner_str_num)
+        owner_str_num.insert(6, '-')
+        print(owner_str_num)
+        obj['owner_str_num'] = ''.join(owner_str_num)
     return render_template('web/account/account_show.html', owner=obj)
 
 
@@ -120,9 +141,9 @@ def noti_list():
     if 'owner_seq' not in session:
         return redirect('login.html')
     admin_yn = escape(session["admin_yn"])
-    print("admin_yn" , admin_yn)
+    print("admin_yn", admin_yn)
     list = DaoNotice().selectlist()
-    return render_template('web/notice/noti_list.html', list=list, admin_yn = admin_yn)
+    return render_template('web/notice/noti_list.html', list=list)
 
 
 @app.route('/noti_detail')
@@ -143,7 +164,6 @@ def noti_add():
 
     noti_title = request.form['noti_title']
     noti_content = request.form['noti_content']
-
 
     noti_file = request.files['noti_file']
     upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
