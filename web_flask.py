@@ -22,7 +22,7 @@ daoOwner = DaoOwner()
 daoSysQues = DaoSysQues()
 daoSysAns = DaoSysAns()
 
-DIR_UPLOAD = "D:/workspace_python/JYOGIYO/static/upload_file"
+DIR_UPLOAD = "static/upload_file"
 
 app = Flask(__name__, static_url_path="", static_folder="static/")
 app.secret_key = 'hello'
@@ -279,13 +279,10 @@ def menu_mod_form():
     menu_display_yn = request.form['menu_display_yn']
     up_user_id = request.form['up_user_id']
 
-
     file = request.files['file']
     if file:
-
-    attach_path = request.form['']
-    attach_file = request.files['']
-
+        attach_path = request.form['']
+        attach_file = request.files['']
     return None
 
 

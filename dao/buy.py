@@ -10,7 +10,7 @@ class DaoBuy:
         self.conn = cx_Oracle.connect(database)
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
-        
+
     def selectAll(self, buy_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select")
         rs = self.cs.execute(sql,(buy_seq,))
@@ -37,19 +37,19 @@ class DaoBuy:
         return cnt
 
     def update(self, buy_seq, menu_seq, buy_cnt, in_date, in_user_id, up_date, up_user_id):
-        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")  
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         self.cs.execute(sql, (menu_seq, buy_cnt, up_user_id, buy_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
 
     def delete(self, buy_seq):
-        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "delete") 
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "delete")
         self.cs.execute(sql, (buy_seq,))
         self.conn.commit()
         cnt = self.cs.rowcount
-        return cnt    
-        
+        return cnt
+
 if __name__ == "__main__":
     dao = DaoBuy(config_path='../config.ini', xml_path='buy.xml')
 #     list = dao.insert("1", "1", "1", " ", "1", " ", "1")
