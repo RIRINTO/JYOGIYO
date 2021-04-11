@@ -17,81 +17,24 @@
                 }
             });
         });
-	
-        function fn_cate_list(){
-        	location.href="cate_list"
-        }
-      
 
-      
+        $(function(){
+           $('#cate_content').html($('#cate_content').html().replaceAll('\r','').replaceAll('\n', '<br>'))
+        })
+
+        function fn_cate_list(){
+           location.href="cate_list"
+        }
+
+        function fn_cate_mod(){
+           document.cate_mod_form.submit()
+
+        }
+
+
+
 
     </script>
-    
-    <!-- category modify Modal-->
-
-    <div class="modal fade" id="CateModModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">카테고리 수정</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <!-- category modify Modal content -->
-
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <table class="table" style="text-align: center">
-                                    <tr>
-                                        <th>순번</th>
-                                        <td>1</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>카테고리명</th>
-                                        <td><input type="text" class="form-control" value="싸이버거"></td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>이미지</th>
-                                        <td>
-                                            <img src="img/싸이버거.jpg"> <input type="file" class="form-control-file border">
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>설명</th>
-                                        <td>
-                                            <textarea class="form-control" rows="5" cols="100">싸이버거는 맛있어</textarea>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>공개여부</th>
-                                        <td>
-                                            <input type="radio" value="y"> 공개
-                                            <input type="radio" value="n"> 비공개
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- end of category modify Modal content -->
-                </div>
-                <div style="text-align: right" class="modal-footer">
-                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal">수정 완료</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end of category modify Modal-->
-
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <!-- Content Row -->
@@ -108,29 +51,43 @@
                         <table class="table" style="text-align: center">
                             <tr>
                                 <th>순번</th>
-                                <td>1</td>
+                                <td>{{cate.cate_seq}}</td>
                             </tr>
-                            
+
                             <tr>
                                 <th>카테고리명</th>
-                                <td>싸이버거</td>
+                                <td>{{cate.cate_name}}</td>
                             </tr>
-                            
+
                             <tr>
                                 <th>이미지</th>
-                                <td><img src="img/싸이버거.jpg"></td>
+                                <td>
+                                {% if cate.attach_file %}
+                                   <img src="cate_download?attach_file={{cate.attach_file}}&attach_path={{cate.attach_path}}">
+                                {% else %}
+                                   파일 없음
+                        {% endif %}
+                                </td>
                             </tr>
-                            
+
                             <tr>
                                 <th>설명</th>
-                                <td>싸이버거는 맛있어!</td>
+                                <td>
+                                {{cate.cate.content}}
+                                </td>
                             </tr>
-                            
+
                             <tr>
                                 <th>공개여부</th>
-                                <td>공개</td>
+                                <td>
+                                {% if cate.cate_display_yn == "y" %}
+                                   공개
+                                {% else %}
+                                   비공개
+                                {% endif %}
+                                </td>
                             </tr>
-                            
+
                         </table>
                          <div style="text-align: right">
                             <button type="button" class="btn btn-outline-success" onclick="fn_cate_list()">목록</button>
@@ -142,4 +99,79 @@
             </div>
         </div>
     </div>
+
+
+    <!-- category modify Modal-->
+
+    <div class="modal fade" id="CateModModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="CateModalLabel">카테고리 수정</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- category modify Modal content -->
+
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <table class="table" style="text-align: center">
+                                    <tr>
+                                        <th>순번</th>
+                                        <td>{{cate.cate_seq}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>카테고리명</th>
+                                        <td><input type="text" class="form-control" value="{{cate.cate_name}}"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>첨부파일</th>
+                                        <td>
+                                            <input type="file" class="form-control-file border">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>설명</th>
+                                           <td>
+                                               {% if cate.attach_file %}
+                                               <input type="file" class="form-control-file border invisible" name="cate_file">
+                                               {% else %}
+                                               <input type="file" class="form-control-file border" name="cate_file">
+                                               {% endif %}
+                                           </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>공개여부</th>
+                                        <td>
+                                        {% if cate.cate_display_yn == 'y' %}
+                                            <input type="radio"  name="cate_display_yn" value="y" checked> 공개
+                                            <input type="radio"  name="cate_display_yn" value="n"> 비공개
+                                        {% else %}
+                                            <input type="radio"  name="cate_display_yn" value="y"> 공개
+                                            <input type="radio"  name="cate_display_yn" value="n" checked> 비공개
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- end of category modify Modal content -->
+                </div>
+                <div style="text-align: right" class="modal-footer">
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_cate_mod()">수정 완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of category modify Modal-->
 {% endblock %}

@@ -108,11 +108,8 @@ def account_manage():
     obj = daoOwner.select(owner_seq)
     if obj:
         owner_str_num = list(obj['owner_str_num'])
-        print(owner_str_num)
         owner_str_num.insert(3, '-')
-        print(owner_str_num)
         owner_str_num.insert(6, '-')
-        print(owner_str_num)
         obj['owner_str_num'] = ''.join(owner_str_num)
     return render_template('web/account/account_manage.html', owner=obj)
 
@@ -125,16 +122,13 @@ def account_show():
     obj = daoOwner.select(owner_seq)
     if obj:
         owner_str_num = list(obj['owner_str_num'])
-        print(owner_str_num)
         owner_str_num.insert(3, '-')
-        print(owner_str_num)
         owner_str_num.insert(6, '-')
-        print(owner_str_num)
         obj['owner_str_num'] = ''.join(owner_str_num)
     return render_template('web/account/account_show.html', owner=obj)
 
-@app.route('/account_mod', methods=["POST"])
-def account_mod():
+@app.route('/account_mod_form', methods=["POST"])
+def account_mod_form():
     if 'owner_seq' not in session:
         return redirect('login.html')
     owner_seq = session["owner_seq"]
