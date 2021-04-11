@@ -1,0 +1,151 @@
+{% extends 'web/layout.html' %}
+
+{% block content %}
+<script>
+    $('span').each(function () {
+        if ($(this).html() === "메뉴 관리") {
+            $(this).parents('li').addClass('active');
+            return false;
+        }
+    });
+    $(document).ready(function () {
+        $('select').each(function () {
+            if ($(this).val() === '{{menu.cate_seq}}') {
+                $(this).attr('selected', true);
+                return false;
+            }
+        });
+    });
+</script>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-dark">메뉴 관리</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <p>메뉴 번호</p>
+                        </div>
+                        <div class="col-6">
+                            <p>{{menu.menu_seq}}</p>
+                        </div>
+                        <div class="col-6"><p>카테고리명</p></div>
+                        <div class="col-6"><p>{{menu.cate_name}}</p></div>
+                        <div class="col-6"><p>메뉴명</p></div>
+                        <div class="col-6"><p>{{menu.menu_name}}</p></div>
+                        <div class="col-6"><p>가격</p></div>
+                        <div class="col-6"><p>{{menu.menu_price}}</p></div>
+                        <div class="col-6"><p>설명</p></div>
+                        <div class="col-6"><p id="menu-content">{{menu.menu_content}}</p></div>
+                        {% if menu.attach_file %}
+                        <div class="col-6"><p>이미지</p></div>
+                        <div class="col-6">
+                            <div class="card">
+                                <img class="card-img-top" src="{{menu.attach_path}}/{{menu.attach_file}}">
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="col-6"><p>공개여부</p></div>
+                        {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
+                        <div class="col-6"><p>공개</p></div>
+                        {% else %}
+                        <div class="col-6"><p>비공개</p></div>
+                        {% endif %}
+                    </div>
+
+                    <div style="text-align: right">
+                        <button type="button" class="btn btn-outline-success" onclick="location.href='menu_list'">목록</button>
+                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#MenuModModal">수정</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- menu modify Modal-->
+<div class="modal fade" id="MenuModModal" tabindex="-1" role="dialog" aria-labelledby="MenuModModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <form action="menu_mod_form" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="MenuModModalLabel">메뉴 수정</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- menu modify Modal content -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <div class="row text-center">
+                                    <div class="col-6"><p>메뉴 번호</p></div>
+                                    <div class="col-6">
+                                        <p>{{menu.menu_seq}}</p>
+                                        <input name="menu_seq" type="hidden" value="{{menu.menu_seq}}">
+                                    </div>
+                                    <div class="col-6"><p>카테고리명</p></div>
+                                    <div class="col-6">
+                                        <select class="form-control" name="cate_seq" required>
+                                            {% for category in categoryList %}
+                                            <option value="{{category.cate_seq}}">{{category.cate_name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-6"><p>메뉴명</p></div>
+                                    <div class="col-6"><input type="text" class="form-control" name="menu_name" value="{{menu.menu_name}}" required></div>
+                                    <div class="col-6"><p>가격</p></div>
+                                    <div class="col-6"><input type="number" class="form-control" name="menu_price" value="{{menu.menu_price}}" min="0" required></div>
+                                    <div class="col-6"><p>설명</p></div>
+                                    <div class="col-6"><textarea class="form-control" name="menu_content" rows="5" cols="100" required>{{menu.menu_content}}</textarea></div>
+                                    {% if menu.attach_file %}
+                                    <div class="col-6"><p>이미지</p></div>
+                                    <div class="col-6">
+                                        <div class="card">
+                                            <img class="card-img-top" src="{{menu.attach_path}}/{{menu.attach_file}}">
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <input type="file" name="file" class="form-control-file border" required>
+                                    {% endif %}
+                                    <div class="col-6"><p>공개여부</p></div>
+                                    {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
+                                    <div class="col-3">
+                                        <label><input type="radio" name="menu_display_yn" value="y" checked required> 공개</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <label><input type="radio" name="menu_display_yn" value="n" required> 비공개</label>
+                                    </div>
+                                    {% else %}
+                                    <div class="col-3">
+                                        <label><input type="radio" name="menu_display_yn" value="y" checked> 공개</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <label><input type="radio" name="menu_display_yn" value="n" required required> 비공개</label>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of menu modify  Modal content -->
+                </div>
+                <div style="text-align: right" class="modal-footer">
+                    <button type="submit" class="btn btn-outline-warning">수정 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end of menu modify  Modal-->
+{% endblock %}

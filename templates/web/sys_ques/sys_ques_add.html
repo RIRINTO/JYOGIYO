@@ -1,0 +1,16 @@
+{% extends 'web/layout.html' %}
+
+{% block content %}
+<script>
+	var cnt = '{{cnt}}'
+	
+	if(cnt == '1'){
+		alert("정상적으로 추가되었습니다.");
+		location.href = "sys_ques_list";
+	}else{
+		alert("추가도중 오류가 생겼습니다.");
+		history.back();
+	}
+
+</script>
+{% endblock %}

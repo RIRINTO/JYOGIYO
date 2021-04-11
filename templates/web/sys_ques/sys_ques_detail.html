@@ -1,0 +1,397 @@
+{% extends 'web/layout.html' %}
+
+{% block content %}
+
+<style>
+	#reply{
+		background : pink;
+	}
+
+</style>
+
+<script>
+    $('span').each(function () {
+        if ($(this).html() === "시스템 문의사항") {
+            $(this).parents('li').addClass('active');
+            return false;
+        }
+    });
+    
+    $(document).ready(function () {
+        $('.menumodify').hide();
+        $('.menumodify').css({
+            height: '25px',
+            fontSize: '10px'
+        });
+        $('.menu').hover(function () {
+            $(this).find('.menumodify').show();
+        }, function () {
+            $(this).find('.menumodify').hide();
+        });
+        $('[data-toggle="popover"]').popover({
+            trigger: 'hover',
+            html: true,
+            content: function () {
+                return '<img class="img-fluid" src="' + $(this).data('img') + '" />';
+            }
+        });
+    });
+
+   
+    function fn_ques_list() {
+        location.href = "sys_ques_list";
+    }
+    
+    
+    function fn_ques_mod(){
+    	document.sysmod.submit();
+    	location.href = 'sys_ques_detail?sys_ques_seq={{ques.sys_ques_seq}}';
+    }
+    
+    
+    function fn_ques_del(){
+    	sys_ques_seq = '{{ques.sys_ques_seq}}'
+    	console.log(sys_ques_seq)
+        
+        var param = "";
+        param += "dummy=" + Math.random();
+        param += '&sys_ques_seq=' + sys_ques_seq;
+
+        $.ajax({
+            url: 'sys_ques_del.ajax',
+            data: param,
+            dataType: "json",
+            type: "post",
+            async: false,
+            statusCode: {
+                404: function () {
+                    alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+                }
+            },
+            success: function (data) {
+                if (data["msg"] === "ok") {
+                    location.href="sys_ques_list"
+                } else {
+                    alert("삭제 도중 문제가 발생하였습니다.");
+                }
+            }
+        });
+    }
+    
+    
+    function fn_img_del(){
+    	sys_ques_seq = '{{ques.sys_ques_seq}}'
+        
+        var param = "";
+        param += "dummy=" + Math.random();
+        param += '&sys_ques_seq=' + sys_ques_seq;
+
+        $.ajax({
+            url: 'sys_img_del.ajax',
+            data: param,
+            dataType: "json",
+            type: "post",
+            async: false,
+            statusCode: {
+                404: function () {
+                    alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+                }
+            },
+            success: function (data) {
+                if (data["msg"] === "ok") {
+                    
+                } else {
+                    alert("삭제 도중 문제가 발생하였습니다.");
+                }
+            }
+        });
+    }
+    
+    
+
+    function fn_reply(){
+    	sys_ques_seq = '{{ques.sys_ques_seq}}'
+    	reply = $("textarea[name=reply_content]").val();
+		
+    	var param = "";
+        param += "dummy=" + Math.random();
+        param += '&sys_ques_seq=' + sys_ques_seq;
+        param += '&reply=' + reply;
+
+        $.ajax({
+            url: 'sys_reply_add.ajax',
+            data: param,
+            dataType: "json",
+            type: "post",
+            async: false,
+            statusCode: {
+                404: function () {
+                    alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+                }
+            },
+            success: function (data) {
+                if (data.msg == 'ok') {
+                    alert("댓글 추가되었습니다");
+                    location.href="sys_ques_detail?sys_ques_seq=" + sys_ques_seq;
+                } else {
+                    alert("댓글 추가 도중 문제가 발생하였습니다.");
+                }
+            }
+        });
+    }
+    
+    
+    function fn_reply_del() {
+    	sys_ques_seq = '{{ques.sys_ques_seq}}'
+   		
+       	var param = "";
+        param += "dummy=" + Math.random();
+        param += '&sys_ques_seq=' + sys_ques_seq;
+
+        $.ajax({
+            url: 'sys_reply_del.ajax',
+            data: param,
+            dataType: "json",
+            type: "post",
+            async: false,
+            statusCode: {
+                404: function () {
+                    alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+                }
+            },
+            success: function (data) {
+                if (data.msg == 'ok') {
+                    alert("답글이 삭제되었습니다");
+                    location.reload();
+//                     location.href="sys_ques_detail?sys_ques_seq=" + sys_ques_seq;
+                } else {
+                    alert("답글이 삭제 도중 문제가 발생하였습니다.");
+                }
+            }
+        });
+     }
+
+
+</script>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-dark">시스템 문의사항</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <table class="table table-hover" style="text-align: center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>공지번호</th>
+                            <td>{{ques.sys_ques_seq}}</td>
+                        </tr>
+                        <tr>
+                            <th>제목</th>
+                            <td>{{ques.sys_ques_title}}</td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td>{{ques.sys_ques_content}}</td>
+                        </tr>
+                        <tr>
+                            <th>이미지</th>
+                            <td>
+	                            {% if ques.attach_file %}
+	                            <img src="download?attach_file={{ques.attach_file}}&attach_path={{ques.attach_path}}" width="100px">
+	                            {% else %}
+	                            첨부파일없음
+	                            {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>표시여부</th>
+                            <td>
+                            	{% if ques.sys_ques_display_yn == 'y' %}
+                            	표시
+                            	{% else %}
+                            	비표시
+                            	{% endif %}
+                            </td>
+                        </tr>
+                        
+                        </tbody>
+                    </table>
+                    
+                    <div style="text-align: right">
+                        <button type="button" class="btn btn-outline-success" onclick="fn_ques_list()">목록</button>
+					                        
+                        <!-- 관리자만 볼수있음 -->
+                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#sys_reply">댓글달기</button>
+
+                        <!-- 작성자만 볼수있음 -->
+<!--                          if session.owner_id == ques.in_user_id %} -->
+                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#sys_ques_mod">수정</button>
+                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#sys_ques_del">삭제</button>
+<!--                          endif %} -->
+                    </div>
+                    <br><br>
+                    
+                    {% if reply %}
+                    <table class="table table-hover" style="text-align: center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th colspan="2">답변</th>
+                        </tr>
+                        <tr>
+                            <td>관리자</td>
+                            <td>{{reply.in_date}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{{reply.sys_ans_reply}}</td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="btn btn-outline-danger" onclick="fn_reply_del()">삭제</button></td>
+                        </tr>
+                    </table>
+                    {% endif %}    	
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- sys_ques_mod Modal-->
+<div class="modal fade" id="sys_ques_mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">문의사항을 수정해주세요</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form name="sys_mod" action="sys_ques_mod" method="post" enctype="multipart/form-data">
+                    <table border='1'>
+                    	<input type="hidden" name="sys_ques_seq" value="{{ques.sys_ques_seq}}">
+                        <tr>
+                            <th>공지번호</th>
+                            <td>{{ques.sys_ques_seq}}</td>
+                        </tr>
+                        <tr>
+                            <th>제목</th>
+                            <td>
+                                <input type="text" name="title" value="{{ques.sys_ques_title}}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td>
+                                <textarea name="content" rows="9" spans="20">{{ques.sys_ques_content}}</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>첨부파일</th>
+                            <td>
+                                {% if ques.attach_file %}
+                                	<input type = "file" name = "file" />
+                                	<a href="javascript:fn_img_del()">{{ques.attach_file}} 파일제거</a>  
+                                	<img src="download?attach_file={{ques.attach_file}}&attach_path={{ques.attach_path}}" width="100px">
+                                {% else %}
+									<input type = "file" name = "file" />
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>표시여부</th>
+                            <td>
+                            	{% if ques.sys_ques_display_yn == 'y' %}
+	                                <input type="radio" name="display_yn" value="y" checked>표시
+	                                <input type="radio" name="display_yn" value="n">비표시
+	                            {% else %}
+	                                <input type="radio" name="display_yn" value="y" checked>표시
+	                                <input type="radio" name="display_yn" value="n">비표시
+	                            {% endif %}
+                            </td>
+                        </tr>
+
+                    </table>
+	                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+	                <input type="submit" class="btn btn-dark" value="수정완료">
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- sys_qna_mod Modal end-->
+
+
+
+<!-- sys_ques_delete Modal-->
+<div class="modal fade" id="sys_ques_del" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">삭제 하시겠습니까?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">하단의 삭제 버튼을 누르면 게시글이 삭제됩니다.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                <a class="btn btn-dark" onclick="fn_ques_del()">삭제</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- sys_qna_reply Modal-->
+<div class="modal fade" id="sys_reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">답변을 작성하시오</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <table border='1'>
+                	<tr>
+                        <th>내용</th>
+                        <td>{{ques.sys_ques_content}}</td>
+                    </tr>
+                    <tr>
+                        <th>답변</th>
+                        <td>
+                            <textarea name="reply_content" rows="9" spans="20"></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-dark" onclick="fn_reply()">답변등록</a>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- sys_qna_reply Modal end-->
+
+{% endblock %}

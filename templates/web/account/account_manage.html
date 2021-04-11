@@ -1,0 +1,84 @@
+{% extends 'web/layout.html' %}
+
+{% block content %}
+    <script>
+    </script>
+    
+    
+
+    <!-- Begin Page Content -->
+    <div class="container">
+        <!-- Content Row -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-dark">정보 수정</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+						<form class="user" action="register" method="post" enctype="multipart/form-data" name="register_form">
+                            <div class="form-group">
+                                   <input type="text" class="form-control form-control-user" name="owner_name" 
+                                   placeholder="이름"  value="{{owner.owner_name}}">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control form-control-user" name="owner_id" 
+                                placeholder="아이디 ( 이메일 )"  value="{{owner.owner_id}}">
+                            </div>
+                            <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" name="owner_pwd" 
+                                    placeholder="비밀번호" value="{{owner.owner_pwd}}">
+                            </div>
+                            <hr>
+
+                            <div class="form-group">
+                                <input type="text" name="owner_str_name" class="form-control form-control-user" placeholder="상호명"  
+                                value="{{owner.owner_str_name}}">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="owner_str_num" class="form-control form-control-user" placeholder="사업자등록번호 또는 가맹점번호"  
+                                value="{{owner.owner_str_num}}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" name="owner_str_tel" class="form-control form-control-user" placeholder="가게전화번호" 
+                                value="{{owner.owner_str_tel}}" >
+                            </div>
+                            
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <p align="center">회사 로고 지정</p>
+                                </div>
+                                <div class="col-sm-9 mb-3 mb-sm-0">
+                                    <input type="file" name="logo" class="form-control-file border"  >
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="password" name="owner_post" class="form-control form-control-user" placeholder="우편번호" readonly 
+                                    value="{{owner.owner_post}}">
+                                </div>
+							    <button data-toggle="modal" data-target="#AddSearchModal" type="button" class="btn btn-primary btn-user">번호검색</button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" name="owner_add1" class="form-control form-control-user" placeholder="주소"  
+                                value="{{owner.owner_add1}}">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="owner_add2" class="form-control form-control-user" placeholder="상세주소"  
+                                value="{{owner.owner_add2}}">
+                            </div>
+                            <input type="button" class="btn btn-primary btn-user btn-block" value="수정">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+   

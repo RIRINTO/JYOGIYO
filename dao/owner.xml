@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Owner">
+
+
+    <select id="selectAll">
+    select
+			owner_seq,
+			owner_name,
+			owner_id,
+			owner_pwd,
+			owner_str_name,
+			owner_str_num,
+			owner_str_tel,
+			owner_add1,
+			owner_add2,
+			logo_path,
+			logo_file,
+			admin_yn,
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+ 	 from
+ 			owner
+    </select>
+
+    <select id="select">
+    select
+			owner_seq,
+			owner_name,
+			owner_id,
+			owner_pwd,
+			owner_str_name,
+			owner_str_num,
+			owner_str_tel,
+			owner_add1,
+			owner_add2,
+			logo_path,
+			logo_file,
+			admin_yn,
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+ 	 from
+ 			owner
+     where
+            owner_seq = :1
+    </select>
+
+    <select id="select_login">
+    select
+			owner_seq,
+			owner_name,
+			owner_id,
+			owner_pwd,
+			owner_str_name,
+			owner_str_num,
+			owner_str_tel,
+			owner_add1,
+			owner_add2,
+			logo_path,
+			logo_file,
+			admin_yn,
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+ 	 from
+ 			owner
+     where
+            owner_id = :1
+       and
+            owner_pwd =:2
+    </select>
+
+
+    <update id="insert">
+		insert into owner
+		(
+			owner_seq,
+			owner_name,
+			owner_id,
+			owner_pwd,
+			owner_str_name,
+
+			owner_str_num,
+			owner_str_tel,
+			owner_add1,
+			owner_add2,
+
+			logo_path,
+			logo_file,
+			admin_yn,
+
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+		)
+		values
+		(
+			owner_seq.nextval,
+			:1,
+			:2,
+			:3,
+			:4,
+
+			:5,
+			:6,
+			:7,
+			:8,
+
+			:9,
+			:10,
+			:11,
+
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+			:12,
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+			:13
+		)
+
+    </update>
+
+    <update id="update">
+    	update
+    			owner
+    	   set
+				owner_name		=:1,
+				owner_pwd		=:2,
+				owner_str_name	=:3,
+				owner_str_num   =:4,
+
+				owner_str_tel	=:5,
+				owner_add1		=:6,
+				owner_add2		=:7,
+				logo_path		=:8,
+						
+				logo_file		=:9,
+    	     	up_date			=to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+    	     	up_user_id		=:10
+    	 where
+    	 		owner_seq =:11
+
+    </update>
+
+    <update id="delete">
+    	delete
+    	  from owner
+    	 where owner_seq =:1
+    </update>
+
+
+    <select id="id_check">
+    select
+			owner_seq,
+			owner_name,
+			owner_id,
+			owner_pwd,
+			owner_str_name,
+			owner_str_num,
+			owner_str_tel,
+			owner_add1,
+			owner_add2,
+			logo_path,
+			logo_file,
+			admin_yn,
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+ 	 from
+ 			owner
+     where
+            owner_id = :1
+    </select>
+
+
+    <select id="owner_str_num_check">
+    select
+			owner_seq,
+			owner_name,
+			owner_id,
+			owner_pwd,
+			owner_str_name,
+			owner_str_num,
+			owner_str_tel,
+			owner_add1,
+			owner_add2,
+			logo_path,
+			logo_file,
+			admin_yn,
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+ 	 from
+ 			owner
+     where
+            owner_str_num = :1
+    </select>
+</mapper>

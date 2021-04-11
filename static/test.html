@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
+    <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
+    <script>
+    </script>
+    <style>
+        /*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+        .table-fixed tbody {
+            height: 300px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .table-fixed thead,
+        .table-fixed tbody,
+        .table-fixed tr,
+        .table-fixed td,
+        .table-fixed th {
+            display: block;
+        }
+
+        .table-fixed tbody td,
+        .table-fixed tbody th,
+        .table-fixed thead > tr > th {
+            float: left;
+            position: relative;
+
+        &
+        ::after {
+            content: '';
+            clear: both;
+            display: block;
+        }
+
+        }
+
+        /*
+        *
+        * ==========================================
+        * FOR DEMO PURPOSES
+        * ==========================================
+        *
+        */
+
+        body {
+            background: #74ebd5;
+            background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            min-height: 100vh;
+
+        }
+
+
+    </style>
+</head>
+<body>
+<!-- Fixed header table-->
+<div class="table-responsive">
+    <table class="table table-fixed">
+        <thead>
+        <tr>
+            <th scope="col" class="col-3">#</th>
+            <th scope="col" class="col-3">First</th>
+            <th scope="col" class="col-3">Last</th>
+            <th scope="col" class="col-3">Handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row" class="col-3">1</th>
+            <td class="col-3">Mark</td>
+            <td class="col-3">Otto</td>
+            <td class="col-3">@mdo</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">2</th>
+            <td class="col-3">Jacob</td>
+            <td class="col-3">Thornton</td>
+            <td class="col-3">@fat</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">3</th>
+            <td colspan="2" class="col-6">Larry the Bird</td>
+            <td class="col-3">@twitter</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">4</th>
+            <td class="col-3">Martin</td>
+            <td class="col-3">Williams</td>
+            <td class="col-3">@Marty</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">5</th>
+            <td colspan="2" class="col-3">Sam</td>
+            <td colspan="2" class="col-3">Pascal</td>
+            <td class="col-3">@sam</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">6</th>
+            <td class="col-3">John</td>
+            <td class="col-3">Green</td>
+            <td class="col-3">@john</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">7</th>
+            <td colspan="2" class="col-3">David</td>
+            <td colspan="2" class="col-3">Bowie</td>
+            <td class="col-3">@david</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">8</th>
+            <td class="col-3">Pedro</td>
+            <td class="col-3">Rodriguez</td>
+            <td class="col-3">@rod</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">5</th>
+            <td colspan="2" class="col-3">Sam</td>
+            <td colspan="2" class="col-3">Pascal</td>
+            <td class="col-3">@sam</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">10</th>
+            <td class="col-3">Jacob</td>
+            <td class="col-3">Thornton</td>
+            <td class="col-3">@fat</td>
+        </tr>
+        <tr>
+            <th scope="row" class="col-3">11</th>
+            <td colspan="2" class="col-6">Larry the Bird</td>
+            <td class="col-3">@twitter</td>
+        </tr>
+        </tbody>
+    </table>
+</div><!-- End -->
+
+</body>
+</html>

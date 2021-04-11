@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
+    <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
+    <script src="lib/js/input-spinner.js"></script>
+
+    <script type="text/javascript">
+        function fn_k_order() {
+            alert("결제 모달 창")
+        }
+
+        function fn_k_home() {
+            location.href = "k_home"
+        }
+
+        function fn_menu() {
+            location.href = "k_menu"
+        }
+
+        function fn_cate1() {
+            location.href = "k_cate1"
+        }
+
+        function fn_cate2() {
+            location.href = "k_cate2"
+        }
+
+        function fn_cate3() {
+            location.href = "k_cate3"
+        }
+
+        $(function () {
+            $("input[type='number']").inputSpinner();
+        });
+    </script>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: auto;
+        }
+
+        #voice {
+            z-index: 999;
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="text-align: center" style="height: 100%">
+    <img src="img/logos/papatouch.jpg" width="auto" height="100px">
+    <div class="row" style="height: 100%">
+        <div class="col-sm-7" style="height: 100%">
+            <nav class="nav nav-pills nav-fill">
+                <a class="nav-item nav-link active" href="javascript:fn_menu()">버거</a>
+                <a class="nav-item nav-link" href="javascript:fn_cate1()">치킨</a>
+                <a class="nav-item nav-link" href="javascript:fn_cate2()">사이드</a>
+                <a class="nav-item nav-link" href="javascript:fn_cate3()">음료</a>
+            </nav>
+            <hr>
+            <div class="row menu">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/thigh.png">
+                            <p>싸이버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/bulgogi.png">
+                            <p>불고기버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/deepcheeze.png">
+                            <p>딥치즈버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/firethigh.png">
+                            <p>불싸이버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/whitega.png">
+                            <p>화이트갈릭버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/incre.png">
+                            <p>인크레더블버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/incre.png">
+                            <p>인크레더블버거</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card_body">
+                            <img class="card-img-top" src="img/store/papatouch_img/incre.png">
+                            <p>인크레더블버거</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div style="height: 70%; overflow: hidden">
+                <div class="row" style="padding-top: 8px; padding-bottom: 8px">
+                    <div class="col-4">메뉴명</div>
+                    <div class="col-5">수량</div>
+                    <div class="col-3">가격</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-4">인크레더블버거</div>
+                    <div class="col-5"><input type="number" value="1" min="1" max="200"></div>
+                    <div class="col-3">5600
+                        <button type="button" class="btn">×</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-4">싸이버거</div>
+                    <div class="col-5"><input type="number" value="1" min="1" max="200"></div>
+                    <div class="col-3">5600
+                        <button type="button" class="btn">×</button>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 30%; width: 100%">
+                <div class="btn-group-vertical" style="height: 100%; width: 100%">
+                    <button type="button" class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-target="#payment_tool">결제</button>
+                    <button type="button" class="btn btn-danger btn-lg btn-block" onclick="fn_k_home()">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="payment_tool" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kakaopay">결제</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">결제를 진행하시겠습니까?</div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" href="#" data-dismiss="modal">결제</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="voice">
+    <img src="img/siri.png" width="150px" height="auto" onclick="alert('김 현 준')">
+</div>
+</body>
+</html>

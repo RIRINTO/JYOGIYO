@@ -1,0 +1,143 @@
+{% extends 'web/layout.html' %}
+
+{% block content %}
+    <script>
+        $('span').each(function () {
+            if ($(this).html() === "이벤트 관리") {
+                $(this).parents('li').addClass('active');
+                return false;
+            }
+        });
+        $(document).ready(function () {
+            $('.menumodify').hide();
+            $('.menumodify').css({
+                height: '25px',
+                fontSize: '10px'
+            });
+            $('.menu').hover(function () {
+                $(this).find('.menumodify').show();
+            }, function () {
+                $(this).find('.menumodify').hide();
+            });
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover',
+                html: true,
+                content: function () {
+                    return '<img class="img-fluid" src="' + $(this).data('img') + '" />';
+                }
+            });
+        });
+
+        function fn_event_detail(owner_seq,event_seq){
+        	location.href="event_detail?owner_seq="+owner_seq+"&event_seq="+event_seq;
+        }
+        function fn_add(){
+            document.event_add.submit();
+        }
+
+    </script>
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Content Row -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-dark">이벤트 관리</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div style="text-align: right">
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#EventaddModal">추가</button>
+                        </div>
+	                    <br>
+                        <table class="table table-hover" style="text-align: center">
+                            <thead class="table-warning">
+                            <tr>
+                                <th>순번</th>
+                                <th>제목</th>
+                                <th>이벤트 기간</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {%for i in list %}
+                            <tr class="menu" onclick="fn_event_detail('{{i.owner_seq}}','{{i.event_seq}}')">
+                                <td>{{i.event_seq}}</td>
+                                <td>{{i.event_title}}</td>
+                                <td>{{i.event_start}}~{{i.event_end}}</td>
+                            </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- event add Modal-->
+    <div class="modal fade" id="EventaddModal" tabindex="-1" role="dialog" aria-labelledby="eventaddModl" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventaddModl">이벤트 추가</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- event add Modal content -->
+
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <form action="event_addact" method="post" name="event_add" enctype = "multipart/form-data">
+                                <input type="hidden" name="event_seq" value="{{event_seq}}">
+                                <table class="table" style="text-align: center">
+                                    <tr>
+                                        <th>순번</th>
+                                        <td>자동생성</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>제목</th>
+                                        <td><input type="text" style="width: 500px" name="event_title"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>내용</th>
+                                        <td>
+                                            <textarea class="form-control" rows="5" cols="100" name="event_content"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>이미지</th>
+                                        <td><input type="file" class="form-control-file border" name="event_file"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>이벤트기간</th>
+                                        <td><input type="date" class="form-control" name="event_start"> ~ <input type="date" class="form-control" name="event_end"></td>
+                                    </tr>
+
+                                </table>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of event modify  Modal content -->
+                </div>
+                <div style="text-align: right" class="modal-footer">
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_add()">추가 완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- end of event add  Modal-->
+
+{% endblock %}
+

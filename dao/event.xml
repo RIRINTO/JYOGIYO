@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+    <select id="selectAll">
+        SELECT
+            owner_seq,
+            event_seq,
+            event_title,
+            event_content,
+            to_char(event_start, 'yyyy-mm-dd'),
+            to_char(event_end, 'yyyy-mm-dd'),
+            attach_path,
+            attach_file,
+            in_date,
+            in_user_id,
+            up_date,
+            up_user_id
+        FROM
+            event
+        order by
+            event_seq
+    </select>
+    <select id="select">
+        SELECT
+            owner_seq,
+            event_seq,
+            event_title,
+            event_content,
+            to_char(event_start,'YYYY-MM-DD'),
+            to_char(event_end,'YYYY-MM-DD'),
+            attach_path,
+            attach_file,
+            in_date,
+            in_user_id,
+            up_date,
+            up_user_id
+        FROM
+            event
+        WHERE
+            owner_seq =:1
+        AND
+            event_seq =:2
+    </select>
+    <update id="insert">
+         INSERT INTO event
+        (
+   	 		owner_seq,
+            event_seq,
+            event_title,
+            event_content,
+            event_start,
+            event_end,
+            attach_path,
+            attach_file,
+            in_date,
+            in_user_id,
+            up_date,
+            up_user_id
+        )
+        VALUES
+        (
+	        :1,
+	        event_seq.nextval,
+	        :2,
+	        :3,
+	        to_date(:4, 'YYYY-MM-DD'),
+	        to_date(:5, 'YYYY-MM-DD') + 1 - 1/24/60/60,
+            :6,
+            :7,
+	        to_char(sysdate, 'YYYYMMDD.HHMISS'),
+	        :8,
+	        to_char(sysdate, 'YYYYMMDD.HHMISS'),
+            :9
+        )
+    </update>
+    <update id="update">
+        UPDATE
+        	event
+       	SET
+	        event_title			=:1,
+	        event_content		=:2,
+	        event_start			=:3,
+	        event_end			=:4,
+            attach_path         =:5,
+            attach_file         =:6,
+	        up_date				=to_char(sysdate, 'YYYYMMDD.HHMISS'),
+	        up_user_id			=:7
+         WHERE
+         	owner_seq=:8
+         AND
+            event_seq=:9
+    </update>
+    
+    <update id="del_img">
+        update
+        	event
+       	set
+	        attach_path			= '',
+	        attach_file			= '',
+	        up_date				=to_char(sysdate, 'YYYYMMDD.HHMISS'),
+	        up_user_id			=:1
+         where
+         	owner_seq=:2
+         and
+            event_seq=:3
+
+    </update>
+    <update id="delete">
+        delete from event
+        where
+            owner_seq=:1
+        and
+            event_seq=:2
+        and
+            to_char(sysdate,('YYYYMMDD')) > to_char(event_end,('YYYYMMDD'))
+    </update>
+</mapper>

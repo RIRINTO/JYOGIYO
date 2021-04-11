@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
+    <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
+
+
+</head>
+
+
+<body>
+<!-- Page Wrapper -->
+
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav sidebar bg-danger sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard"> <img src="img/logo_white.png" alt="logo_white" width="100px" height="auto">
+        </a>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item"><a class="nav-link" href="dashboard"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item"><a class="nav-link" href="noti_list"> <i class="fas fa-fw fa-table"></i> <span>공지사항</span></a></li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item"><a class="nav-link" href="cate_list"> <i class="fas fa-fw fa-chart-area"></i> <span>카테고리 관리</span></a></li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item"><a class="nav-link" href="menu_list"> <i class="fas fa-fw fa-chart-area"></i> <span>메뉴 관리</span></a></li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item"><a class="nav-link" href="event_list"> <i class="fas fa-fw fa-table"></i> <span>이벤트 관리</span></a></li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item"><a class="nav-link" href="sys_ques_list"> <i class="fas fa-fw fa-chart-area"></i> <span>시스템 문의사항</span></a></li>
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                    <li class="nav-item dropdown no-arrow d-sm-none"><a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false"> <i class="fas fa-search fa-fw"></i>
+                    </a> <!-- Dropdown - Messages -->
+                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-dark" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow"><a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span
+                            class="mr-2 d-none d-lg-inline text-gray-600 small">신민경</span> <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                    </a> <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="account_show"> <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 정보 보기
+                            </a> <a class="dropdown-item" href="account_manage"> <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> 정보 수정
+                        </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+            {% block content %} {% endblock %}
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; jyogiyo 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+
+    </div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">로그아웃 하시겠습니까?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">하단의 "Logout" 버튼을 누르시면 로그아웃됩니다.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-dark" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Logout Modal-->
+
+
+    <!-- category modify Modal-->
+
+    <div class="modal fade" id="CateModModal" tabindex="-1" role="dialog" aria-labelledby="CateModModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="CateModModalLabel">카테고리 수정</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- category modify Modal content -->
+
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <table class="table" style="text-align: center">
+                                    <tr>
+                                        <th>순번</th>
+                                        <td>1</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>카테고리명</th>
+                                        <td><input type="text" class="form-control" value="싸이버거"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>이미지</th>
+                                        <td>
+                                            <img src="img/싸이버거.jpg"> <input type="file" class="form-control-file border">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>설명</th>
+                                        <td>
+                                            <textarea class="form-control" rows="5" cols="100">싸이버거는 맛있어</textarea>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>공개여부</th>
+                                        <td>
+                                            <input type="radio" value="y"> 공개
+                                            <input type="radio" value="n"> 비공개
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- end of category modify Modal content -->
+                </div>
+                <div style="text-align: right" class="modal-footer">
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal">수정 완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of category modify Modal-->
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+{% extends 'web/layout.html' %} {% block content %}
+<script>
+	$('span').each(function() {
+		if ($(this).html() === "카테고리 관리") {
+			$(this).parents('li').addClass('active');
+			return false;
+		}
+	});
+	$(document).ready(
+			function() {
+				$('[data-toggle="popover"]').popover(
+						{
+							trigger : 'hover',
+							html : true,
+							content : function() {
+								return '<img class="img-fluid" src="'
+										+ $(this).data('img') + '" />';
+							}
+						});
+			});
+
+	function fn_cate_detail(ord) {
+		location.href = "cate_detail?ord=" + ord;
+	}
+
+// #################################################################################################	
+
+
+// #################################################################################################	
+</script>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-xl-12 col-lg-12">
+			<div class="card shadow mb-4">
+				<!-- Card Header - Dropdown -->
+				<div
+					class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+					<h6 class="m-0 font-weight-bold text-dark">카테고리 관리</h6>
+				</div>
+				<!-- Card Body -->
+				<div class="card-body">
+					<div style="text-align: right">
+						<button type="button" class="btn btn-outline-primary" onclick="fn_opne_btn">추가</button>
+					</div>
+<!-- ###################################################################################################-->					
+					<!-- category modify Modal-->
+					<!-- The Modal -->
+					<div id="myModal" class="modal">
+
+						<!-- Modal content -->
+						<div class="modal-content">
+							<span class="close">&times;</span>
+							<p>Some text in the Modal..</p>
+						</div>
+					</div>
+<!-- ###################################################################################################-->					
+
+
+					<div class="modal fade" id="CateModModal" tabindex="-1"
+						role="dialog" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-xl" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">카테고리 수정</h5>
+									<button class="close" type="button" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">×</span>
+									</button>
+								</div>
+								<div class="modal-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+									<br>
+									<table class="table table-hover" style="text-align: center">
+										<thead class="table-warning">
+											<tr>
+												<th>순번</th>
+												<th>카테고리명</th>
+												<th>이미지</th>
+												<th>표시여부</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr class="menu" onclick="fn_cate_detail(1)">
+												<td>1</td>
+												<td>버거</td>
+												<td><img src="img/img.svg" alt="img" width="25px"
+													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
+													data-placement="left"></td>
+												<td>Y</td>
+											</tr>
+											<tr class="menu" onclick="fn_cate_detail(1)">
+												<td>2</td>
+												<td>치킨</td>
+												<td><img src="img/img.svg" alt="img" width="25px"
+													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
+													data-placement="left"></td>
+												<td>Y</td>
+											</tr>
+											<tr class="menu" onclick="fn_cate_detail(1)">
+												<td>3</td>
+												<td>사이드</td>
+												<td><img src="img/img.svg" alt="img" width="25px"
+													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
+													data-placement="left"></td>
+												<td>Y</td>
+											</tr>
+											<tr class="menu" onclick="fn_cate_detail(1)">
+												<td>4</td>
+												<td>음료</td>
+												<td><img src="img/img.svg" alt="img" width="25px"
+													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
+													data-placement="left"></td>
+												<td>Y</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endblock %}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Menu">
+    <select id="selectAll">
+        SELECT MENU_SEQ,
+               M.OWNER_SEQ,
+               M.CATE_SEQ,
+               MENU_NAME,
+               MENU_PRICE,
+               MENU_CONTENT,
+               MENU_DISPLAY_YN,
+               M.ATTACH_PATH,
+               M.ATTACH_FILE,
+               M.IN_DATE,
+               M.IN_USER_ID,
+               M.UP_DATE,
+               M.UP_USER_ID,
+               C.CATE_NAME
+        FROM MENU M
+                 INNER JOIN CATEGORY C on M.CATE_SEQ = C.CATE_SEQ
+        WHERE M.OWNER_SEQ = :V_OWNER_SEQ
+        ORDER BY MENU_SEQ
+    </select>
+    <select id="select">
+        SELECT MENU_SEQ,
+               M.OWNER_SEQ,
+               M.CATE_SEQ,
+               MENU_NAME,
+               MENU_PRICE,
+               MENU_CONTENT,
+               MENU_DISPLAY_YN,
+               M.ATTACH_PATH,
+               M.ATTACH_FILE,
+               M.IN_DATE,
+               M.IN_USER_ID,
+               M.UP_DATE,
+               M.UP_USER_ID,
+               C.CATE_NAME
+        FROM MENU M
+                 INNER JOIN CATEGORY C on M.CATE_SEQ = C.CATE_SEQ
+        WHERE M.MENU_SEQ = :V_MENU_SEQ
+          AND M.OWNER_SEQ = :V_OWNER_SEQ
+    </select>
+    <update id="insert">
+        INSERT INTO MENU(MENU_SEQ,
+                         OWNER_SEQ,
+                         CATE_SEQ,
+                         MENU_NAME,
+                         MENU_PRICE,
+                         MENU_CONTENT,
+                         MENU_DISPLAY_YN,
+                         ATTACH_PATH,
+                         ATTACH_FILE,
+                         IN_DATE,
+                         IN_USER_ID,
+                         UP_DATE,
+                         UP_USER_ID)
+        VALUES (MENU_SEQ.NEXTVAL,
+                :V_OWNER_SEQ,
+                :V_CATE_SEQ,
+                :V_MENU_NAME,
+                :V_MENU_PRICE,
+                :V_MENU_CONTENT,
+                :V_MENU_DISPLAY_YN,
+                :V_ATTACH_PATH,
+                :V_ATTACH_FILE,
+                TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+                :V_IN_USER_ID,
+                TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+                :V_UP_USER_ID)
+    </update>
+    <update id="update">
+        UPDATE MENU
+        SET CATE_SEQ        = :V_CATE_SEQ,
+            MENU_NAME       = :V_MENU_NAME,
+            MENU_PRICE      = :V_MENU_PRICE,
+            MENU_CONTENT    = :V_MENU_CONTENT,
+            MENU_DISPLAY_YN = :V_MENU_DISPLAY_YN,
+            ATTACH_PATH     = :V_ATTACH_PATH,
+            ATTACH_FILE     = :V_ATTACH_FILE,
+            UP_DATE         = TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+            UP_USER_ID      = :V_UP_USER_ID
+        WHERE MENU_SEQ = :V_MENU_SEQ
+    </update>
+</mapper>
