@@ -149,10 +149,11 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <form name="noti_mod_form" action="noti_mod" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="noti_seq" value="{{noti.noti_seq}}"> 
-                                <input type="hidden" name="attach_path" value="{{noti.attach_path}}"> 
-                                <input type="hidden" name="attach_file" value="{{noti.attach_file}}"> 
-                                <table class="table" style="text-align: center">
+                                <input type="hidden" name="noti_seq" value="{{noti.noti_seq}}">
+                                <input type="hidden" name="attach_path" value="{{noti.attach_path}}">
+                                <input type="hidden" name="attach_file" value="{{noti.attach_file}}">
+
+                                    <table class="table" style="text-align: center">
                                     <tr>
                                         <th>순번</th>
                                         <td>{{noti.note_seq}}</td>
