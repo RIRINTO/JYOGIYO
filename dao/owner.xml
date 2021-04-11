@@ -2,7 +2,10 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Owner">
-
+	<select id="owner_seq_gen">
+		select owner_seq.nextval
+		from dual
+		</select>
 
     <select id="selectAll">
     select
@@ -93,7 +96,6 @@
 
 			logo_path,
 			logo_file,
-			admin_yn,
 
 			in_date,
 			in_user_id,
@@ -102,21 +104,17 @@
 		)
 		values
 		(
-			owner_seq.nextval,
 			:1,
 			:2,
 			:3,
 			:4,
-
 			:5,
 			:6,
 			:7,
 			:8,
-
 			:9,
 			:10,
 			:11,
-
 			to_char(sysdate, 'YYYYMMDD.HH24MISS'),
 			:12,
 			to_char(sysdate, 'YYYYMMDD.HH24MISS'),

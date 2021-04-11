@@ -38,20 +38,28 @@ def main():
 
 @app.route('/register', methods=['POST'])
 def register():
-    owner_seq = "5"
     owner_name = request.form["owner_name"]
     owner_id = request.form["owner_id"]
     owner_pwd = request.form["owner_pwd"]
     owner_str_name = request.form["owner_str_name"]
-    owner_str_num = request.form["owner_str_num"]
-    owner_str_tel = request.form["owner_str_tel"]
-    #     logo = request.file["logo"]
-    owner_post = request.form["owner_post"]
+    owner_str_num = request.form["owner_str_num"].replace("-","")
+    owner_str_tel = request.form["owner_str_tel"].replace("-","")
+
     owner_add1 = request.form["owner_add1"]
     owner_add2 = request.form["owner_add2"]
 
+    owner_seq = daoOwner.owner_seq_gen()
+
+    logo = request.files["logo"]
+    upload_dir = DIR_UPLOAD + '/' + str(owner_seq)
+    os.makedirs(upload_dir, exist_ok=True)
+
+    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + secure_filename(logo.filename)
+    logo.save(os.path.join(upload_dir, attach_file))
+
     try:
-        cnt = daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_post, owner_add1, owner_add2, "logo_path", "logo_file", "n", "in_date", "in_user_id", "up_date", "up_user_id")
+        cnt = daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, upload_dir, attach_file, "in_date", owner_id, "up_date", owner_id)
+        print('cnt',cnt)
         if cnt:
             return redirect("login.html")
     except:
@@ -75,12 +83,13 @@ def owner_str_num_check_ajax():
 def login():
     owner_id = request.form["owner_id"]
     owner_pwd = request.form["owner_pwd"]
-    
+
     obj = daoOwner.select_login(owner_id, owner_pwd)
     if obj:
-        session["owner_seq"] = obj["owner_seq"] 
+        session["owner_seq"] = obj["owner_seq"]
         return render_template('web/dashboard/dashboard.html', obj=obj)
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -217,8 +226,8 @@ def noti_del_img():
 def noti_download():
     attach_path = request.args.get('attach_path')
     attach_file = request.args.get('attach_file')
-    file_name = attach_path +"/"+attach_file
-    
+    file_name = attach_path + "/" + attach_file
+
     return send_file(file_name,
                      as_attachment=True)
 
@@ -270,7 +279,10 @@ def menu_mod_form():
     menu_display_yn = request.form['menu_display_yn']
     up_user_id = request.form['up_user_id']
 
+
     file = request.files['file']
+    if file:
+
     attach_path = request.form['']
     attach_file = request.files['']
 
@@ -451,7 +463,6 @@ def sys_ques_add_render():
     attach_file_temp = secure_filename(file.filename)
     attach_path_temp = str(datetime.today().strftime("%Y%m%d%H%M%S")) + "_" + attach_file_temp
     file.save(DIR_UPLOAD + attach_path_temp)
-
 
     attach_path = ""
     attach_file = ""

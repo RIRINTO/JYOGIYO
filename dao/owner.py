@@ -4,7 +4,7 @@ import configparser
 
 
 class DaoOwner:
-    def __init__(self,config_path='config.ini', xml_path='dao/owner.xml'):
+    def __init__(self, config_path='config.ini', xml_path='dao/owner.xml'):
         config = configparser.ConfigParser()
         config.read(config_path)
         database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database']['hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
@@ -12,15 +12,20 @@ class DaoOwner:
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
 
+    def owner_seq_gen(self):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "owner_seq_gen")
+        self.cs.execute(sql)
+        return self.cs.fetchone()[0]
+
     def selectAll(self):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectAll")
         rs = self.cs.execute(sql)
         list = []
         for record in rs:
             list.append({'owner_seq': record[0], 'owner_name': record[1], 'owner_id': record[2], 'owner_pwd': record[3],
-                   'owner_str_name': record[4], 'owner_str_num': record[5], 'owner_str_tel': record[6], 'owner_add1': record[7],
-                   'owner_add2': record[8], 'logo_path': record[9], 'logo_file': record[10], 'admin_yn': record[11],
-                   'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]})
+                         'owner_str_name': record[4], 'owner_str_num': record[5], 'owner_str_tel': record[6], 'owner_add1': record[7],
+                         'owner_add2': record[8], 'logo_path': record[9], 'logo_file': record[10], 'admin_yn': record[11],
+                         'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]})
         return list
 
     def select(self, owner_seq):
@@ -34,9 +39,9 @@ class DaoOwner:
                    'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]}
         return obj
 
-    def select_login(self,owner_id,owner_pwd):
+    def select_login(self, owner_id, owner_pwd):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select_login")
-        rs = self.cs.execute(sql, (owner_id,owner_pwd))
+        rs = self.cs.execute(sql, (owner_id, owner_pwd))
         obj = None
         for record in rs:
             obj = {'owner_seq': record[0], 'owner_name': record[1], 'owner_id': record[2], 'owner_pwd': record[3],
@@ -45,14 +50,14 @@ class DaoOwner:
                    'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]}
         return obj
 
-    def insert(self, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel,  owner_add1, owner_add2, logo_path, logo_file, admin_yn, in_date, in_user_id, up_date, up_user_id):
+    def insert(self, owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, ( owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, admin_yn, in_user_id, up_user_id))
+        self.cs.execute(sql, (owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, in_user_id, up_user_id))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
 
-    def update(self, owner_seq, owner_name, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, admin_yn, up_date, up_user_id):
+    def update(self, owner_seq, owner_name, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         self.cs.execute(sql, (owner_name, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, up_user_id, owner_seq))
         self.conn.commit()
@@ -75,7 +80,6 @@ class DaoOwner:
         self.cs.execute(sql, (owner_id,))
         return self.cs.rowcount
 
-
     def owner_str_num_check(self, owner_str_num):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "owner_str_num_check")
         self.cs.execute(sql, (owner_str_num,))
@@ -83,7 +87,7 @@ class DaoOwner:
 
 
 if __name__ == '__main__':
-    daoOwner = DaoOwner(config_path='../config.ini', xml_path='owner.xml');
+    daoOwner = DaoOwner(config_path='../config.ini', xml_path='owner.xml')
 #     list = dao.selectAll()
 #     cnt = daoOwner.insert("3", "김현주", "khj@naver.com", "1234", "홍콩반점", "123434123", "01023121231", "12344", "대전 중구", "은행동", "", "", "y", "in_date", "khj", "", "khj")
 #     cnt = dao.update("2", "3", "3","3","3","3","3","3","3","3","3","3","3","3")
