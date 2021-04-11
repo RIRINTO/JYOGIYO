@@ -104,7 +104,7 @@ def dashboard():
 def account_manage():
     if 'owner_seq' not in session:
         return redirect('login.html')
-    owner_seq = escape(session["owner_seq"])
+    owner_seq = session["owner_seq"]
     obj = daoOwner.select(owner_seq)
     if obj:
         owner_str_num = list(obj['owner_str_num'])
@@ -121,7 +121,7 @@ def account_manage():
 def account_show():
     if 'owner_seq' not in session:
         return redirect('login.html')
-    owner_seq = escape(session["owner_seq"])
+    owner_seq = session["owner_seq"]
     obj = daoOwner.select(owner_seq)
     if obj:
         owner_str_num = list(obj['owner_str_num'])
@@ -132,6 +132,21 @@ def account_show():
         print(owner_str_num)
         obj['owner_str_num'] = ''.join(owner_str_num)
     return render_template('web/account/account_show.html', owner=obj)
+
+@app.route('/account_mod', methods=["POST"])
+def account_mod():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_seq = session["owner_seq"]
+    owner_name = request.form["owner_name"]
+    owner_pwd = request.form["owner_pwd"]
+    owner_str_name = request.form["owner_str_name"]
+    owner_str_tel = request.form["owner_str_tel"]
+
+    owner_add1 = request.form["owner_add1"]
+    owner_add2 = request.form["owner_add2"]
+    cnt = daoOwner.update(owner_seq,owner_name,owner_pwd)
+
 
 
 ##################   notice   ######################

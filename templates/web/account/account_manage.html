@@ -3,8 +3,6 @@
 {% block content %}
     <script>
     </script>
-    
-    
 
     <!-- Begin Page Content -->
     <div class="container">
@@ -18,14 +16,14 @@
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
-						<form class="user" action="register" method="post" enctype="multipart/form-data" name="register_form">
+						<form class="user" action="account_mod" method="post" enctype="multipart/form-data" >
                             <div class="form-group">
                                    <input type="text" class="form-control form-control-user" name="owner_name" 
                                    placeholder="이름"  value="{{owner.owner_name}}">
                             </div>
                             <div class="form-group">
                                 <input type="email" class="form-control form-control-user" name="owner_id" 
-                                placeholder="아이디 ( 이메일 )"  value="{{owner.owner_id}}">
+                                placeholder="아이디 ( 이메일 )"  value="{{owner.owner_id}}" readonly >
                             </div>
                             <div class="form-group">
                                     <input type="password" class="form-control form-control-user" name="owner_pwd" 
@@ -39,7 +37,7 @@
                             </div>
                             <div class="form-group">
                                 <input type="text" name="owner_str_num" class="form-control form-control-user" placeholder="사업자등록번호 또는 가맹점번호"  
-                                value="{{owner.owner_str_num}}">
+                                value="{{owner.owner_str_num}}" readonly >
                             </div>
                             
                             <div class="form-group">
@@ -52,28 +50,27 @@
                                     <p align="center">회사 로고 지정</p>
                                 </div>
                                 <div class="col-sm-9 mb-3 mb-sm-0">
-                                    <input type="file" name="logo" class="form-control-file border"  >
+                                    <input type="file" name="logo" class="form-control-file border">
                                 </div>
                             </div>
                             
                             <hr>
                             <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="password" name="owner_post" class="form-control form-control-user" placeholder="우편번호" readonly 
-                                    value="{{owner.owner_post}}">
+                                <div class="col-8">
+                                    <input type="text" name="owner_add1" class="form-control form-control-user" placeholder="주소"
+                                           value="{{owner.owner_add1}}" readonly required>
                                 </div>
-							    <button data-toggle="modal" data-target="#AddSearchModal" type="button" class="btn btn-primary btn-user">번호검색</button>
+                                <div class="col-4">
+                                    <button data-toggle="modal" data-target="#AddSearchModal" type="button" class="btn btn-primary btn-user">주소검색</button>
+                                </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <input type="text" name="owner_add1" class="form-control form-control-user" placeholder="주소"  
-                                value="{{owner.owner_add1}}">
+                            <div class="form-group row">
+                                <div class="col-8">
+                                    <input type="text" name="owner_add2" class="form-control form-control-user" placeholder="상세주소"
+                                           value="{{owner.owner_add2}}" required>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <input type="text" name="owner_add2" class="form-control form-control-user" placeholder="상세주소"  
-                                value="{{owner.owner_add2}}">
-                            </div>
-                            <input type="button" class="btn btn-primary btn-user btn-block" value="수정">
+                            <button type="submit" class="btn btn-primary btn-user btn-block">수정</button>
                         </form>
                     </div>
                 </div>
