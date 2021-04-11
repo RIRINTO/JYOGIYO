@@ -1,126 +1,140 @@
-{% extends 'web/layout.html' %} {% block content %}
+{% extends 'web/layout.html' %}
+{% block content %}
 <script>
-	$('span').each(function() {
-		if ($(this).html() === "카테고리 관리") {
-			$(this).parents('li').addClass('active');
-			return false;
-		}
-	});
-	$(document).ready(
-			function() {
-				$('[data-toggle="popover"]').popover(
-						{
-							trigger : 'hover',
-							html : true,
-							content : function() {
-								return '<img class="img-fluid" src="'
-										+ $(this).data('img') + '" />';
-							}
-						});
-			});
+   $('span').each(function() {
+      if ($(this).html() === "카테고리 관리") {
+         $(this).parents('li').addClass('active');
+         return false;
+      }
+   });
+   $(document).ready(
+         function() {
+            $('[data-toggle="popover"]').popover(
+                  {
+                     trigger : 'hover',
+                     html : true,
+                     content : function() {
+                        return '<img class="img-fluid" src="'
+                              + $(this).data('img') + '" />';
+                     }
+                  });
+         });
 
-	function fn_cate_detail(ord) {
-		location.href = "cate_detail?ord=" + ord;
-	}
+   function fn_cate_detail(ord) {
+      location.href = "cate_detail?ord=" + ord;
+   }
 
-// #################################################################################################	
-
-
-// #################################################################################################	
+    function fn_cate_add() {
+        document.cate_add_form.submit();
+    }
 </script>
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
-	<!-- Content Row -->
-	<div class="row">
-		<div class="col-xl-12 col-lg-12">
-			<div class="card shadow mb-4">
-				<!-- Card Header - Dropdown -->
-				<div
-					class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-					<h6 class="m-0 font-weight-bold text-dark">카테고리 관리</h6>
-				</div>
-				<!-- Card Body -->
-				<div class="card-body">
-					<div style="text-align: right">
-						<button type="button" class="btn btn-outline-primary" onclick="fn_opne_btn">추가</button>
-					</div>
-<!-- ###################################################################################################-->					
-					<!-- category modify Modal-->
-					<!-- The Modal -->
-					<div id="myModal" class="modal">
+   <!-- Content Row -->
+   <div class="row">
+      <div class="col-xl-12 col-lg-12">
+         <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div
+               class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+               <h6 class="m-0 font-weight-bold text-dark">카테고리 관리</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+               <div style="text-align: right">
+                  <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#CateAddModal">추가</button>
+               </div>
+               <br>
+               <table class="table table-hover" style="text-align: center">
+                  <thead class="table-warning">
+                     <tr>
+                        <th>순번</th>
+                        <th>카테고리명</th>
+                        <th>이미지</th>
+                        <th>표시여부</th>
+                     </tr>
+                  </thead>
+                  <tbody>
 
-						<!-- Modal content -->
-						<div class="modal-content">
-							<span class="close">&times;</span>
-							<p>Some text in the Modal..</p>
-						</div>
-					</div>
-<!-- ###################################################################################################-->					
+                        {% for i in list %}
+                        <tr class="menu" onclick="fn_cate_detail('{{i.cate_seq}}')">
+                            <td>{{i.cate_seq}}</td>
+                            <td>{{i.cate_name}}</td>
+                            <td>{{i.attach_file}}</td>
+                            <td>{{i.cate_display_yn}}</td>
+                        </tr>
+                        {% endfor %}
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
 
 
-					<div class="modal fade" id="CateModModal" tabindex="-1"
-						role="dialog" aria-labelledby="exampleModalLabel"
-						aria-hidden="true">
-						<div class="modal-dialog modal-xl" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">카테고리 수정</h5>
-									<button class="close" type="button" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">×</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<br>
-									<table class="table table-hover" style="text-align: center">
-										<thead class="table-warning">
-											<tr>
-												<th>순번</th>
-												<th>카테고리명</th>
-												<th>이미지</th>
-												<th>표시여부</th>
-											</tr>
-										</thead>
 
-										<tbody>
-											<tr class="menu" onclick="fn_cate_detail(1)">
-												<td>1</td>
-												<td>버거</td>
-												<td><img src="img/img.svg" alt="img" width="25px"
-													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
-													data-placement="left"></td>
-												<td>Y</td>
-											</tr>
-											<tr class="menu" onclick="fn_cate_detail(1)">
-												<td>2</td>
-												<td>치킨</td>
-												<td><img src="img/img.svg" alt="img" width="25px"
-													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
-													data-placement="left"></td>
-												<td>Y</td>
-											</tr>
-											<tr class="menu" onclick="fn_cate_detail(1)">
-												<td>3</td>
-												<td>사이드</td>
-												<td><img src="img/img.svg" alt="img" width="25px"
-													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
-													data-placement="left"></td>
-												<td>Y</td>
-											</tr>
-											<tr class="menu" onclick="fn_cate_detail(1)">
-												<td>4</td>
-												<td>음료</td>
-												<td><img src="img/img.svg" alt="img" width="25px"
-													height="auto" data-toggle="popover" data-img="img/싸이버거.jpg"
-													data-placement="left"></td>
-												<td>Y</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				{% endblock %}
+<!-- notice modify Modal-->
+<div class="modal fade" id="CateAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CateAddModalLabel">카테고리 추가</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <!-- category modify Modal content -->
+
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <form name="cate_add_form" action="cate_add" method="post" enctype="multipart/form-data">
+                                <table class="table" style="text-align: center">
+
+                                    <tr>
+                                        <th>카테고리명</th>
+                                        <td><input type="text" name="cate_name" class="form-control" placeholder="카테고리명을 입력해주세요."></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>내용</th>
+                                        <td>
+                                            <textarea class="form-control" name="cate_content" rows="5" cols="100" placeholder="카테고리의 설명을 입력해주세요."></textarea>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>첨부파일</th>
+                                        <td>
+                                            <input type="file" name="cate_file">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>표시여부</th>
+                                        <td>
+                                            <input type="radio" name="cate_display_yn" value="y" required> 공개
+                                            <input type="radio" name="cate_display_yn" value="n" required> 비공개
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end of notice modify  Modal content -->
+            </div>
+            <div style="text-align: right" class="modal-footer">
+                <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_cate_add()">추가완료</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of notice add Modal-->
+{% endblock %}

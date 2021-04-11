@@ -111,26 +111,15 @@
                                 <td>{{noti.in_date}}</td>
                             </tr>
 
-                            <!-- 관리자만 볼수있음 -->
-                            <tr>
-                                <th>공개여부</th>
-                                <td>
-                                {% if noti.noti_display_yn == "y"%}
-                                	공개
-                                {% else %}
-                                	비공개
-                                {% endif %}
-                                </td>
-                            </tr>
-                            
                         </table>
                          <div style="text-align: right">
                             <button type="button" class="btn btn-outline-success" onclick="fn_noti_list()">목록</button>
                            
                            <!-- 관리자만 볼수있음 -->
+                             {% if noti.in_user_id == session.owner_id %}
                             <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#NotiModModal">수정</button>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#NotiDelModal">삭제</button>
-                            
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -190,19 +179,6 @@
                                             {% else %}
                                             <input type="file" class="form-control-file border" name="noti_file">
                                             {% endif %}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>공개여부</th>
-                                        <td>
-                                        {% if noti.noti_display_yn == 'y' %}
-                                            <input type="radio"  name="noti_display_yn" value="y" checked> 공개
-                                            <input type="radio"  name="noti_display_yn" value="n"> 비공개
-                                        {% else %}
-                                            <input type="radio"  name="noti_display_yn" value="y"> 공개
-                                            <input type="radio"  name="noti_display_yn" value="n" checked> 비공개
-                                        {% endif %}
                                         </td>
                                     </tr>
                                 </table>

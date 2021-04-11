@@ -17,9 +17,8 @@ class DaoNotice:
         rs = self.cs.execute(sql)
         list=[]
         for record in rs:
-            list.append({'noti_seq':record[0],'noti_title':record[1],'noti_content':record[2],'noti_display_yn':record[3],                         
-                         'attach_path':record[4],'attach_file':record[5],'in_date':record[6],'in_user_id':record[7],
-                         'up_date':record[8],'up_user_id':record[9]})
+            list.append({'noti_seq':record[0],'noti_title':record[1],'noti_content':record[2],'attach_path':record[3],
+                         'attach_file':record[4],'in_date':record[5],'in_user_id':record[6],'up_date':record[7],'up_user_id':record[8]})
         return list
     
     def select(self, noti_seq):
@@ -27,23 +26,21 @@ class DaoNotice:
         rs = self.cs.execute(sql,(noti_seq,))
         obj = None
         for record in rs:
-            obj = {'noti_seq':record[0],'noti_title':record[1],'noti_content':record[2],'noti_display_yn':record[3],                         
-                   'attach_path':record[4],'attach_file':record[5],'in_date':record[6],'in_user_id':record[7],
-                   'up_date':record[8],'up_user_id':record[9]}
+            obj = {'noti_seq':record[0],'noti_title':record[1],'noti_content':record[2],'attach_path':record[3],
+                    'attach_file':record[4],'in_date':record[5],'in_user_id':record[6],'up_date':record[7],'up_user_id':record[8]}
         return obj
     
-    def insert(self, noti_title, noti_content, noti_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def insert(self, noti_title, noti_content, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (noti_title, noti_content, noti_display_yn, attach_path, attach_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (noti_title, noti_content, attach_path, attach_file, in_user_id, up_user_id))
         self.conn.commit()
         cnt = self.cs.rowcount
-        print(cnt)
         return cnt
 
     
-    def update(self, noti_seq, noti_title, noti_content, noti_display_yn, attach_path, attach_file, up_user_id):
+    def update(self, noti_seq, noti_title, noti_content, attach_path, attach_file, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")        
-        self.cs.execute(sql, (noti_title, noti_content, noti_display_yn, attach_path, attach_file,up_user_id, noti_seq))
+        self.cs.execute(sql, (noti_title, noti_content, attach_path, attach_file,up_user_id, noti_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

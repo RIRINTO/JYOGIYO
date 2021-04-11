@@ -88,6 +88,7 @@ def login():
     obj = daoOwner.select_login(owner_id, owner_pwd)
     if obj:
         session["owner_seq"] = obj["owner_seq"]
+        session["owner_id"] = obj["owner_id"]
         return render_template('web/dashboard/dashboard.html', obj=obj)
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
@@ -115,12 +116,19 @@ def account_show():
 
 @app.route('/noti_list')
 def noti_list():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+
     list = DaoNotice().selectlist()
+    print(list)
     return render_template('web/notice/noti_list.html', list=list)
 
 
 @app.route('/noti_detail')
 def noti_detail():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+
     noti_seq = request.args.get('noti_seq')
     obj = DaoNotice().select(noti_seq)
     return render_template('web/notice/noti_detail.html', noti=obj)
@@ -128,9 +136,13 @@ def noti_detail():
 
 @app.route('/noti_add', methods=['POST'])
 def noti_add():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    owner_id = escape(session['owner_id'])
+
     noti_title = request.form['noti_title']
     noti_content = request.form['noti_content']
-    noti_display_yn = request.form['noti_display_yn']
+
 
     noti_file = request.files['noti_file']
     upload_dir = DIR_UPLOAD + '/' + escape(session['owner_seq'])
@@ -151,7 +163,7 @@ def noti_add():
     print('attach_file', attach_file)
 
     try:
-        cnt = daoNotice.insert(noti_title, noti_content, noti_display_yn, attach_path, attach_file, None, "in_user_id", None, "up_user_id")
+        cnt = daoNotice.insert(noti_title, noti_content, attach_path, attach_file, None, owner_id, None, owner_id)
         if cnt:
             return redirect('noti_list')
     except:
@@ -164,7 +176,6 @@ def noti_mod():
     noti_seq = request.form['noti_seq']
     noti_title = request.form['noti_title']
     noti_content = request.form['noti_content']
-    noti_display_yn = request.form['noti_display_yn']
     attach_path_old = request.form['attach_path']
     attach_file_old = request.form['attach_file']
     print(noti_seq)
@@ -190,7 +201,7 @@ def noti_mod():
         attach_file = attach_file_old
         print("file X")
 
-    cnt = daoNotice.update(noti_seq, noti_title, noti_content, noti_display_yn, attach_path, attach_file, "up_user_id")
+    cnt = daoNotice.update(noti_seq, noti_title, noti_content, attach_path, attach_file, "up_user_id")
     print(cnt)
     if cnt:
         return redirect("noti_detail?noti_seq=" + noti_seq)
