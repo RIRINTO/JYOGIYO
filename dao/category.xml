@@ -16,6 +16,7 @@
                UP_USER_ID
         FROM CATEGORY
         WHERE OWNER_SEQ = :V_OWNER_SEQ
+        ORDER BY CATE_SEQ
     </select>
 
     <select id="selectYList">
@@ -36,7 +37,7 @@
             OR CATE_DISPLAY_YN = 'y')
     </select>
 
-    <select id="selectFromKiosk">
+    <select id="selectKiosk">
         SELECT distinct C.CATE_SEQ,
                C.OWNER_SEQ,
                CATE_NAME,

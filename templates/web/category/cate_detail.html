@@ -38,7 +38,7 @@
 		param += "&cate_seq=" + cate_seq;
 
 		$.ajax({
-			type : "post",
+			type : "post", 
 			url : "cate_del_img.ajax",
 			dataType : "json",
 			data : param,
@@ -104,10 +104,10 @@
                         <tr>
                             <th>공개여부</th>
                             <td>
-                                {% if cate.cate_display_yn == "y" %}
-                                공개
+                                {% if cate.cate_display_yn == "표시" %}
+                                표시
                                 {% else %}
-                                비공개
+                                비표시
                                 {% endif %}
                             </td>
                         </tr>
@@ -183,12 +183,12 @@
 	                                <tr>
 	                                    <th>공개여부</th>
 	                                    <td>
-	                                        {% if cate.cate_display_yn == 'y' %}
-	                                        <input type="radio" name="cate_display_yn" value="y" checked> 공개
-	                                        <input type="radio" name="cate_display_yn" value="n"> 비공개
+	                                        {% if cate.cate_display_yn == '표시' %}
+	                                        <input type="radio" name="cate_display_yn" value="표시" checked> 표시
+	                                        <input type="radio" name="cate_display_yn" value="비표시"> 비표시
 	                                        {% else %}
-	                                        <input type="radio" name="cate_display_yn" value="y"> 공개
-	                                        <input type="radio" name="cate_display_yn" value="n" checked> 비공개
+	                                        <input type="radio" name="cate_display_yn" value="표시"> 표시
+	                                        <input type="radio" name="cate_display_yn" value="비표시" checked> 비표시
 	                                        {% endif %}
 	                                    </td>
 	                                </tr>

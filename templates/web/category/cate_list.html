@@ -14,7 +14,7 @@
            html: true,
            content: function () {
                return '<img class="img-fluid" src="' + $(this).data('img') + '" />';
-           }
+           } 
        });
    });
    
@@ -55,16 +55,20 @@
                   </thead>
                   <tbody>
 
-                        {% for i in list %}
-                        <tr class="menu" onclick="fn_cate_detail('{{i.cate_seq}}')">
-                            <td>{{i.cate_seq}}</td>
-                            <td>{{i.cate_name}}</td>
+                        {% for cate in list %}
+                        <tr class="menu" onclick="fn_cate_detail('{{cate.cate_seq}}')">
+                            <td>{{cate.cate_seq}}</td>
+                            <td>{{cate.cate_name}}</td>
                             <td>
-                                {% if i.attach_file %}
-                                <img src="downloads?path=Z:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{i.attach_path}}&file={{i.attach_file}}" data-placement="left">
+                                {% if cate.attach_file %}
+                                <img src="downloads?path=W:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}" data-placement="left">
                                 {% endif %}
                             </td>
-                            <td>{{i.cate_display_yn}}</td>
+                            {% if cate.cate_display_yn == 'y' %}
+                            	<td>표시</td>
+                            {% else %}
+                            	<td>비표시</td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                </table>
@@ -120,8 +124,8 @@
                                     <tr>
                                         <th>표시여부</th>
                                         <td>
-                                            <input type="radio" name="cate_display_yn" value="y" required> 공개
-                                            <input type="radio" name="cate_display_yn" value="n" required> 비공개
+                                            <input type="radio" name="cate_display_yn" value="y" required> 표시
+                                            <input type="radio" name="cate_display_yn" value="n" required> 비표시
                                         </td>
                                     </tr>
                                 </table>

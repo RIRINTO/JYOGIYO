@@ -1,12 +1,17 @@
 import os
 import random
+import smtplib
+import requests
+import configparser
+import re
 
 from datetime import datetime
 from flask import Flask, render_template, redirect, request, session, escape
 from flask.json import jsonify
 from flask.helpers import send_file, url_for
 from werkzeug.utils import secure_filename
-
+from email.mime.text import MIMEText
+from dao.buy import DaoBuy
 from dao.category import DaoCategory
 from dao.event import DaoEvent
 from dao.menu import DaoMenu
@@ -15,6 +20,7 @@ from dao.notice import DaoNotice
 from dao.sys_ques import DaoSysQues
 from dao.sys_ans import DaoSysAns
 
+daoBuy = DaoBuy()
 daoCategory = DaoCategory()
 daoEvent = DaoEvent()
 daoMenu = DaoMenu()
@@ -23,10 +29,13 @@ daoOwner = DaoOwner()
 daoSysQues = DaoSysQues()
 daoSysAns = DaoSysAns()
 
-DIR_UPLOAD = "Z:/uploads"
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+DIR_UPLOAD, KakaoAK, HOST, PORT = config['DIR_UPLOAD']['DIR_UPLOAD'], config['Kakao']['KakaoAK'], config['network']['HOST'], config['network']['PORT']
 
 app = Flask(__name__, static_url_path="", static_folder="static/")
-app.secret_key = 'hello'
+app.secret_key = os.urandom(24)
 
 
 @app.route('/login')
@@ -94,6 +103,63 @@ def login():
 def logout():
     session.clear()
     return redirect('/login.html')
+
+
+@app.route('/temp_pwd_send.ajax', methods=['POST'])
+def temp_pwd_send_ajax():
+    owner_str_num = request.form["owner_str_num"].replace("-", "")
+    owner_id = request.form["owner_id"]
+
+    try:
+        list = daoOwner.id_check_list(owner_id, owner_str_num)
+    except:
+        return '0'
+
+    smtpName = "smtp.naver.com"  # smtp 서버 주소
+    smtpPort = 587  # smtp 포트 번호
+
+    sendEmail = "hihidaeho@naver.com"
+    password = "shingoha2848"
+    recvEmail = owner_id
+
+    pwd_list = ['!', '@', '#', '$', '%', '^', '&', '+', '=', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 
+            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 
+            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    temp = ""
+    regPwd = '.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*'
+    match = None
+
+    while 1:
+        temp = ""
+        for _ in range(15):
+            match = re.match(regPwd, temp)
+            if match:
+                break
+            temp += pwd_list[random.randint(0,70)]
+        if match:
+            break
+    print(temp)
+    
+    title = "죠기요 임시 비밀번호 발급"             # 메일 제목
+    content = list["owner_name"] + "님의 임시 비밀번호는 " + temp + " 입니다. \n로그인 후에 비밀번호를 변경하여 사용하시기 바랍니다."   # 메일 내용
+
+    msg = MIMEText(content)  # MIMEText(text , _charset = "utf8")
+    msg['From'] = sendEmail
+    msg['To'] = recvEmail
+    msg['Subject'] = title
+
+    try:
+        s = smtplib.SMTP(smtpName, smtpPort)  # 메일 서버 연결
+        s.starttls()  # TLS 보안 처리
+        s.login(sendEmail, password)  # 로그인
+        s.sendmail(sendEmail, recvEmail, msg.as_string())  # 메일 전송, 문자열로 변환하여 보냅니다.
+        s.close()  # smtp 서버 연결을 종료합니다.
+    except:
+        return '0'
+
+    owner_pwd = temp
+    cnt = daoOwner.update_pwd(owner_pwd, owner_id)
+    return str(cnt)
 
 
 @app.route('/')
@@ -276,9 +342,9 @@ def cate_list():
         return redirect('login.html')
     owner_seq = escape(session['owner_seq'])
     list = daoCategory.selectAll(owner_seq)
+    
     return render_template('web/category/cate_list.html', list=list)
-
-
+    
 @app.route('/cate_detail')
 def cate_detail():
     if 'owner_seq' not in session:
@@ -338,6 +404,7 @@ def cate_mod():
         return redirect("cate_detail?cate_seq=" + cate_seq)
     return '<script>alert("수정에 실패하였습니다.");history.back()</script>'
 
+
 @app.route("/cate_del_img.ajax", methods=['POST'])
 def cate_del_img():
     cate_seq = request.form['cate_seq']
@@ -349,6 +416,7 @@ def cate_del_img():
         msg = "ng"
 
     return jsonify(msg=msg)
+
 
 ##################     menu     ######################
 
@@ -452,6 +520,7 @@ def event_detail():
 
 @app.route('/event_addact', methods=['POST'])
 def event_addact():
+    owner_id = escape(session['owner_id'])
     owner_seq = escape(session['owner_seq'])
     event_seq = request.form["event_seq"]
     event_title = request.form["event_title"]
@@ -463,7 +532,7 @@ def event_addact():
     if event_file:
         attach_path, attach_file = saveFile(event_file)
     try:
-        cnt = daoEvent.insert(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, 'in_user_id', None, 'up_user_id')
+        cnt = daoEvent.insert(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, owner_id, None, owner_id)
         if cnt:
             return redirect('event_list')
     except:
@@ -473,6 +542,7 @@ def event_addact():
 
 @app.route('/event_modact', methods=['POST'])
 def event_modact():
+    owner_id = escape(session['owner_id'])
     owner_seq = escape(session['owner_seq'])
     event_seq = request.form["event_seq"]
     event_title = request.form["event_title"]
@@ -491,7 +561,7 @@ def event_modact():
         attach_path, attach_file = saveFile(event_file)
 
     try:
-        cnt = daoEvent.update(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, 'in_user_id', None, 'up_user_id')
+        cnt = daoEvent.update(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, owner_id, None, owner_id)
         if cnt:
             return f'<script>location.href="event_detail?owner_seq={owner_seq}&event_seq={event_seq}"</script>'
     except:
@@ -509,7 +579,7 @@ def event_delact():
             return redirect('event_list')
     except:
         pass
-    return '<script>alert("이벤트 삭제에 실패하였습니다.");history.back()</script>'
+    return '<script>alert("진행중인 이벤트입니다.");history.back()</script>'
 
 
 @app.route("/event_del.ajax", methods=['POST'])
@@ -592,21 +662,18 @@ def sys_ques_mod():
     sys_ques_content = request.form["content"]
     sys_ques_display_yn = request.form["display_yn"]
     file = request.files["file"]
-    old_attach_path = request.form["attach_path"]
-    old_attach_file = request.form["attach_file"]
-
-    attach_path = ""
-    attach_file = ""
+    attach_path = request.form["attach_path"]
+    attach_file = request.form["attach_file"]
 
     if file:
         attach_path, attach_file = saveFile(file)
-        print("file O")
-    else:
-        print("file X")
-
-    cnt = DaoSysQues().update(sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, "", owner_id, "", owner_id)
-    return redirect(url_for('sys_ques_detail', sys_ques_seq=sys_ques_seq))
-
+    
+    try:
+        if DaoSysQues().update(sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, "", owner_id, "", owner_id):
+            return f"<script>alert('성공적으로 수정되었습니다.');location.href='sys_ques_detail?sys_ques_seq={sys_ques_seq}'</script>"
+    except:
+        pass
+#     return redirect(url_for('sys_ques_detail', sys_ques_seq=sys_ques_seq))
 
 @app.route('/sys_ques_del.ajax', methods=['POST'])
 def sys_ques_del():
@@ -681,10 +748,9 @@ def password_change_failed():
     return render_template('web/account/password_change_failed.html')
 
 
-@app.route('/k_main')
+@app.route('/kiosk_main')
 def k_main():
-    return render_template('kiosk/k_main.html')
-
+    return render_template('kiosk/main.html')
 
 
 @app.route('/kiosk_login', methods=['POST'])
@@ -692,39 +758,41 @@ def kiosk_login():
     owner_id = request.form["owner_id"]
     owner_pwd = request.form["owner_pwd"]
 
-    obj = daoOwner.select_login(owner_id,owner_pwd)
-
-    owner_seq = obj["owner_seq"]
+    obj = daoOwner.select_login(owner_id, owner_pwd)
 
     if obj:
         session["owner_seq"] = obj["owner_seq"]
         session["owner_id"] = obj["owner_id"]
         session["admin_yn"] = obj["admin_yn"]
         session["owner_name"] = obj["owner_name"]
+        session["owner_str_name"] = obj["owner_str_name"]
         session["logo_path"] = obj["logo_path"]
         session["logo_file"] = obj["logo_file"]
-        return redirect('k_home')
-
+        return redirect('kiosk_home')
 
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
 
-@app.route('/k_home')
+@app.route('/kiosk_home')
 def k_home():
+    if 'owner_id' not in session:
+        return redirect('kiosk_main')
     logo_path = escape(session["logo_path"])
     logo_file = escape(session["logo_file"])
     owner_seq = escape(session["owner_seq"])
     list = daoEvent.selectAll(owner_seq)
-    return render_template('kiosk/k_home.html',logo_path=logo_path , logo_file=logo_file , list=list)
+    return render_template('kiosk/home.html', logo_path=logo_path, logo_file=logo_file, list=list)
 
 
-@app.route('/k_menu')
+@app.route('/kiosk_menu')
 def k_menu():
+    if 'owner_id' not in session:
+        return redirect('kiosk_main')
     owner_seq = escape(session["owner_seq"])
     logo_path = escape(session["logo_path"])
     logo_file = escape(session["logo_file"])
-    cate_list = daoCategory.selectFromKiosk(owner_seq)
-    return render_template('kiosk/k_menu.html', cate_list=cate_list, logo_path=logo_path , logo_file=logo_file)
+    cate_list = daoCategory.selectKiosk(owner_seq)
+    return render_template('kiosk/menu.html', cate_list=cate_list, logo_path=logo_path, logo_file=logo_file)
 
 
 @app.route('/select_menu.ajax', methods=["POST"])
@@ -733,21 +801,120 @@ def select_menu():
     owner_seq = escape(session["owner_seq"])
 
     try:
-        menu_list = daoMenu.selectFromKiosk(owner_seq, cate_seq)
+        menu_list = daoMenu.selectKiosk(owner_seq, cate_seq)
+        return jsonify(menu_list=menu_list)
     except:
         pass
-    return jsonify(menu_list=menu_list)
-
+    return None
 
 
 @app.route('/kiosk_pay_form', methods=["POST"])
 def kiosk_pay_form():
+    if 'owner_id' not in session:
+        return redirect('kiosk_main')
+    owner_seq = escape(session['owner_seq'])
     goods = dict(request.form)
-    print(goods)
-    return "<script>histoy.back();</script>"
+
+    buyList = {'menu': [], 'buy_seq': daoBuy.genBuySeq(), 'total_price': 0}
+
+    menuList = daoMenu.selectKakao(owner_seq)
+    count = 0
+    for key, value in goods.items():
+        buyList['menu'].append({'menu_seq': int(key.split("_")[1]),
+                                'menu_name': menuList[int(key.split("_")[-1])]['menu_name'],
+                                'count': int(value),
+                                'menu_price': menuList[int(key.split("_")[1])]['menu_price']})
+        buyList['total_price'] += menuList[int(key.split("_")[1])]['menu_price'] * int(value)
+        count += int(value)
+    buy_name = buyList['menu'][0]['menu_name']
+    if count - 1:
+        buy_name += ' 외 ' + str(count - 1) + '개'
+
+    URL = 'https://kapi.kakao.com/v1/payment/ready'
+    headers = {
+        'Authorization': "KakaoAK " + KakaoAK,
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    }
+    params = {
+        "cid": "TC0ONETIME",
+        "partner_order_id": buyList['buy_seq'],
+        "partner_user_id": "Kiosk",
+        "item_name": buy_name,
+        "quantity": 1,
+        "total_amount": buyList['total_price'],
+        "tax_free_amount": 0,
+        "approval_url": f"http://192.168.41.52:5004/pay_success",
+        "cancel_url": f"http://192.168.41.52:5004/kiosk_home",
+        "fail_url": f"http://192.168.41.52:5004/pay_fail",
+    }
+
+    res = requests.post(URL, headers=headers, params=params)
+    buyList['tid'] = res.json()['tid']  # 결제 승인시 사용할 tid를 세션에 저장
+    session['buy'] = buyList
+    return redirect(res.json()['next_redirect_pc_url'])
 
 
+@app.route('/pay_success')
+def pay_success():
+    buyList = session['buy']
+    print(buyList)
+    owner_seq = escape(session['owner_seq'])
+    
+    URL = 'https://kapi.kakao.com/v1/payment/approve'
+    headers = {
+        "Authorization": "KakaoAK " + KakaoAK,
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    }
+    params = {
+        "cid": "TC0ONETIME",  # 테스트용 코드
+        "tid": buyList['tid'],  # 결제 요청시 세션에 저장한 tid
+        "partner_order_id": buyList['buy_seq'],  # 주문번호
+        "partner_user_id": "Kiosk",  # 유저 아이디
+        "pg_token": request.args.get("pg_token"),  # 쿼리 스트링으로 받은 pg토큰
+    }
+    res = requests.post(URL, headers=headers, params=params).json()
+    
+    owner = daoOwner.select(escape(session['owner_seq']))
 
+    if owner and owner['owner_str_num']:
+        owner_str_num = list(owner['owner_str_num'])
+        owner_str_num.insert(3, '-')
+        owner_str_num.insert(6, '-')
+        owner['owner_str_num'] = ''.join(owner_str_num)
+    
+    cnt = daoBuy.insert(buyList['buy_seq'], buyList['menu'], owner_seq)
+
+    return render_template('kiosk/success.html', owner=owner, res=res, buyList=buyList)
+
+
+@app.route("/kakaopay/cancel", methods=['POST', 'GET'])
+def cancel():
+    URL = "https://kapi.kakao.com/v1/payment/order"
+    headers = {
+        "Authorization": "KakaoAK " + KakaoAK,
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    }
+    params = {
+        "cid": "TC0ONETIME",  # 가맹점 코드
+        "tid": session['tid'],  # 결제 고유 코드
+    }
+    res = requests.post(URL, headers=headers, params=params)
+    print(res.text)
+    amount = res.json()['cancel_available_amount']['total']
+
+    context = {
+        'res': res,
+        'cancel_available_amount': amount,
+    }
+
+    if res.json()['status'] == "QUIT_PAYMENT":
+        res = res.json()
+        return render_template('kiosk/cancel.html', params=params, res=res, context=context)
+
+
+@app.route("/kakaopay/fail", methods=['POST', 'GET'])
+def fail():
+    return render_template('kiosk/fail.html')
 
 
 @app.route('/downloads')
@@ -772,4 +939,4 @@ def saveFile(file, owner_seq=None):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host=HOST, port=PORT, debug=True)

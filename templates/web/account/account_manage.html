@@ -56,6 +56,75 @@
     });
 
     
+    $(function () {
+        $('input[name=owner_pwd]').keyup(function () {
+            if (pw_check()) {
+                $('input[name=owner_pwd]').next().removeClass('badge-danger').html('조건을 만족합니다.').addClass('badge-success');
+            } else {
+                $('input[name=owner_pwd]').next().removeClass('badge-success').html('비밀번호는 영문자, 숫자, 특수문자를 포함한 8 ~ 15자리여야 합니다.').addClass('badge-danger');
+            }
+        }).focusout(function () {
+            if (pw_check()) {
+                $('input[name=owner_pwd]').next().html('');
+            }
+        });
+
+        $('input[name=owner_pwd_check]').keyup(function () {
+            if (pw_double_check()) {
+                $('input[name=owner_pwd_check]').next().removeClass('badge-danger').html('비밀번호가 일치합니다.').addClass('badge-success');
+            } else {
+                $('input[name=owner_pwd_check]').next().removeClass('badge-success').html('비밀번호가 일치하지 않습니다.').addClass('badge-danger');
+            }
+        }).focusout(function () {
+            if (pw_double_check()) {
+                $('input[name=owner_pwd_check]').next().html('');
+            }
+        });
+        
+        $('input[name=owner_str_tel]').keyup(function () {
+            if (str_tel_check()) {
+                $('input[name=owner_str_tel]').next().removeClass('badge-danger').html('사용할 수 있는 전화번호입니다.').addClass('badge-success');
+            } else {
+                $('input[name=owner_str_tel]').next().removeClass('badge-success').html('사용할 수 없는 전화번호입니다.').addClass('badge-danger');
+            }
+        }).focusout(function () {
+            if (str_tel_check()) {
+                $('input[name=owner_str_tel]').next().html('');
+            }
+        });
+        
+
+        $('input').keyup(function () {
+            field_fill_check();
+        }).focusout(function () {
+            field_fill_check();
+        });
+    });
+
+        function pw_check() {
+            const regPwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+            return regPwd.test($('input[name=owner_pwd]').val())
+        }
+
+        function pw_double_check() {
+            return $('input[name=owner_pwd]').val() === $('input[name=owner_pwd_check]').val()
+        }
+        
+        function str_tel_check() {
+            const regTel = /^\d{2,3}-\d{3,4}-\d{4}$/;
+            return regTel.test($('input[name=owner_str_tel]').val())
+        }
+        
+        function field_fill_check() {
+            if (pw_check()
+                && pw_double_check()
+                && str_tel_check()){
+                $('#submit').attr('disabled', false);
+            } else {
+                $('#submit').attr('disabled', true);
+            }
+        }
+        
     
 </script>
 
@@ -85,8 +154,15 @@
                         <div class="form-group">
                             <input type="email" class="form-control form-control-user" name="owner_id" placeholder="아이디 ( 이메일 )" value="{{owner.owner_id}}" readonly required>
                         </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control form-control-user" name="owner_pwd" placeholder="비밀번호" value="{{owner.owner_pwd}}" required>
+                        <div class="form-group row">
+            	            <div class="col-sm-6 mb-3 mb-sm-0">
+                	            <input type="password" class="form-control form-control-user" name="owner_pwd" placeholder="비밀번호"  value="{{owner.owner_pwd}}" >
+                    	        <span class="badge badge-pill"></span>
+                        	</div>
+                        	<div class="col-sm-6">
+                            	<input type="password" class="form-control form-control-user" name="owner_pwd_check" placeholder="비밀번호 확인" value="{{owner.owner_pwd}}">
+                            	<span class="badge badge-pill"></span>
+                        	</div>
                         </div>
                         <hr>
 
@@ -99,6 +175,7 @@
 
                         <div class="form-group">
                             <input type="text" name="owner_str_tel" class="form-control form-control-user" placeholder="가게전화번호" value="{{owner.owner_str_tel}}" required>
+                            <span class="badge badge-pill"></span>
                         </div>
 
                         <div class="form-group row">
@@ -108,7 +185,7 @@
                             <div class="col-8" id="logo_image">
                                 {% if owner.logo_file %}
                                 <p>
-                                	<img src="downloads?path=Z:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{owner.logo_path}}&file={{owner.logo_file}}" data-placement="left">
+                                	<img src="downloads?path=W:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{owner.logo_path}}&file={{owner.logo_file}}" data-placement="left">
                                     
                                     <a href="javascript:del_images()">×</a>
                                 </p>
@@ -133,7 +210,7 @@
                                 <input type="text" name="owner_add2" class="form-control form-control-user" placeholder="상세주소" value="{{owner.owner_add2}}" required required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-user btn-block">수정</button>
+                        <button type="submit" id="submit" class="btn btn-primary btn-user btn-block">수정</button>
                     </form>
                 </div>
             </div>

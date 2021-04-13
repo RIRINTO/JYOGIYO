@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
+    <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
+    <script src="lib/js/input-spinner.js"></script>
+
+    <script type="text/javascript">
+        function fn_k_order() {
+            alert("결제 모달 창")
+        }
+
+        function fn_k_home() {
+            location.href = "kiosk_home"
+        }
+
+        $(function () {
+            $("input[type=number]").inputSpinner();
+        });
+
+
+        $(function () {
+            $("input[type='number']").inputSpinner();
+            fn_cate('{{cate_list[0].cate_seq}}');
+        });
+
+        function fn_cate(cate_seq) {
+            let param = Math.random()
+            param += "&cate_seq=" + cate_seq
+
+            $.ajax({
+                type: "post",
+                url: "select_menu.ajax",
+                dataType: "json",
+                data: param,
+                error: function () {
+                    alert('통신 실패!!');
+                },
+                success: function (data) {
+                    $("nav a").each(function () {
+                        $(this).removeClass("active");
+                    });
+
+                    let menu = ''
+
+                    for (var i = 0; i < data.menu_list.length; i++) {
+                        menu += '       <div class="col-sm-3">'
+                        menu += '            <div class="card" onclick="add_to_bucket(\'' + data.menu_list[i].menu_seq + '\', \'' + data.menu_list[i].menu_name + '\', \'' + data.menu_list[i].menu_price + '\')">'
+                        menu += '              <div class="card_body">'
+                        menu += '                <img class="card-img-top" src="downloads?path=' + data.menu_list[i].attach_path + '&file=' + data.menu_list[i].attach_file + '">'
+                        menu += '                <p>' + data.menu_list[i].menu_name + '</p>'
+                        menu += '                </div>'
+                        menu += '          	  </div>'
+                        menu += '          </div>'
+
+                    }
+                    $('#menu_list').html(menu);
+                    $("nav a").each(function () {
+                        if (cate_seq === $(this).attr('rel')) {
+                            $(this).addClass("active");
+                        }
+                    });
+                }
+            });
+        };
+
+        function add_to_bucket(menu_seq, menu_name, menu_price) {
+            if (document.getElementById('menu_seq_' + menu_seq) === null) {
+                let item = '            <div class="row" id="menu_seq_' + menu_seq + '">'
+                item += '                <input type="hidden" name="menu_price_' + menu_seq + '" value="' + menu_price + '" disabled >'
+                item += '                <div class="col-4">' + menu_name + '</div>'
+                item += '                <div class="col-5"><input name="menuseq_' + menu_seq + '" type="number" value="1" min="1"></div>'
+                item += '                <div class="col-3">'
+                item += '                    <span>' + menu_price + '</span>'
+                item += '                    <button type="button" class="btn">×</button>'
+                item += '                </div>'
+                item += '                <br/>'
+                item += '            </div>'
+                $('#bucket').append(item);
+
+                $("#menu_seq_" + menu_seq + " button").on('click', function () {
+                    $("#menu_seq_" + menu_seq).remove();
+                    calcMoney();
+                });
+
+                $("#menu_seq_" + menu_seq + " input[name=menuseq_" + menu_seq + "]").inputSpinner();
+                $("#menu_seq_" + menu_seq + " input[name=menuseq_" + menu_seq + "]").change(function () {
+                    $("#menu_seq_" + menu_seq + " span").html($("input[name=menu_price_" + menu_seq + "]").val() * parseInt($("#menu_seq_" + menu_seq + " input[name=menuseq_" + menu_seq + "]").val()));
+                    calcMoney();
+                });
+                calcMoney();
+            } else {
+                $("#menu_seq_" + menu_seq + " input[name=menuseq_" + menu_seq + "]").val(parseInt($("#menu_seq_" + menu_seq + " input[name=menuseq_" + menu_seq + "]").val()) + 1);
+                $("#menu_seq_" + menu_seq + " span").html($("input[name=menu_price_" + menu_seq + "]").val() * parseInt($("#menu_seq_" + menu_seq + " input[name=menuseq_" + menu_seq + "]").val()));
+                calcMoney();
+            }
+        }
+
+        function calcMoney() {
+            let sumMoney = 0
+            $("#bucket span").each(function () {
+                sumMoney += parseInt($(this).html())
+            });
+            if (sumMoney > 0) {
+                $("#pay span").html(sumMoney + "원 ");
+            } else {
+                $("#pay span").html("");
+            }
+        }
+
+
+    </script>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: auto;
+        }
+
+        #voice {
+            z-index: 999;
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<form action="kiosk_pay_form" method="post" class="h-100" style="text-align: center">
+    <img src="downloads?path={{logo_path}}&file={{logo_file}}" width="auto" height="10%">
+    <div class="container-fluid" style="height: 90%">
+        <div class="row h-100">
+            <div class="col-sm-7 h-100">
+                <nav class="nav nav-pills nav-fill">
+                    {% for c in cate_list %}
+                    <a class="nav-item nav-link" rel="{{c.cate_seq}}" href="javascript:fn_cate('{{c.cate_seq}}')">{{c.cate_name}}</a>
+                    {% endfor %}
+                </nav>
+                <hr>
+
+                <div class="row menu" id="menu_list">
+                </div>
+            </div>
+
+            <!-- 계산서 -->
+
+            <div class="col-sm-5 h-100">
+                <div style="height: 70%; overflow-x: hidden;overflow-y: auto" id="bucket">
+                    <div class="row" style="padding-top: 8px; padding-bottom: 8px">
+                        <div class="col-4">메뉴명</div>
+                        <div class="col-5">수량</div>
+                        <div class="col-3">가격</div>
+                    </div>
+                    <hr>
+                </div>
+
+                <div style="height: 30%; width: 100%">
+                    <div class="btn-group-vertical h-100" style="width: 100%">
+                        <button type="button" class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-target="#payment_tool" id="pay"><span></span>결제</button>
+                        <button type="button" class="btn btn-danger btn-lg btn-block" onclick="fn_k_home()">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="payment_tool" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="kakaopay">결제하기</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">결제를 진행하시겠습니까?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="submit">결제하기</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="voice">
+    <img src="downloads?path=W:/uploads/img&file=siri.png" width="150px" height="auto" onclick="alert('김 현 준')">
+</div>
+</body>
+</html>

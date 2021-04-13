@@ -36,10 +36,18 @@ class DaoMenu:
         self.cs.execute(sql, (owner_seq,))
         return list(map(menuSort, self.cs.fetchall()))
 
-    def selectFromKiosk(self, owner_seq, cate_seq):
-        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectFromKiosk")
+    def selectKiosk(self, owner_seq, cate_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectKiosk")
         self.cs.execute(sql, (owner_seq, cate_seq))
         return list(map(menuSort, self.cs.fetchall()))
+
+    def selectKakao(self, owner_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectKakao")
+        self.cs.execute(sql, (owner_seq,))
+        res = dict()
+        for rs in self.cs.fetchall():
+            res[rs[0]] = menuSort(rs)
+        return res
 
     def select(self, menu_seq, owner_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select")
@@ -61,3 +69,5 @@ class DaoMenu:
 
 if __name__ == '__main__':
     daoMenu = DaoMenu(config_path='../config.ini', xml_path='menu.xml')
+    for i in daoMenu.selectKakao(22).items():
+        print(i)

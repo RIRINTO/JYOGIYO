@@ -44,7 +44,7 @@
     
     
     function fn_ques_mod(){
-    	document.sysmod.submit();
+		document.sysmod.submit();
     	location.href = 'sys_ques_detail?sys_ques_seq={{ques.sys_ques_seq}}';
     }
     
@@ -264,9 +264,14 @@
 
             <div class="modal-body">
                 <form name="sys_mod" action="sys_ques_mod" method="post" enctype="multipart/form-data">
+					{% if ques.attach_file %}
+	                   <input type="hidden" name="attach_path" value="{{ques.attach_path}}" >
+	                   <input type="hidden" name="attach_file" value="{{ques.attach_file}}">
+	                {% else %}   
+	                   <input type="hidden" name="attach_path" value="" >
+	                   <input type="hidden" name="attach_file" value="">
+	                {% endif %} 
                     <table class="table" style="text-align: center">
-                           <input type="hidden" name="attach_path" value="{{ques.attach_path}}" >
-                           <input type="hidden" name="attach_file" value="{{ques.attach_file}}">
                     	<input type="hidden" name="sys_ques_seq" value="{{ques.sys_ques_seq}}">
                         <tr>
                             <th>공지번호</th>
@@ -290,6 +295,7 @@
                                 {% if ques.attach_file %}
                                 	<img src="downloads?path={{ques.attach_path}}&file={{ques.attach_file}}" width="200px"><br>
                                 	<a href="javascript:fn_img_del()">&times;</a>  
+									<input type = "file" class="form-control-file border invisible" name = "file" />
                                 {% else %}
 									<input type = "file" name = "file" />
                                 {% endif %}
@@ -358,7 +364,7 @@
             </div>
 
             <div class="modal-body">
-                <table border='1'>
+                <table class="table" style="text-align: center">
                 	<tr>
                         <th>내용</th>
                         <td>{{ques.sys_ques_content}}</td>

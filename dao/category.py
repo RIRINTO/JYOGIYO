@@ -39,8 +39,8 @@ class DaoCategory:
         self.cs.execute(sql, (owner_seq,))
         return list(map(categorySort, self.cs.fetchall()))
 
-    def selectFromKiosk(self, owner_seq):
-        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectFromKiosk")
+    def selectKiosk(self, owner_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectKiosk")
         self.cs.execute(sql, (owner_seq,))
         return list(map(categorySort, self.cs.fetchall()))
 
