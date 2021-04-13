@@ -15,9 +15,10 @@
 			in_date,
 			in_user_id,
 			up_date,
-			up_user_id
+			up_user_id,
+			(select in_date from sys_answer where sys_ques_seq = q.sys_ques_seq)  
     	FROM 
-    		sys_question
+    		sys_question q
     	ORDER BY
     		sys_ques_seq desc
     </select>
@@ -34,9 +35,10 @@
 			in_date,
 			in_user_id,
 			up_date,
-			up_user_id
+			up_user_id,
+			(select in_date from sys_answer where sys_ques_seq = q.sys_ques_seq) 
     	FROM 
-    		sys_question
+    		sys_question q
     	WHERE
     		sys_ques_seq = :1
     </select>

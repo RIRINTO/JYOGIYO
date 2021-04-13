@@ -14,7 +14,8 @@ def menusort(munuList : list):
             'in_date': munuList[7], 
             'in_user_id': munuList[8], 
             'up_date': munuList[9], 
-            'up_user_id': munuList[10]}
+            'up_user_id': munuList[10],
+            'reply_in_date': munuList[11]}
 
 class DaoSysQues:
     def __init__(self, config_path='config.ini', xml_path='dao/sys_ques.xml'):

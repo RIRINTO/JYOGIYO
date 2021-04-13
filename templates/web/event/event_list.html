@@ -19,17 +19,10 @@
             }, function () {
                 $(this).find('.menumodify').hide();
             });
-            $('[data-toggle="popover"]').popover({
-                trigger: 'hover',
-                html: true,
-                content: function () {
-                    return '<img class="img-fluid" src="' + $(this).data('img') + '" />';
-                }
-            });
         });
 
-        function fn_event_detail(owner_seq,event_seq){
-        	location.href="event_detail?owner_seq="+owner_seq+"&event_seq="+event_seq;
+        function fn_event_detail(event_seq){
+        	location.href="event_detail?event_seq="+event_seq;
         }
         function fn_add(){
             document.event_add.submit();
@@ -50,7 +43,9 @@
                     <!-- Card Body -->
                     <div class="card-body">
                         <div style="text-align: right">
+                            {% if session.admin_yn!="y" %}
                             <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#EventaddModal">추가</button>
+                            {% endif %}
                         </div>
 	                    <br>
                         <table class="table table-hover" style="text-align: center">
@@ -62,14 +57,20 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {% if list %}
                             {%for i in list %}
-                            <tr class="menu" onclick="fn_event_detail('{{i.owner_seq}}','{{i.event_seq}}')">
+                            <tr class="menu" onclick="fn_event_detail('{{i.event_seq}}')">
                                 <td>{{i.event_seq}}</td>
                                 <td>{{i.event_title}}</td>
-                                <td>{{i.event_start}}~{{i.event_end}}</td>
+                                <td>{{i.event_start}} ~ {{i.event_end}}</td>
                             </tr>
                             </tbody>
                             {% endfor %}
+                            {% else %}
+                             <tr>
+                               <td colspan="6">등록된 이벤트가 없습니다.</td>
+                             </tr>
+                            {% endif %}
                         </table>
                     </div>
                 </div>
@@ -105,7 +106,7 @@
 
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" style="width: 500px" name="event_title"></td>
+                                        <td><input type="text" class="form-control" name="event_title"></td>
                                     </tr>
 
                                     <tr>
@@ -120,9 +121,14 @@
                                     </tr>
                                     <tr>
                                         <th>이벤트기간</th>
-                                        <td><input type="date" class="form-control" name="event_start"> ~ <input type="date" class="form-control" name="event_end"></td>
+                                        <td>
+                                            시작일
+                                            <input type="date" class="form-control" name="event_start">
+                                            <br>
+                                            마감일
+                                            <input type="date" class="form-control" name="event_end">
+                                        </td>
                                     </tr>
-
                                 </table>
                             </form>
                             </div>

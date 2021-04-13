@@ -18,6 +18,46 @@
         WHERE OWNER_SEQ = :V_OWNER_SEQ
     </select>
 
+    <select id="selectYList">
+        SELECT CATE_SEQ,
+               OWNER_SEQ,
+               CATE_NAME,
+               CATE_CONTENT,
+               CATE_DISPLAY_YN,
+               ATTACH_PATH,
+               ATTACH_FILE,
+               IN_DATE,
+               IN_USER_ID,
+               UP_DATE,
+               UP_USER_ID
+        FROM CATEGORY
+        WHERE OWNER_SEQ = :V_OWNER_SEQ
+          AND (CATE_DISPLAY_YN = 'Y'
+            OR CATE_DISPLAY_YN = 'y')
+    </select>
+
+    <select id="selectFromKiosk">
+        SELECT distinct C.CATE_SEQ,
+               C.OWNER_SEQ,
+               CATE_NAME,
+               CATE_CONTENT,
+               CATE_DISPLAY_YN,
+               C.ATTACH_PATH,
+               C.ATTACH_FILE,
+               C.IN_DATE,
+               C.IN_USER_ID,
+               C.UP_DATE,
+               C.UP_USER_ID
+        FROM MENU M
+                 INNER JOIN CATEGORY C ON M.CATE_SEQ = C.CATE_SEQ
+        WHERE M.OWNER_SEQ = :V_OWNER_SEQ
+          AND (MENU_DISPLAY_YN = 'Y'
+            OR MENU_DISPLAY_YN = 'y')
+          AND (CATE_DISPLAY_YN = 'Y'
+            OR CATE_DISPLAY_YN = 'y')
+        ORDER BY CATE_SEQ
+    </select>
+
     <select id="select">
         SELECT CATE_SEQ,
                OWNER_SEQ,
@@ -73,15 +113,26 @@
 		update
     			category
 		set
-			OWNER_SEQ =:1,
-			CATE_NAME =:2,
-			CATE_CONTENT =:3,
-			CATE_DISPLAY_YN =:4,
-			ATTACH_PATH =:5,
-			ATTACH_FILE =:6,
-			to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+			owner_seq =:1,
+			cate_name =:2,
+			cate_content =:3,
+			cate_display_yn =:4,
+			attach_path =:5,
+			attach_file =:6,
+			up_date = to_char(sysdate, 'YYYYMMDD.HH24MISS'),
 			up_user_id =:7
 		where
 			cate_seq =:8
+    </update>
+<!-- ################## del_img ################## -->    
+    <update id="del_img">
+        update
+        	category
+       	set
+	        attach_path			= '',
+	        attach_file			= '',
+	        up_date				=to_char(sysdate, 'YYYYMMDD.HHMISS')
+         where
+         	cate_seq=:1
     </update>
 </mapper>

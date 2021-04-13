@@ -25,21 +25,107 @@
             location.href = "k_menu"
         }
 
+
         function fn_cate1() {
             location.href = "k_cate1"
         }
 
-        function fn_cate2() {
-            location.href = "k_cate2"
-        }
+        $(function () {
+            $("input[type=number]").inputSpinner();
+        });
 
-        function fn_cate3() {
-            location.href = "k_cate3"
-        }
 
         $(function () {
             $("input[type='number']").inputSpinner();
+            fn_cate('{{cate_list[0].cate_seq}}');
         });
+
+        function fn_cate(cate_seq) {
+            let param = Math.random()
+            param += "&cate_seq=" + cate_seq
+
+            $.ajax({
+                type: "post",
+                url: "select_menu.ajax",
+                dataType: "json",
+                data: param,
+                error: function () {
+                    alert('통신 실패!!');
+                },
+                success: function (data) {
+                	$("nav a").each(function(){
+                    	$(this).removeClass("active");
+                    });
+                	
+                    let menu = ''
+
+                    for (var i = 0; i < data.menu_list.length; i++) {
+                        menu += '       <div class="col-sm-3">'
+                        menu += '            <div class="card" onclick="add_to_bucket(\'' + data.menu_list[i].menu_seq + '\', \'' + data.menu_list[i].menu_name + '\', \'' + data.menu_list[i].menu_price + '\')">'
+                        menu += '              <div class="card_body">'
+                        menu += '                <img class="card-img-top" src="downloads?path=' + data.menu_list[i].attach_path + '&file=' + data.menu_list[i].attach_file + '">'
+                        menu += '                <p>' + data.menu_list[i].menu_name + '</p>'
+                        menu += '                </div>'
+                        menu += '          	  </div>'
+                        menu += '          </div>'
+
+                    }
+                    $('#menu_list').html(menu);
+                    $("nav a").each(function(){
+                    	if(cate_seq === $(this).attr('rel')) {
+	                    	$(this).addClass("active");
+                    	}
+                    });
+                }
+            });
+        };
+
+        function add_to_bucket(menu_seq, menu_name, menu_price) {
+            if (document.getElementById('menu_seq_' + menu_seq) === null) {
+                let item = '            <div class="row" id="menu_seq_' + menu_seq + '">'
+                item += '                <input type="hidden" name="menu_price_' + menu_seq + '" value="' + menu_price + '" disabled >'
+                item += '                <div class="col-4">' + menu_name + '</div>'
+                item += '                <div class="col-5"><input name="menu_seq_' + menu_seq + '" type="number" value="1" min="1"></div>'
+                item += '                <div class="col-3">'
+                item += '                    <span>' + menu_price + '</span>'
+                item += '                    <button type="button" class="btn">×</button>'
+                item += '                </div>'
+                item += '                <br/>'
+                item += '            </div>'
+                $('#bucket').append(item);
+
+                $("#menu_seq_" + menu_seq + " button").on('click', function () {
+                    $("#menu_seq_" + menu_seq).remove();
+                    calcMoney();
+                });
+
+                $("#menu_seq_" + menu_seq + " input[name=menu_seq_" + menu_seq + "]").inputSpinner();
+                $("#menu_seq_" + menu_seq + " input[name=menu_seq_" + menu_seq + "]").change(function () {
+                    $("#menu_seq_" + menu_seq + " span").html($("input[name=menu_price_" + menu_seq + "]").val() * parseInt($("#menu_seq_" + menu_seq + " input[name=menu_seq_" + menu_seq + "]").val()));
+                    calcMoney();
+                });
+                calcMoney();
+            } else {
+                $("#menu_seq_" + menu_seq + " input[name=menu_seq_" + menu_seq + "]").val(parseInt($("#menu_seq_" + menu_seq + " input[name=menu_seq_" + menu_seq + "]").val()) + 1);
+                $("#menu_seq_" + menu_seq + " span").html($("input[name=menu_price_" + menu_seq + "]").val() * parseInt($("#menu_seq_" + menu_seq + " input[name=menu_seq_" + menu_seq + "]").val()));
+                calcMoney();
+            }
+        }
+
+        function calcMoney() {
+            let sumMoney = 0
+            $("#bucket span").each(function () {
+                sumMoney += parseInt($(this).html())
+            });
+            if (sumMoney > 0) {
+                $("#pay span").html(sumMoney + "원 ");
+            } else {
+                $("#pay span").html("");
+            }
+        }
+        
+        
+        
     </script>
     <style>
         html, body {
@@ -56,112 +142,41 @@
         }
     </style>
 </head>
+
+
 <body>
+<form action="kiosk_pay_form" method="post" >
 <div class="container-fluid" style="text-align: center" style="height: 100%">
-    <img src="img/logos/papatouch.jpg" width="auto" height="100px">
+    <img src="downloads?path={{logo_path}}&file={{logo_file}}" width="auto" height="100px">
     <div class="row" style="height: 100%">
+
         <div class="col-sm-7" style="height: 100%">
             <nav class="nav nav-pills nav-fill">
-                <a class="nav-item nav-link active" href="javascript:fn_menu()">버거</a>
-                <a class="nav-item nav-link" href="javascript:fn_cate1()">치킨</a>
-                <a class="nav-item nav-link" href="javascript:fn_cate2()">사이드</a>
-                <a class="nav-item nav-link" href="javascript:fn_cate3()">음료</a>
+                {% for c in cate_list %}
+                <a class="nav-item nav-link" rel="{{c.cate_seq}}" href="javascript:fn_cate('{{c.cate_seq}}')">{{c.cate_name}}</a>
+                {% endfor %}
             </nav>
             <hr>
-            <div class="row menu">
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/thigh.png">
-                            <p>싸이버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/bulgogi.png">
-                            <p>불고기버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/deepcheeze.png">
-                            <p>딥치즈버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/firethigh.png">
-                            <p>불싸이버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/whitega.png">
-                            <p>화이트갈릭버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/incre.png">
-                            <p>인크레더블버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/incre.png">
-                            <p>인크레더블버거</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card_body">
-                            <img class="card-img-top" src="img/store/papatouch_img/incre.png">
-                            <p>인크레더블버거</p>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="row menu" id="menu_list">
             </div>
         </div>
+
+        <!-- 계산서 -->
+        
         <div class="col-sm-5">
-            <div style="height: 70%; overflow: hidden">
+            <div style="height: 70%; overflow-x: hidden;overflow-y: auto" id="bucket">
                 <div class="row" style="padding-top: 8px; padding-bottom: 8px">
                     <div class="col-4">메뉴명</div>
                     <div class="col-5">수량</div>
                     <div class="col-3">가격</div>
                 </div>
                 <hr>
-                <div class="row">
-                    <div class="col-4">인크레더블버거</div>
-                    <div class="col-5"><input type="number" value="1" min="1" max="200"></div>
-                    <div class="col-3">5600
-                        <button type="button" class="btn">×</button>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-4">싸이버거</div>
-                    <div class="col-5"><input type="number" value="1" min="1" max="200"></div>
-                    <div class="col-3">5600
-                        <button type="button" class="btn">×</button>
-                    </div>
-                </div>
             </div>
+            
             <div style="height: 30%; width: 100%">
                 <div class="btn-group-vertical" style="height: 100%; width: 100%">
-                    <button type="button" class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-target="#payment_tool">결제</button>
+                    <button type="button" class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-target="#payment_tool" id="pay"><span></span>결제</button>
                     <button type="button" class="btn btn-danger btn-lg btn-block" onclick="fn_k_home()">취소</button>
                 </div>
             </div>
@@ -174,22 +189,23 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="kakaopay">결제</h5>
+                <h5 class="modal-title" id="kakaopay">결제하기</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">결제를 진행하시겠습니까?</div>
             <div class="modal-footer">
-                <a class="btn btn-danger" href="#" data-dismiss="modal">결제</a>
+                <button class="btn btn-danger" type="submit">결제하기</button>
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
             </div>
         </div>
     </div>
 </div>
+</form>
 
 <div id="voice">
-    <img src="img/siri.png" width="150px" height="auto" onclick="alert('김 현 준')">
+    <img src="downloads?path=Z:/uploads/img&file=siri.png" width="150px" height="auto" onclick="alert('김 현 준')">
 </div>
 </body>
 </html>

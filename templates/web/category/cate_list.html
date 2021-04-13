@@ -7,19 +7,17 @@
          return false;
       }
    });
-   $(document).ready(
-         function() {
-            $('[data-toggle="popover"]').popover(
-                  {
-                     trigger : 'hover',
-                     html : true,
-                     content : function() {
-                        return '<img class="img-fluid" src="'
-                              + $(this).data('img') + '" />';
-                     }
-                  });
-         });
 
+   $(document).ready(function () {
+       $('[data-toggle="popover"]').popover({
+           trigger: 'hover',
+           html: true,
+           content: function () {
+               return '<img class="img-fluid" src="' + $(this).data('img') + '" />';
+           }
+       });
+   });
+   
    function fn_cate_detail(cate_seq) {
       location.href = "cate_detail?cate_seq=" + cate_seq;
    }
@@ -61,7 +59,11 @@
                         <tr class="menu" onclick="fn_cate_detail('{{i.cate_seq}}')">
                             <td>{{i.cate_seq}}</td>
                             <td>{{i.cate_name}}</td>
-                            <td>{{i.attach_file}}</td>
+                            <td>
+                                {% if i.attach_file %}
+                                <img src="downloads?path=Z:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{i.attach_path}}&file={{i.attach_file}}" data-placement="left">
+                                {% endif %}
+                            </td>
                             <td>{{i.cate_display_yn}}</td>
                         </tr>
                         {% endfor %}

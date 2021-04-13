@@ -4,17 +4,20 @@ import configparser
 
 
 def categorySort(categoryList: list):
-    return {"cate_seq": categoryList[0],
-            "owner_seq": categoryList[1],
-            "cate_name": categoryList[2],
-            "cate_content": categoryList[3],
-            "cate_display_yn": categoryList[4],
-            "attach_path": categoryList[5],
-            "attach_file": categoryList[6],
-            "in_date": categoryList[7],
-            "in_user_id": categoryList[8],
-            "up_date": categoryList[9],
-            "up_user_id": categoryList[10]}
+    if categoryList:
+        return {"cate_seq": categoryList[0],
+                "owner_seq": categoryList[1],
+                "cate_name": categoryList[2],
+                "cate_content": categoryList[3],
+                "cate_display_yn": categoryList[4],
+                "attach_path": categoryList[5],
+                "attach_file": categoryList[6],
+                "in_date": categoryList[7],
+                "in_user_id": categoryList[8],
+                "up_date": categoryList[9],
+                "up_user_id": categoryList[10]}
+    else:
+        return None
 
 
 class DaoCategory:
@@ -30,6 +33,18 @@ class DaoCategory:
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectAll")
         self.cs.execute(sql, (owner_seq,))
         return list(map(categorySort, self.cs.fetchall()))
+
+    def selectYList(self, owner_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectYList")
+        self.cs.execute(sql, (owner_seq,))
+        return list(map(categorySort, self.cs.fetchall()))
+
+    def selectFromKiosk(self, owner_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectFromKiosk")
+        self.cs.execute(sql, (owner_seq,))
+        return list(map(categorySort, self.cs.fetchall()))
+
+
 
     def select(self, owner_seq, cate_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select")
@@ -56,6 +71,14 @@ class DaoCategory:
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
+
+    def del_img(self, cate_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "del_img")
+        self.cs.execute(sql, (cate_seq,))
+        self.conn.commit()
+        cnt = self.cs.rowcount
+        return cnt
+        pass
 
 
 if __name__ == "__main__":

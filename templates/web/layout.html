@@ -22,33 +22,23 @@
     <!-- Sidebar -->
     <ul class="navbar-nav sidebar bg-danger sidebar-dark accordion" id="accordionSidebar">
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard"> <img src="img/logo_white.png" alt="logo_white" width="100px" height="auto">
-        </a>
-
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard"> <img src="downloads?path=Z:/uploads/img&file=logo_white.png" alt="logo_white" width="100px" height="auto"></a>
         <!-- Nav Item - Dashboard -->
         <li class="nav-item"><a class="nav-link" href="dashboard"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
-
         <!-- Divider -->
         <hr class="sidebar-divider">
-
         <!-- Nav Item - Tables -->
         <li class="nav-item"><a class="nav-link" href="noti_list"> <i class="fas fa-fw fa-table"></i> <span>공지사항</span></a></li>
-
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
-
         <!-- Nav Item - Charts -->
         <li class="nav-item"><a class="nav-link" href="cate_list"> <i class="fas fa-fw fa-chart-area"></i> <span>카테고리 관리</span></a></li>
-
         <!-- Nav Item - Tables -->
         <li class="nav-item"><a class="nav-link" href="menu_list"> <i class="fas fa-fw fa-chart-area"></i> <span>메뉴 관리</span></a></li>
-
         <!-- Nav Item - Tables -->
         <li class="nav-item"><a class="nav-link" href="event_list"> <i class="fas fa-fw fa-table"></i> <span>이벤트 관리</span></a></li>
-
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
-
         <!-- Nav Item - Charts -->
         <li class="nav-item"><a class="nav-link" href="sys_ques_list"> <i class="fas fa-fw fa-chart-area"></i> <span>시스템 문의사항</span></a></li>
     </ul>
@@ -89,19 +79,19 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow"><a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span
-                            class="mr-2 d-none d-lg-inline text-gray-600 small">{{session.owner_name}}</span> <img class="img-profile rounded-circle" src="{{session.logo_path}}/{{session.logo_file}}">
+                            class="mr-2 d-none d-lg-inline text-gray-600 small">{{session.owner_name}}</span> <img class="img-profile rounded-circle" src="downloads?path={{session.logo_path}}&file={{session.logo_file}}">
                     </a> <!-- Dropdown - User Information -->
                         {% if session.admin_yn == "N" %}
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="account_show"> <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 정보 보기</a>
-                                <a class="dropdown-item" href="account_manage"> <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> 정보 수정</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
-                            </div>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="account_show"> <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 정보 보기</a>
+                            <a class="dropdown-item" href="account_manage"> <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> 정보 수정</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
+                        </div>
                         {% else %}
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
-                            </div>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
+                        </div>
                         {% endif %}
                     </li>
 
@@ -120,9 +110,7 @@
                 </div>
             </footer>
             <!-- End of Footer -->
-
         </div>
-
     </div>
 
     <!-- Logout Modal-->
@@ -139,78 +127,11 @@
                 <div class="modal-body">하단의 "Logout" 버튼을 누르시면 로그아웃됩니다.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-dark" href="login.html">Logout</a>
+                    <a class="btn btn-danger" href="logout">Logout</a>
                 </div>
             </div>
         </div>
     </div>
     <!-- End of Logout Modal-->
-
-
-    <!-- category modify Modal-->
-
-    <div class="modal fade" id="CateModModal" tabindex="-1" role="dialog" aria-labelledby="CateModModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="CateModModalLabel">카테고리 수정</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <!-- category modify Modal content -->
-
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <table class="table" style="text-align: center">
-                                    <tr>
-                                        <th>순번</th>
-                                        <td>1</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>카테고리명</th>
-                                        <td><input type="text" class="form-control" value="싸이버거"></td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>이미지</th>
-                                        <td>
-                                            <img src="img/싸이버거.jpg"> <input type="file" class="form-control-file border">
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>설명</th>
-                                        <td>
-                                            <textarea class="form-control" rows="5" cols="100">싸이버거는 맛있어</textarea>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>공개여부</th>
-                                        <td>
-                                            <input type="radio" value="y"> 공개
-                                            <input type="radio" value="n"> 비공개
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- end of category modify Modal content -->
-                </div>
-                <div style="text-align: right" class="modal-footer">
-                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal">수정 완료</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end of category modify Modal-->
-</div>
 </body>
 </html>

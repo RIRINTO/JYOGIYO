@@ -62,10 +62,14 @@
                             <td>{{menu.menu_price}}</td>
                             <td>
                                 {% if menu.attach_file %}
-                                <img src="img/img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="{{menu.attach_path}}/{{menu.attach_file}}" data-placement="left">
+                                <img src="downloads?path=Z:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}" data-placement="left">
                                 {% endif %}
                             </td>
-                            <td>{{menu.menu_display_yn}}</td>
+                            {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
+                            <td>표시</td>
+                            {% else %}
+                            <td>비표시</td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                         {% else %}

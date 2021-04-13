@@ -37,33 +37,27 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="row text-center">
-                        <div class="col-6">
-                            <p>메뉴 번호</p>
-                        </div>
-                        <div class="col-6">
-                            <p>{{menu.menu_seq}}</p>
-                        </div>
-                        <div class="col-6"><p>카테고리명</p></div>
-                        <div class="col-6"><p>{{menu.cate_name}}</p></div>
-                        <div class="col-6"><p>메뉴명</p></div>
-                        <div class="col-6"><p>{{menu.menu_name}}</p></div>
-                        <div class="col-6"><p>가격</p></div>
-                        <div class="col-6"><p>{{menu.menu_price}}</p></div>
-                        <div class="col-6"><p>설명</p></div>
-                        <div class="col-6"><p id="menu-content">{{menu.menu_content}}</p></div>
+                        <div class="col-4"><p><b>메뉴 번호</b></p></div>
+                        <div class="col-8"><p>{{menu.menu_seq}}</p></div>
+                        <div class="col-4"><p><b>카테고리명</b></p></div>
+                        <div class="col-8"><p>{{menu.cate_name}}</p></div>
+                        <div class="col-4"><p><b>메뉴명</b></p></div>
+                        <div class="col-8"><p>{{menu.menu_name}}</p></div>
+                        <div class="col-4"><p><b>가격</b></p></div>
+                        <div class="col-8"><p>{{menu.menu_price}}</p></div>
+                        <div class="col-4"><p><b>설명</b></p></div>
+                        <div class="col-8"><p id="menu-content">{{menu.menu_content}}</p></div>
                         {% if menu.attach_file %}
-                        <div class="col-6"><p>이미지</p></div>
-                        <div class="col-6">
-                            <div class="card">
-                                <img class="card-img-top" src="{{menu.attach_path}}/{{menu.attach_file}}">
-                            </div>
+                        <div class="col-4"><p><b>이미지</b></p></div>
+                        <div class="card col-8">
+                            <img class="card-img-top" src="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}">
                         </div>
                         {% endif %}
-                        <div class="col-6"><p>공개여부</p></div>
+                        <div class="col-4"><p><b>표시여부</b></p></div>
                         {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
-                        <div class="col-6"><p>공개</p></div>
+                        <div class="col-8"><p>표시</p></div>
                         {% else %}
-                        <div class="col-6"><p>비공개</p></div>
+                        <div class="col-8"><p>비표시</p></div>
                         {% endif %}
                     </div>
 
@@ -125,7 +119,7 @@
                                     <div class="col-6">
                                         <div class="card" id="image_card">
                                             {% if menu.attach_file %}
-                                            <img class="card-img-top" src="{{menu.attach_path}}/{{menu.attach_file}}">
+                                            <img class="card-img-top" src="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}">
                                             <button type="button" class="close" aria-label="Close" onclick="del_images()">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>

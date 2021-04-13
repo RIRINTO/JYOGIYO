@@ -69,7 +69,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-dark">이벤트 추가</h6>
+                    <h6 class="m-0 font-weight-bold text-dark">이벤트 관리</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -90,27 +90,26 @@
                             <th>내용</th>
                             <td>{{event.event_content}}</td>
                         </tr>
+                        {% if event.attach_file %}
                         <tr>
                             <th>이미지</th>
                             <td>
-                                {% if event.attach_file %}
-                                <img src="{{event.attach_path}}/{{event.attach_file}}" width="300px" height="300px">
-                                {% else %}
-                                파일 없음
-                                {% endif %}
+                                <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}" width="300px" height="300px">
                             </td>
                         </tr>
+                        {% endif %}
                         <tr>
                             <th>이벤트기간</th>
-                            <td>{{event.event_start}}~{{event.event_end}}</td>
+                            <td>{{event.event_start}} ~ {{event.event_end}}</td>
                         </tr>
 
                     </table>
                     <div style="text-align: right">
                         <button type="button" class="btn btn-outline-success" onclick="fn_event_list()">목록</button>
+                        {% if session.admin_yn!="y" %}
                         <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#EventModModal">수정</button>
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#EventDelModal">삭제</button>
-
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -149,29 +148,35 @@
 
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" value="{{event.event_title}}" name="event_title" style="text-align: center; width: 500px"></td>
+                                        <td><input type="text" class="form-control" value="{{event.event_title}}" name="event_title" style="text-align: center;"></td>
                                     </tr>
 
                                     <tr>
                                         <th>내용</th>
                                         <td>
-                                            <textarea class="form-control" rows="5" cols="100" name="event_content" placeholder="{{event.event_content}}"></textarea>
+                                            <textarea class="form-control" rows="5" name="event_content">{{event.event_content}}</textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>이미지</th>
                                         <td>
-                                            {% if event.attach_file %}
+                                          {% if event.attach_file %}
                                             <a id="attach" href="javascript:fn_del_ajax()">{{event.attach_file}} x</a>
                                             <input type="file" class="form-control-file border invisible" name="event_file">
                                             {% else %}
                                             <input type="file" class="form-control-file border" name="event_file">
-                                            {% endif %}
+                                          {% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>이벤트기간</th>
-                                        <td><input type="date" class="form-control" value="{{event.event_start}}" name="event_start"> ~ <input type="date" class="form-control" value="{{event.event_end}}" name="event_end"></td>
+                                        <td>
+                                            시작일
+                                            <input type="date" class="form-control" value="{{event.event_start}}" name="event_start">
+                                            <br>
+                                            마감일
+                                            <input type="date" class="form-control" value="{{event.event_end}}" name="event_end">
+                                        </td>
                                     </tr>
                                 </table>
                             </form>

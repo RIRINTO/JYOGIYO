@@ -13,7 +13,7 @@
     <style>
         div#main {
             height: 100%;
-            background-image: url("img/logos/papatouch.jpg");
+            background-image: url("downloads?path={{logo_path}}&file={{logo_file}}");
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;
@@ -29,7 +29,13 @@
     </style>
 </head>
 <body onclick="location.href='k_menu'">
-<div class="container-sm" style="text-align: center" id="main"></div>
+<div class="container-sm" style="text-align: center" id="main">
+ </div>
+{% for i in list %}
+<div>
+    <img src="{{i.attach_path}}/{{i.attach_file}}">
+</div>
+{% endfor %}
 <br>
 </body>
 </html>

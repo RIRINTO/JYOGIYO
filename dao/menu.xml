@@ -3,84 +3,113 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Menu">
     <select id="selectAll">
-        select menu_seq,
-               m.owner_seq,
-               m.cate_seq,
-               menu_name,
-               menu_price,
-               menu_content,
-               menu_display_yn,
-               m.attach_path,
-               m.attach_file,
-               m.in_date,
-               m.in_user_id,
-               m.up_date,
-               m.up_user_id,
-               c.cate_name
-        from menu m
-                 inner join category c on m.cate_seq = c.cate_seq
-        where m.owner_seq = :v_owner_seq
-        order by menu_seq
+        SELECT MENU_SEQ,
+               M.OWNER_SEQ,
+               M.CATE_SEQ,
+               MENU_NAME,
+               MENU_PRICE,
+               MENU_CONTENT,
+               MENU_DISPLAY_YN,
+               M.ATTACH_PATH,
+               M.ATTACH_FILE,
+               M.IN_DATE,
+               M.IN_USER_ID,
+               M.UP_DATE,
+               M.UP_USER_ID,
+               C.CATE_NAME
+        FROM MENU M
+                 INNER JOIN CATEGORY C ON M.CATE_SEQ = C.CATE_SEQ
+        WHERE M.OWNER_SEQ = :V_OWNER_SEQ
+          AND (CATE_DISPLAY_YN = 'Y'
+            OR CATE_DISPLAY_YN = 'y')
+        ORDER BY MENU_SEQ
+    </select>
+    <select id="selectFromKiosk">
+        SELECT MENU_SEQ,
+               M.OWNER_SEQ,
+               M.CATE_SEQ,
+               MENU_NAME,
+               MENU_PRICE,
+               MENU_CONTENT,
+               MENU_DISPLAY_YN,
+               M.ATTACH_PATH,
+               M.ATTACH_FILE,
+               M.IN_DATE,
+               M.IN_USER_ID,
+               M.UP_DATE,
+               M.UP_USER_ID,
+               C.CATE_NAME
+        FROM MENU M
+                 INNER JOIN CATEGORY C ON M.CATE_SEQ = C.CATE_SEQ
+        WHERE M.OWNER_SEQ = :V_OWNER_SEQ
+          AND C.CATE_SEQ = :V_CATE_SEQ
+          AND (MENU_DISPLAY_YN = 'Y'
+            OR MENU_DISPLAY_YN = 'y')
+          AND (CATE_DISPLAY_YN = 'Y'
+            OR CATE_DISPLAY_YN = 'y')
+        ORDER BY MENU_SEQ
     </select>
     <select id="select">
-        select menu_seq,
-               m.owner_seq,
-               m.cate_seq,
-               menu_name,
-               menu_price,
-               menu_content,
-               menu_display_yn,
-               m.attach_path,
-               m.attach_file,
-               m.in_date,
-               m.in_user_id,
-               m.up_date,
-               m.up_user_id,
-               c.cate_name
-        from menu m
-                 inner join category c on m.cate_seq = c.cate_seq
-        where m.menu_seq = :v_menu_seq
-          and m.owner_seq = :v_owner_seq
+        SELECT MENU_SEQ,
+               M.OWNER_SEQ,
+               M.CATE_SEQ,
+               MENU_NAME,
+               MENU_PRICE,
+               MENU_CONTENT,
+               MENU_DISPLAY_YN,
+               M.ATTACH_PATH,
+               M.ATTACH_FILE,
+               M.IN_DATE,
+               M.IN_USER_ID,
+               M.UP_DATE,
+               M.UP_USER_ID,
+               C.CATE_NAME
+        FROM MENU M
+                 INNER JOIN CATEGORY C ON M.CATE_SEQ = C.CATE_SEQ
+        WHERE M.MENU_SEQ = :V_MENU_SEQ
+          AND M.OWNER_SEQ = :V_OWNER_SEQ
+          AND (CATE_DISPLAY_YN = 'Y'
+            OR CATE_DISPLAY_YN = 'y')
     </select>
     <update id="insert">
-        insert into menu(menu_seq,
-                         owner_seq,
-                         cate_seq,
-                         menu_name,
-                         menu_price,
-                         menu_content,
-                         menu_display_yn,
-                         attach_path,
-                         attach_file,
-                         in_date,
-                         in_user_id,
-                         up_date,
-                         up_user_id)
-        values (menu_seq.nextval,
-                :v_owner_seq,
-                :v_cate_seq,
-                :v_menu_name,
-                :v_menu_price,
-                :v_menu_content,
-                :v_menu_display_yn,
-                :v_attach_path,
-                :v_attach_file,
-                to_char(sysdate, 'yyyymmdd.hh24miss'),
-                :v_in_user_id,
-                to_char(sysdate, 'yyyymmdd.hh24miss'),
-                :v_up_user_id)
+        INSERT INTO MENU(MENU_SEQ,
+                         OWNER_SEQ,
+                         CATE_SEQ,
+                         MENU_NAME,
+                         MENU_PRICE,
+                         MENU_CONTENT,
+                         MENU_DISPLAY_YN,
+                         ATTACH_PATH,
+                         ATTACH_FILE,
+                         IN_DATE,
+                         IN_USER_ID,
+                         UP_DATE,
+                         UP_USER_ID)
+        VALUES (MENU_SEQ.NEXTVAL,
+                :V_OWNER_SEQ,
+                :V_CATE_SEQ,
+                :V_MENU_NAME,
+                :V_MENU_PRICE,
+                :V_MENU_CONTENT,
+                :V_MENU_DISPLAY_YN,
+                :V_ATTACH_PATH,
+                :V_ATTACH_FILE,
+                TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+                :V_IN_USER_ID,
+                TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+                :V_UP_USER_ID)
     </update>
     <update id="update">
-        update menu
-        set cate_seq        = :v_cate_seq,
-            menu_name       = :v_menu_name,
-            menu_price      = :v_menu_price,
-            menu_content    = :v_menu_content,
-            menu_display_yn = :v_menu_display_yn,
-            attach_path     = :v_attach_path,
-            attach_file     = :v_attach_file,
-            up_date         = to_char(sysdate, 'yyyymmdd.hh24miss'),
-            up_user_id      = :v_up_user_id
-        where menu_seq = :v_menu_seq
+        UPDATE MENU
+        SET CATE_SEQ        = :V_CATE_SEQ,
+            MENU_NAME       = :V_MENU_NAME,
+            MENU_PRICE      = :V_MENU_PRICE,
+            MENU_CONTENT    = :V_MENU_CONTENT,
+            MENU_DISPLAY_YN = :V_MENU_DISPLAY_YN,
+            ATTACH_PATH     = :V_ATTACH_PATH,
+            ATTACH_FILE     = :V_ATTACH_FILE,
+            UP_DATE         = TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+            UP_USER_ID      = :V_UP_USER_ID
+        WHERE MENU_SEQ = :V_MENU_SEQ
     </update>
 </mapper>

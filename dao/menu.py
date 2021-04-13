@@ -4,20 +4,22 @@ import configparser
 
 
 def menuSort(menuList: list):
-    return {"menu_seq": menuList[0],
-            "owner_seq": menuList[1],
-            "cate_seq": menuList[2],
-            "menu_name": menuList[3],
-            "menu_price": menuList[4],
-            "menu_content": menuList[5],
-            "menu_display_yn": menuList[6],
-            "attach_path": menuList[7],
-            "attach_file": menuList[8],
-            "in_date": menuList[9],
-            "in_user_id": menuList[10],
-            "up_date": menuList[11],
-            "up_user_id": menuList[12],
-            "cate_name": menuList[13]}
+    if menuList:
+        return {"menu_seq": menuList[0],
+                "owner_seq": menuList[1],
+                "cate_seq": menuList[2],
+                "menu_name": menuList[3],
+                "menu_price": menuList[4],
+                "menu_content": menuList[5],
+                "menu_display_yn": menuList[6],
+                "attach_path": menuList[7],
+                "attach_file": menuList[8],
+                "in_date": menuList[9],
+                "in_user_id": menuList[10],
+                "up_date": menuList[11],
+                "up_user_id": menuList[12],
+                "cate_name": menuList[13]}
+    return None
 
 
 class DaoMenu:
@@ -32,6 +34,11 @@ class DaoMenu:
     def selectAll(self, owner_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectAll")
         self.cs.execute(sql, (owner_seq,))
+        return list(map(menuSort, self.cs.fetchall()))
+
+    def selectFromKiosk(self, owner_seq, cate_seq):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectFromKiosk")
+        self.cs.execute(sql, (owner_seq, cate_seq))
         return list(map(menuSort, self.cs.fetchall()))
 
     def select(self, menu_seq, owner_seq):
