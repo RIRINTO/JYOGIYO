@@ -48,7 +48,7 @@
 
                         {% for n in list %}
                         <tr class="menu" onclick="fn_noti_detail('{{n.noti_seq}}')">
-                            <td>{{n.noti_seq}}</td>
+                            <td>{{loop.index}}</td>
                             <td>{{n.noti_title}}</td>
                             <td>{{n.in_date}}</td>
                         </tr>

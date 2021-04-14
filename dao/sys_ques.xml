@@ -12,13 +12,19 @@
     		sys_ques_display_yn,
     		attach_path,
     		attach_file,
-			in_date,
+			TO_CHAR(to_date(in_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD'),
 			in_user_id,
-			up_date,
+			TO_CHAR(to_date(up_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD'),
 			up_user_id,
-			(select in_date from sys_answer where sys_ques_seq = q.sys_ques_seq)  
+			(select TO_CHAR(to_date(in_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD') from sys_answer where sys_ques_seq = q.sys_ques_seq)  
     	FROM 
     		sys_question q
+    	WHERE
+    		sys_ques_display_yn = 'y'
+		or
+			in_user_id = :1
+		or 
+			'admin@kakao.com' = :1 
     	ORDER BY
     		sys_ques_seq desc
     </select>
@@ -32,11 +38,11 @@
     		sys_ques_display_yn,
     		attach_path,
     		attach_file,
-			in_date,
+			TO_CHAR(to_date(in_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD'),
 			in_user_id,
-			up_date,
+			TO_CHAR(to_date(up_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD'),
 			up_user_id,
-			(select in_date from sys_answer where sys_ques_seq = q.sys_ques_seq) 
+			(select TO_CHAR(to_date(in_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD') from sys_answer where sys_ques_seq = q.sys_ques_seq) 
     	FROM 
     		sys_question q
     	WHERE

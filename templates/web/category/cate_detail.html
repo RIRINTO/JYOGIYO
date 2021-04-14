@@ -88,7 +88,7 @@
 							<tr>
 								<th>상세이미지</th>
 								<td>
-									<img src="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}" width="300px" height="300px">
+									<img src="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}" width="200px" height="200px">
 								</td>
 							</tr>
 						{% endif %}
@@ -103,12 +103,11 @@
 
                         <tr>
                             <th>공개여부</th>
-                            <td>
-                                {% if cate.cate_display_yn == "표시" %}
-                                표시
-                                {% else %}
-                                비표시
-                                {% endif %}
+							{% if cate.cate_display_yn == "y" %}
+                                <td>표시</td>
+                            {% else %}
+                                <td>비표시</td>
+							{% endif %}
                             </td>
                         </tr>
 
@@ -183,12 +182,12 @@
 	                                <tr>
 	                                    <th>공개여부</th>
 	                                    <td>
-	                                        {% if cate.cate_display_yn == '표시' %}
-	                                        <input type="radio" name="cate_display_yn" value="표시" checked> 표시
-	                                        <input type="radio" name="cate_display_yn" value="비표시"> 비표시
+	                                        {% if cate.cate_display_yn == 'y' %}
+	                                        <input type="radio" name="cate_display_yn" value="y" checked required> 표시
+	                                        <input type="radio" name="cate_display_yn" value="n" required> 비표시
 	                                        {% else %}
-	                                        <input type="radio" name="cate_display_yn" value="표시"> 표시
-	                                        <input type="radio" name="cate_display_yn" value="비표시" checked> 비표시
+	                                        <input type="radio" name="cate_display_yn" value="y" required> 표시
+	                                        <input type="radio" name="cate_display_yn" value="n" checked required> 비표시
 	                                        {% endif %}
 	                                    </td>
 	                                </tr>

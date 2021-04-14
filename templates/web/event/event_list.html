@@ -60,7 +60,7 @@
                             {% if list %}
                             {%for i in list %}
                             <tr class="menu" onclick="fn_event_detail('{{i.event_seq}}')">
-                                <td>{{i.event_seq}}</td>
+                                <td>{{loop.index}}</td>
                                 <td>{{i.event_title}}</td>
                                 <td>{{i.event_start}} ~ {{i.event_end}}</td>
                             </tr>

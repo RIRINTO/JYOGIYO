@@ -26,10 +26,10 @@ class DaoSysQues:
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
 
-    def selectAll(self):
+    def selectAll(self, owner_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectAll")
         #         MyLog().getLogger().debug(sql)
-        rs = self.cs.execute(sql)
+        rs = self.cs.execute(sql,(owner_id,))
         return list(map(menusort, rs.fetchall()))
 
     def select(self, sys_ques_seq):
@@ -71,7 +71,8 @@ class DaoSysQues:
         return cnt
 
 if __name__ == '__main__':
-    dao = DaoSysQues(config_path='../config.ini', xml_path='sys_qna.xml')
+    dao = DaoSysQues(config_path='../config.ini', xml_path='sys_ques.xml')
+    dao.selectAll(22)
 
 #     cnt = dao.insert("1", "카테고리 내의 메뉴 한번에 못 지우나요?", "카테고리 내의 메뉴 한번에 못 지우나요?카테고리 내의 메뉴 한번에 못 지우나요?", "y", "", "", "", "abc@naver.com", "", "abc@naver.com")
 #     cnt = dao.insert("1", "힘들어요 살려주세요?", "카테고리 내의 메뉴 한번에 못 지우나요?카테고리 내의 메뉴 한번에 못 지우나요?", "y",  "", "", "", "abc@naver.com", "", "abc@naver.com")

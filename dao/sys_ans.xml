@@ -12,7 +12,7 @@
     		sys_ques_display_yn,
     		attach_path,
     		attach_file,
-			in_date,
+			TO_CHAR(to_date(in_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD'),
 			in_user_id,
 			up_date,
 			up_user_id
@@ -26,7 +26,7 @@
     	SELECT
     		sys_ques_seq, 
     		sys_ans_reply, 
-			in_date,
+			TO_CHAR(to_date(in_date, 'YYYYMMDD.HH24MISS'),'YYYY-MM-DD'),
 			in_user_id,
 			up_date,
 			up_user_id
@@ -59,25 +59,6 @@
         		:4
         		)
     
-    
-<!--     	INSERT INTO sys_answer -->
-<!-- 		( -->
-<!-- 			sys_ques_seq,  -->
-<!-- 			sys_ans_reply,  -->
-<!-- 			in_date, -->
-<!-- 			in_user_id, -->
-<!-- 			up_date, -->
-<!-- 			up_user_id -->
-<!-- 		)  -->
-<!-- 		VALUES -->
-<!-- 		( -->
-<!-- 			:1, -->
-<!-- 			:2, -->
-<!-- 			to_char(sysdate,'yyyymmdd.hh24miss'), -->
-<!-- 			:3, -->
-<!-- 			to_char(sysdate,'yyyymmdd.hh24miss'), -->
-<!-- 			:4 -->
-<!-- 		) -->
     </update>
     
     <update id="update">

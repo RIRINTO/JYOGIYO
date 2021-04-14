@@ -53,24 +53,24 @@
                         <th>표시여부</th>
                      </tr>
                   </thead>
-                  <tbody>
-
-                        {% for cate in list %}
-                        <tr class="menu" onclick="fn_cate_detail('{{cate.cate_seq}}')">
-                            <td>{{cate.cate_seq}}</td>
-                            <td>{{cate.cate_name}}</td>
-                            <td>
-                                {% if cate.attach_file %}
-                                <img src="downloads?path=W:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}" data-placement="left">
-                                {% endif %}
-                            </td>
-                            {% if cate.cate_display_yn == 'y' %}
-                            	<td>표시</td>
-                            {% else %}
-                            	<td>비표시</td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
+	                  <tbody>
+	                        {% for cate in list %}
+	                        <tr class="menu" onclick="fn_cate_detail('{{cate.cate_seq}}')">
+	                            <td>{{loop.index}}</td>
+	                            <td>{{cate.cate_name}}</td>
+	                            <td>
+	                                {% if cate.attach_file %}
+	                                <img src="downloads?path=W:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}" data-placement="left">
+	                                {% endif %}
+	                            </td>
+	                            {% if cate.cate_display_yn == 'y' %}
+	                            <td>표시</td>
+	                            {% else %}
+	                            <td>비표시</td>
+	                            {% endif %}
+	                        </tr>
+	                        {% endfor %}
+					</tbody>
                </table>
             </div>
          </div>

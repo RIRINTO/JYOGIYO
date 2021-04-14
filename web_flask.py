@@ -4,6 +4,7 @@ import smtplib
 import requests
 import configparser
 import re
+import ssl
 
 from datetime import datetime
 from flask import Flask, render_template, redirect, request, session, escape
@@ -122,9 +123,9 @@ def temp_pwd_send_ajax():
     password = "shingoha2848"
     recvEmail = owner_id
 
-    pwd_list = ['!', '@', '#', '$', '%', '^', '&', '+', '=', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 
-            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 
-            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    pwd_list = ['!', '@', '#', '$', '%', '^', '&', '+', '=', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+                'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     temp = ""
     regPwd = '.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*'
     match = None
@@ -135,13 +136,13 @@ def temp_pwd_send_ajax():
             match = re.match(regPwd, temp)
             if match:
                 break
-            temp += pwd_list[random.randint(0,70)]
+            temp += pwd_list[random.randint(0, 70)]
         if match:
             break
     print(temp)
-    
-    title = "죠기요 임시 비밀번호 발급"             # 메일 제목
-    content = list["owner_name"] + "님의 임시 비밀번호는 " + temp + " 입니다. \n로그인 후에 비밀번호를 변경하여 사용하시기 바랍니다."   # 메일 내용
+
+    title = "죠기요 임시 비밀번호 발급"  # 메일 제목
+    content = list["owner_name"] + "님의 임시 비밀번호는 " + temp + " 입니다. \n로그인 후에 비밀번호를 변경하여 사용하시기 바랍니다."  # 메일 내용
 
     msg = MIMEText(content)  # MIMEText(text , _charset = "utf8")
     msg['From'] = sendEmail
@@ -342,9 +343,10 @@ def cate_list():
         return redirect('login.html')
     owner_seq = escape(session['owner_seq'])
     list = daoCategory.selectAll(owner_seq)
-    
+
     return render_template('web/category/cate_list.html', list=list)
-    
+
+
 @app.route('/cate_detail')
 def cate_detail():
     if 'owner_seq' not in session:
@@ -419,7 +421,6 @@ def cate_del_img():
 
 
 ##################     menu     ######################
-
 @app.route('/menu_list')
 def menu_list():
     if 'owner_seq' not in session:
@@ -497,7 +498,6 @@ def menu_mod_form():
 
 
 ##################    event     ######################  
-
 @app.route('/event_list')
 def event_list():
     if 'owner_seq' not in session:
@@ -602,8 +602,8 @@ def event_del_img():
 def sys_ques_list():
     if 'owner_id' not in session:
         return redirect('login.html')
-
-    list = DaoSysQues().selectAll()
+    owner_id = escape(session['owner_id'])
+    list = daoSysQues.selectAll(owner_id)
     return render_template('web/sys_ques/sys_ques_list.html', list=list, enumerate=enumerate)
 
 
@@ -667,12 +667,14 @@ def sys_ques_mod():
 
     if file:
         attach_path, attach_file = saveFile(file)
-    
+
     try:
         if DaoSysQues().update(sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, "", owner_id, "", owner_id):
             return f"<script>alert('성공적으로 수정되었습니다.');location.href='sys_ques_detail?sys_ques_seq={sys_ques_seq}'</script>"
     except:
         pass
+
+
 #     return redirect(url_for('sys_ques_detail', sys_ques_seq=sys_ques_seq))
 
 @app.route('/sys_ques_del.ajax', methods=['POST'])
@@ -814,6 +816,7 @@ def kiosk_pay_form():
         return redirect('kiosk_main')
     owner_seq = escape(session['owner_seq'])
     goods = dict(request.form)
+    print(goods)
 
     buyList = {'menu': [], 'buy_seq': daoBuy.genBuySeq(), 'total_price': 0}
 
@@ -843,9 +846,9 @@ def kiosk_pay_form():
         "quantity": 1,
         "total_amount": buyList['total_price'],
         "tax_free_amount": 0,
-        "approval_url": f"http://192.168.41.52:5004/pay_success",
-        "cancel_url": f"http://192.168.41.52:5004/kiosk_home",
-        "fail_url": f"http://192.168.41.52:5004/pay_fail",
+        "approval_url": f"http://127.0.0.1:5004/pay_success",
+        "cancel_url": f"http://127.0.0.1:5004/kiosk_home",
+        "fail_url": f"http://127.0.0.1:5004/pay_fail",
     }
 
     res = requests.post(URL, headers=headers, params=params)
@@ -859,7 +862,7 @@ def pay_success():
     buyList = session['buy']
     print(buyList)
     owner_seq = escape(session['owner_seq'])
-    
+
     URL = 'https://kapi.kakao.com/v1/payment/approve'
     headers = {
         "Authorization": "KakaoAK " + KakaoAK,
@@ -873,7 +876,7 @@ def pay_success():
         "pg_token": request.args.get("pg_token"),  # 쿼리 스트링으로 받은 pg토큰
     }
     res = requests.post(URL, headers=headers, params=params).json()
-    
+
     owner = daoOwner.select(escape(session['owner_seq']))
 
     if owner and owner['owner_str_num']:
@@ -881,7 +884,7 @@ def pay_success():
         owner_str_num.insert(3, '-')
         owner_str_num.insert(6, '-')
         owner['owner_str_num'] = ''.join(owner_str_num)
-    
+
     cnt = daoBuy.insert(buyList['buy_seq'], buyList['menu'], owner_seq)
 
     return render_template('kiosk/success.html', owner=owner, res=res, buyList=buyList)
@@ -923,8 +926,7 @@ def downloads():
     file = request.args.get('file')
     print(path)
     print(file)
-    return send_file(path + '/' + file,
-                     as_attachment=True)
+    return send_file(path + '/' + file)
 
 
 def saveFile(file, owner_seq=None):
@@ -939,4 +941,6 @@ def saveFile(file, owner_seq=None):
 
 
 if __name__ == '__main__':
-    app.run(host=HOST, port=PORT, debug=True)
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    ssl_context.load_cert_chain(certfile='ssl/root.ca.pem', keyfile='ssl/root.ca.key', password='java')
+    app.run(host=HOST, port=PORT, debug=True, ssl_context=ssl_context)

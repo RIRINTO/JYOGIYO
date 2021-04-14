@@ -56,7 +56,7 @@
                         {% if menu_list %}
                         {% for menu in menu_list %}
                         <tr onclick="location.href='menu_detail?menu_seq={{menu.menu_seq}}'">
-                            <td>{{menu.menu_seq}}</td>
+                            <td>{{loop.index}}</td>
                             <td>{{menu.cate_name}}</td>
                             <td>{{menu.menu_name}}</td>
                             <td>{{menu.menu_price}}</td>

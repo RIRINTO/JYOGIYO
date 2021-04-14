@@ -48,9 +48,8 @@
                             </thead>
                             <tbody>
                             {% for i in list %}
-                            	{% if i.sys_ques_display_yn == 'y' or i.in_user_id == session.owner_id or session.owner_id == 'admin@kakao.com' %}
 		                            <tr class="menu" onclick="location.href='sys_ques_detail?sys_ques_seq={{i.sys_ques_seq}}'">
-		                                <td>{{i.sys_ques_seq}}</td>
+		                                <td>{{loop.index}}</td>
 		                                <td>{{i.sys_ques_title}}</td>
 		                                <td>{{i.in_date}}</td>
 		                                <td>
@@ -61,7 +60,6 @@
 		                                {% endif %}
 		                                </td>
 		                            </tr>
-		                    	{% endif %}      
                             {% endfor %}
                             </tbody>
                         </table>
