@@ -941,6 +941,7 @@ def saveFile(file, owner_seq=None):
 
 
 if __name__ == '__main__':
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-    ssl_context.load_cert_chain(certfile='ssl/root.ca.pem', keyfile='ssl/root.ca.key', password='java')
-    app.run(host=HOST, port=PORT, debug=True, ssl_context=ssl_context)
+    # ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    # ssl_context.load_cert_chain(certfile='ssl/root.ca.pem', keyfile='ssl/root.ca.key', password='java')
+    # app.run(host=HOST, port=PORT, debug=True, ssl_context=ssl_context)
+    app.run(host=HOST, port=PORT, debug=True)
