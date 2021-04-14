@@ -126,6 +126,7 @@
             }
         }
 
+        let flag_siri = false;
         $(document).ready(function () {
             $('#pay').on('click', function () {
                 if ($.trim($('#bucket').html()) === "") {
@@ -142,10 +143,16 @@
             });
             $('#siri').data('popover');
             $('#siri').on('click', function () {
-                $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
-                $('#siri').attr('data-content', '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>');
-                $('#siri').popover('show');
+                if (flag_siri) {
+                    recognition.stop();
+                    flag_siri = false;
+                    $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
+                } else {
+                    $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
+                    $('#siri').attr('data-content', '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>');
+                    $('#siri').popover('show');
                 speak_to_siri()
+                }
             });
         });
 
@@ -167,6 +174,7 @@
 
         function speak_to_siri() {
             recognition.start();
+            flag_siri = true;
             isRecognizing = true;
             recognition.onresult = function (event) {
                 let transcript = event.results[0][0].transcript;
@@ -176,6 +184,7 @@
                 $('#siri').data('popover');
                 $('#siri').popover('show');
                 $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
+                flag_siri = false;
 
                 // 여기에 메서드 만들어서 ajax로 받으러 가라
             }
