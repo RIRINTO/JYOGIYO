@@ -151,7 +151,7 @@
                     $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
                     $('#siri').attr('data-content', '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>');
                     $('#siri').popover('show');
-                speak_to_siri()
+                    speak_to_siri()
                 }
             });
         });
@@ -185,9 +185,32 @@
                 $('#siri').popover('show');
                 $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
                 flag_siri = false;
-
+                search_menu_ajax(transcript)
                 // 여기에 메서드 만들어서 ajax로 받으러 가라
             }
+        }
+
+        function search_menu_ajax(msg) {
+            var param = ""
+            param += "dummy=" + Math.random()
+            param += "&msg=" + msg
+            console.log(param)
+            $.ajax({
+                type: "post",
+                url: "search_menu.ajax",
+                dataType: "json",
+                data: param,
+                error: function () {
+                    alert('통신 실패!!');
+                },
+                success: function (data) {
+                    if (data.msg == 'ok') {
+                        alert("OOO")
+                    } else {
+                        alert('XXX');
+                    }
+                }
+            });
         }
     </script>
 </head>
