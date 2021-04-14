@@ -134,139 +134,52 @@
                     $('#payment_tool').modal('show');
                 }
             });
+
+            $('#siri').popover({
+                title: '음성인식 주문을 시작합니다.',
+                content: '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>',
+                html: true
+            });
+            $('#siri').data('popover');
+            $('#siri').on('click', function () {
+                $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
+                $('#siri').attr('data-content', '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>');
+                $('#siri').popover('show');
+                speak_to_siri()
+            });
         });
 
-        var message = document.querySelector("#message");
-        var button = document.querySelector("#speech");
-        var korea = document.querySelector("#korea");
-        var english = document.querySelector("#english");
-        var isRecognizing = false;
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-
-        if ('SpeechRecognition' in window) {
-            // Speech recognition support. Talk to your apps!
-            console.log("음성인식을 지원하는 브라우저입니다.")
-        }
-
-        try {
-            var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
-        } catch (e) {
-            console.error(e);
-        }
-
-        recognition.lang = 'ko-KR'; //선택하게 해줘야 할듯 .
+        // 인스턴스 생성
+        const recognition = new SpeechRecognition();
+        // true면 음절을 연속적으로 인식하나 false면 한 음절만 기록함
         recognition.interimResults = false;
+        // 값이 없으면 HTML의 <html lang="en">을 참고합니다. ko-KR, en-US
+        recognition.lang = "ko-KR";
+        // recognition.lang = "en-US";
+        // true means continuous, and false means not continuous (single result each time.)
+        // true면 음성 인식이 안 끝나고 계속 됩니다.
+        recognition.continuous = false;
+        // 숫자가 작을수록 발음대로 적고, 크면 문장의 적합도에 따라 알맞은 단어로 대체합니다.
+        // maxAlternatives가 크면 이상한 단어도 문장에 적합하게 알아서 수정합니다.
         recognition.maxAlternatives = 5;
-
-
-        let sirititle = '음성인식 주문을 시작합니다.';
-
-        let elem = '<p id="message">원하시는 메뉴를 말해주세요.</p>';
-        elem += '<div id=\'korea\' class=\'textbox\'></div>';
-
-        // $(function () {
-        //     $('#siri').$('#siri').popover({
-        //         animation: true,
-        //         title: sirititle,
-        //         content: elem,
-        //         html: true
-        //     }).on('click', function () {
-        //         siripop()
-        //         text_to_speech("음성인식 시작")
-        //         speak_to_siri()
-        //
-        //     });
-        // });
-
-        // $('#siri').data('bs.popover').options.content = 'new content';
-
-        var siri = $('#siri').data('popover');
-
-        $(function (){
-
-            $('#siri').on('click', function () {
-               $("#siri").attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
-               $('#siri').popover({
-                title: 'Dynamic update',
-                content: 'Loading...'
-                })
-                var siri = $('#siri').data('popover');
-                $('#siri').popover('show');
-                setTimeout(function () {
-                   $('#siri').popover('hide');
-                   $('#siri').attr('data-content', 'hello, am ready');
-                   var siri = $('#siri').data('popover');
-                   $('#siri').popover('show');
-               }, 3000);
-
-                setTimeout(function () {
-                    $('#siri').popover('hide');
-                    $('#siri').attr('data-content', 'changed');
-                    var siri = $('#siri').data('popover');
-                    $('#siri').popover('show');
-                    $("#siri").attr("src", "downloads?path=W:/uploads/img&file=siri.png");
-                }, 6000);
-
-            });
-
-        })
-
-        // $('#siri').popover({
-        //     title: 'Dynamic update',
-        //     content: 'Loading...'
-        // });
 
         function speak_to_siri() {
             recognition.start();
             isRecognizing = true;
-
-            recognition.onstart = function () {
-                console.log("음성인식이 시작 되었습니다. 이제 마이크에 무슨 말이든 하세요.")
-                message.innerHTML = "음성인식 시작...";
-                button.innerHTML = "Listening...";
-                button.disabled = true;
-            }
-
-
-            recognition.onspeechend = function () {
-                message.innerHTML = "버튼을 누르고 아무말이나 하세요.";
-                button.disabled = false;
-                button.innerHTML = "Start STT";
-            }
-
             recognition.onresult = function (event) {
-                console.log('You said: ', event.results[0][0].transcript);
-                // 결과를 출력
-                var resText = event.results[0][0].transcript;
-                korea.innerHTML = resText;
-            };
-        }
+                let transcript = event.results[0][0].transcript;
+                console.log(transcript);
+                $('#siri').popover('hide');
+                $('#siri').attr('data-content', transcript);
+                $('#siri').data('popover');
+                $('#siri').popover('show');
+                $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
 
-        function text_to_speech(txt) {
-            // Web Speech API - speech synthesis
-            if ('speechSynthesis' in window) {
-                // Synthesis support. Make your web apps talk!
-                console.log("음성합성을 지원하는  브라우저입니다.");
+                // 여기에 메서드 만들어서 ajax로 받으러 가라
             }
-            var msg = new SpeechSynthesisUtterance();
-            var voices = window.speechSynthesis.getVoices();
-            //msg.voice = voices[10]; // 두번째 부터 완전 외국인 발음이 됨. 사용하지 말것.
-            msg.voiceURI = 'native';
-            msg.volume = 1; // 0 to 1
-            msg.rate = 1.3; // 0.1 to 10
-            //msg.pitch = 2; //0 to 2
-            msg.text = txt;
-            msg.lang = 'ko-KR';
-
-            msg.onend = function (e) {
-                if (isRecognizing == false) {
-                    recognition.start();
-                }
-                console.log('Finished in ' + event.elapsedTime + ' seconds.');
-            };
-            window.speechSynthesis.speak(msg);
         }
-
     </script>
 </head>
 
