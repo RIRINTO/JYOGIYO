@@ -11,11 +11,21 @@
     <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
     <script src="lib/js/input-spinner.js"></script>
-
-    <script type="text/javascript">
-        function fn_k_order() {
-            alert("결제 모달 창")
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: auto;
         }
+
+        #voice {
+            z-index: 999;
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+        }
+    </style>
+    <script type="text/javascript">
 
         function fn_k_home() {
             location.href = "kiosk_home"
@@ -87,7 +97,7 @@
 
                 $("#menu_seq_" + menu_seq + " button").on('click', function () {
                     $("#menu_seq_" + menu_seq).remove();
-                    
+
                     calcMoney();
                 });
 
@@ -116,32 +126,148 @@
             }
         }
 
-        $( document ).ready(function() {
-			$('#pay').on('click', function() {
-				if($.trim($('#bucket').html()) === ""){
-					alert("메뉴를 선택하세요.")
-				}else{
-					$('#payment_tool').modal('show');
-				}
-			});
+        $(document).ready(function () {
+            $('#pay').on('click', function () {
+                if ($.trim($('#bucket').html()) === "") {
+                    alert("메뉴를 선택하세요.")
+                } else {
+                    $('#payment_tool').modal('show');
+                }
+            });
         });
 
-        
-    </script>
-    <style>
-        html, body {
-            margin: 0;
-            height: 100%;
-            overflow: auto;
+        var message = document.querySelector("#message");
+        var button = document.querySelector("#speech");
+        var korea = document.querySelector("#korea");
+        var english = document.querySelector("#english");
+        var isRecognizing = false;
+
+
+        if ('SpeechRecognition' in window) {
+            // Speech recognition support. Talk to your apps!
+            console.log("음성인식을 지원하는 브라우저입니다.")
         }
 
-        #voice {
-            z-index: 999;
-            position: fixed;
-            bottom: 50px;
-            right: 50px;
+        try {
+            var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+        } catch (e) {
+            console.error(e);
         }
-    </style>
+
+        recognition.lang = 'ko-KR'; //선택하게 해줘야 할듯 .
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 5;
+
+
+        let sirititle = '음성인식 주문을 시작합니다.';
+
+        let elem = '<p id="message">원하시는 메뉴를 말해주세요.</p>';
+        elem += '<div id=\'korea\' class=\'textbox\'></div>';
+
+        // $(function () {
+        //     $('#siri').$('#siri').popover({
+        //         animation: true,
+        //         title: sirititle,
+        //         content: elem,
+        //         html: true
+        //     }).on('click', function () {
+        //         siripop()
+        //         text_to_speech("음성인식 시작")
+        //         speak_to_siri()
+        //
+        //     });
+        // });
+
+        // $('#siri').data('bs.popover').options.content = 'new content';
+
+        var siri = $('#siri').data('popover');
+
+        $(function (){
+
+            $('#siri').on('click', function () {
+               $("#siri").attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
+               $('#siri').popover({
+                title: 'Dynamic update',
+                content: 'Loading...'
+                })
+                var siri = $('#siri').data('popover');
+                $('#siri').popover('show');
+                setTimeout(function () {
+                   $('#siri').popover('hide');
+                   $('#siri').attr('data-content', 'hello, am ready');
+                   var siri = $('#siri').data('popover');
+                   $('#siri').popover('show');
+               }, 3000);
+
+                setTimeout(function () {
+                    $('#siri').popover('hide');
+                    $('#siri').attr('data-content', 'changed');
+                    var siri = $('#siri').data('popover');
+                    $('#siri').popover('show');
+                    $("#siri").attr("src", "downloads?path=W:/uploads/img&file=siri.png");
+                }, 6000);
+
+            });
+
+        })
+
+        // $('#siri').popover({
+        //     title: 'Dynamic update',
+        //     content: 'Loading...'
+        // });
+
+        function speak_to_siri() {
+            recognition.start();
+            isRecognizing = true;
+
+            recognition.onstart = function () {
+                console.log("음성인식이 시작 되었습니다. 이제 마이크에 무슨 말이든 하세요.")
+                message.innerHTML = "음성인식 시작...";
+                button.innerHTML = "Listening...";
+                button.disabled = true;
+            }
+
+
+            recognition.onspeechend = function () {
+                message.innerHTML = "버튼을 누르고 아무말이나 하세요.";
+                button.disabled = false;
+                button.innerHTML = "Start STT";
+            }
+
+            recognition.onresult = function (event) {
+                console.log('You said: ', event.results[0][0].transcript);
+                // 결과를 출력
+                var resText = event.results[0][0].transcript;
+                korea.innerHTML = resText;
+            };
+        }
+
+        function text_to_speech(txt) {
+            // Web Speech API - speech synthesis
+            if ('speechSynthesis' in window) {
+                // Synthesis support. Make your web apps talk!
+                console.log("음성합성을 지원하는  브라우저입니다.");
+            }
+            var msg = new SpeechSynthesisUtterance();
+            var voices = window.speechSynthesis.getVoices();
+            //msg.voice = voices[10]; // 두번째 부터 완전 외국인 발음이 됨. 사용하지 말것.
+            msg.voiceURI = 'native';
+            msg.volume = 1; // 0 to 1
+            msg.rate = 1.3; // 0.1 to 10
+            //msg.pitch = 2; //0 to 2
+            msg.text = txt;
+            msg.lang = 'ko-KR';
+
+            msg.onend = function (e) {
+                if (isRecognizing == false) {
+                    recognition.start();
+                }
+                console.log('Finished in ' + event.elapsedTime + ' seconds.');
+            };
+            window.speechSynthesis.speak(msg);
+        }
+
+    </script>
 </head>
 
 
@@ -166,7 +292,7 @@
             <!-- 계산서 -->
 
             <div class="col-sm-5 h-100">
-                <div class="h-75" style="overflow-x: hidden;overflow-y: auto" >
+                <div class="h-75" style="overflow-x: hidden;overflow-y: auto">
                     <div class="row" style="padding-top: 8px; padding-bottom: 8px">
                         <div class="col-4">메뉴명</div>
                         <div class="col-5">수량</div>
@@ -207,7 +333,7 @@
 </form>
 
 <div id="voice">
-    <img src="downloads?path=W:/uploads/img&file=siri.png" width="150px" height="auto" onclick="alert('김 현 준')">
+    <img src="downloads?path=W:/uploads/img&file=siri.png" class="rounded-circle" width="150px" height="auto" id="siri">
 </div>
 </body>
 </html>

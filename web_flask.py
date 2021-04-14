@@ -750,6 +750,11 @@ def password_change_failed():
     return render_template('web/account/password_change_failed.html')
 
 
+@app.route("/voice")
+def voice():
+    return render_template('kiosk/voice.html')
+
+
 @app.route('/kiosk_main')
 def k_main():
     return render_template('kiosk/main.html')
@@ -808,6 +813,7 @@ def select_menu():
     except:
         pass
     return None
+
 
 
 @app.route('/kiosk_pay_form', methods=["POST"])
@@ -918,6 +924,7 @@ def cancel():
 @app.route("/kakaopay/fail", methods=['POST', 'GET'])
 def fail():
     return render_template('kiosk/fail.html')
+
 
 
 @app.route('/downloads')
