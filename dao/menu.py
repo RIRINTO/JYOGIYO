@@ -49,6 +49,11 @@ class DaoMenu:
             res[rs[0]] = menuSort(rs)
         return res
 
+    def selectByName(self, owner_seq, menu_name):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectByName")
+        self.cs.execute(sql, (owner_seq, menu_name,))
+        return list(map(menuSort, self.cs.fetchall()))
+
     def select(self, menu_seq, owner_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select")
         self.cs.execute(sql, (menu_seq, owner_seq))
@@ -67,7 +72,44 @@ class DaoMenu:
         return self.cs.rowcount
 
 
+    def menuCntChart(self,owner_seq, month):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "menuCntChart")
+        rs = self.cs.execute(sql, (owner_seq, month,))
+        list = []
+        for record in rs:
+            list.append({'menu_seq': record[0],
+                         'menu_name': record[1],
+                         'menu_cnt': record[2]})
+        return list
+
+    def menuSalesChart(self,owner_seq,month):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "menuSalesChart")
+        rs = self.cs.execute(sql, (owner_seq, month,))
+        list = []
+        for record in rs:
+            list.append({'menu_seq': record[0],
+                         'menu_name': record[1],
+                         'menu_sales': record[2]})
+        return list
+
+    def salesChart(self,owner_seq, months):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "salesChart")
+        rs = self.cs.execute(sql, (owner_seq, months,))
+        list = []
+        for record in rs:
+            list.append({'period': record[0],
+                         'sales': record[1]})
+        return list
+
+
 if __name__ == '__main__':
     daoMenu = DaoMenu(config_path='../config.ini', xml_path='menu.xml')
-    for i in daoMenu.selectKakao(22).items():
-        print(i)
+    print(daoMenu.menuCntChart('2021-04'))
+    print(daoMenu.menuSalesChart('2021-04'))
+    print(daoMenu.salesChart(6))
+
+    from dateutil.relativedelta import relativedelta
+    from datetime import datetime
+    thismonth = datetime.now().strftime("%Y-%m")
+    lastmonth = (datetime.now() - relativedelta(months=1)).strftime("%Y-%m")
+    print(thismonth, lastmonth)

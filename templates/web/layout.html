@@ -8,7 +8,7 @@
     <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <script src="lib/jquery/jquery-3.6.0.min.js"></script>
     <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
+    <script type="text/javascript" src="lib/charts/loader.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
 
 
@@ -30,7 +30,7 @@
         <!-- Nav Item - Tables -->
         <li class="nav-item"><a class="nav-link" href="noti_list"> <i class="fas fa-fw fa-table"></i> <span>공지사항</span></a></li>
         <!-- Divider -->
-        {% if session.admin_yn == "N" %}
+        {% if session.admin_yn == "N" or session.admin_yn == "n" %}
 	        <hr class="sidebar-divider d-none d-md-block">
 	        <!-- Nav Item - Charts -->
 	        <li class="nav-item"><a class="nav-link" href="cate_list"> <i class="fas fa-fw fa-chart-area"></i> <span>카테고리 관리</span></a></li>
@@ -39,9 +39,12 @@
 	        <!-- Nav Item - Tables -->
 	        <li class="nav-item"><a class="nav-link" href="event_list"> <i class="fas fa-fw fa-table"></i> <span>이벤트 관리</span></a></li>
         <hr class="sidebar-divider d-none d-md-block">
+        <!-- Nav Item - Charts -->
+        <li class="nav-item"><a class="nav-link" href="voc_list"> <i class="fas fa-fw fa-chart-area"></i> <span>고객소리함</span></a></li>
         {% endif %}
         <!-- Divider -->
         <!-- Nav Item - Charts -->
+
         <li class="nav-item"><a class="nav-link" href="sys_ques_list"> <i class="fas fa-fw fa-chart-area"></i> <span>시스템 문의사항</span></a></li>
     </ul>
     <!-- End of Sidebar -->
@@ -62,12 +65,12 @@
 					<li class="navbar nav ml-auto">
 						<button type="button" class="btn btn-warning btn-sm btn-block" onclick="location.href='kiosk_home'">키오스크</button>
 					</li>
-					{% endif %}				
+					{% endif %}
                     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                     <li class="nav-item dropdown no-arrow d-sm-none">
-                    	<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                    	<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     		<i class="fas fa-search fa-fw"></i>
-                    	</a> 
+                    	</a>
                     <!-- Dropdown - Messages -->
                         <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                             <form class="form-inline mr-auto w-100 navbar-search">
@@ -87,8 +90,8 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
-                    	<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-                    		<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{session.owner_name}}</span> 
+                    	<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    		<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{session.owner_name}}</span>
                     		<img class="img-profile rounded-circle" src="downloads?path={{session.logo_path}}&file={{session.logo_file}}">
                     </a> <!-- Dropdown - User Information -->
                         {% if session.admin_yn == "N" %}
@@ -105,7 +108,7 @@
                         {% endif %}
                     </li>
                 </ul>
-	
+
             </nav>
             <!-- End of Topbar -->
             {% block content %} {% endblock %}

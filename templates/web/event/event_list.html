@@ -64,8 +64,8 @@
                                 <td>{{i.event_title}}</td>
                                 <td>{{i.event_start}} ~ {{i.event_end}}</td>
                             </tr>
-                            </tbody>
                             {% endfor %}
+                            </tbody>
                             {% else %}
                              <tr>
                                <td colspan="6">등록된 이벤트가 없습니다.</td>
@@ -106,13 +106,13 @@
 
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" class="form-control" name="event_title"></td>
+                                        <td><input type="text" class="form-control" name="event_title" required></td>
                                     </tr>
 
                                     <tr>
                                         <th>내용</th>
                                         <td>
-                                            <textarea class="form-control" rows="5" cols="100" name="event_content"></textarea>
+                                            <textarea class="form-control" rows="5" cols="100" name="event_content" required></textarea>
                                         </td>
                                     </tr>
                                     <tr>
@@ -123,10 +123,10 @@
                                         <th>이벤트기간</th>
                                         <td>
                                             시작일
-                                            <input type="date" class="form-control" name="event_start">
+                                            <input type="date" class="form-control" name="event_start" required>
                                             <br>
                                             마감일
-                                            <input type="date" class="form-control" name="event_end">
+                                            <input type="date" class="form-control" name="event_end" required>
                                         </td>
                                     </tr>
                                 </table>

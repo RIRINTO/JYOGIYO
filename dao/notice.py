@@ -30,9 +30,9 @@ class DaoNotice:
                     'attach_file':record[4],'in_date':record[5],'in_user_id':record[6],'up_date':record[7],'up_user_id':record[8]}
         return obj
     
-    def insert(self, noti_title, noti_content, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def insert(self, noti_title, noti_content, attach_path, attach_file, owner_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (noti_title, noti_content, attach_path, attach_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (noti_title, noti_content, attach_path, attach_file, owner_id, owner_id))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
@@ -68,8 +68,7 @@ class DaoNotice:
         
 if __name__ == '__main__':
     dao = DaoNotice(config_path='../config.ini', xml_path='notice.xml')
-#     cnt = dao.insert("1","titie","content","y","1","in_user_id","1","up_user_id")
+#     cnt = dao.insert("noti_title", "noti_content", "attach_path", "attach_file", "owner_id")
 #     cnt = dao.update("1", "noti", "noti","y","in_date","in_user_id","up_date","up_user_id")
 #     cnt = dao.delete("1")
-
 #     print(cnt)

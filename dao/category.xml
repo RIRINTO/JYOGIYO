@@ -15,7 +15,7 @@
                UP_DATE,
                UP_USER_ID
         FROM CATEGORY
-        WHERE OWNER_SEQ = :V_OWNER_SEQ
+        WHERE OWNER_SEQ = :V_OWNER_SEQ 
         ORDER BY CATE_SEQ
     </select>
 
@@ -60,20 +60,24 @@
     </select>
 
     <select id="select">
-        SELECT CATE_SEQ,
-               OWNER_SEQ,
-               CATE_NAME,
-               CATE_CONTENT,
-               CATE_DISPLAY_YN,
-               ATTACH_PATH,
-               ATTACH_FILE,
-               IN_DATE,
-               IN_USER_ID,
-               UP_DATE,
-               UP_USER_ID
-        FROM CATEGORY
-        WHERE OWNER_SEQ = :V_OWNER_SEQ
-          AND CATE_SEQ = :V_CATE_SEQ
+        select 
+        	cate_seq,
+			owner_seq,
+			cate_name,
+			cate_content,
+			cate_display_yn,
+			attach_path,
+			attach_file,
+			in_date,
+			in_user_id,
+			up_date,
+			up_user_id
+        from 
+        	category
+        where 
+        	owner_seq = :v_owner_seq
+		and 
+			cate_seq = :v_cate_seq
     </select>
     
 <!-- ################## insert ################## -->

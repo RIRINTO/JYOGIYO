@@ -8,146 +8,69 @@
     <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <script src="lib/jquery/jquery-3.6.0.min.js"></script>
     <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
-    <script>
-    </script>
-    <style>
-        /*
-*
-* ==========================================
-* CUSTOM UTIL CLASSES
-* ==========================================
-*
-*/
-        .table-fixed tbody {
-            height: 300px;
-            overflow-y: auto;
-            width: 100%;
-        }
+   	<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
+	<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
 
-        .table-fixed thead,
-        .table-fixed tbody,
-        .table-fixed tr,
-        .table-fixed td,
-        .table-fixed th {
-            display: block;
-        }
+<script>
+// 우선 컨텍스트를 가져옵니다. 
+	$(function(){
+			
+		var ctx = document.getElementById("myChart").getContext('2d');
+		/*
+		- Chart를 생성하면서, 
+		- ctx를 첫번째 argument로 넘겨주고, 
+		- 두번째 argument로 그림을 그릴때 필요한 요소들을 모두 넘겨줍니다. 
+		*/
+	
+		
+		var myChart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(75, 192, 192, 0.2)',
+		                'rgba(153, 102, 255, 0.2)',
+		                'rgba(255, 159, 64, 0.2)'
+		            ],
+		            borderColor: [
+		                'rgba(255,99,132,1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(75, 192, 192, 1)',
+		                'rgba(153, 102, 255, 1)',
+		                'rgba(255, 159, 64, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		        maintainAspectRatio: true, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        }
+		    }
+		});
+	})
+</script>
 
-        .table-fixed tbody td,
-        .table-fixed tbody th,
-        .table-fixed thead > tr > th {
-            float: left;
-            position: relative;
-
-        &
-        ::after {
-            content: '';
-            clear: both;
-            display: block;
-        }
-
-        }
-
-        /*
-        *
-        * ==========================================
-        * FOR DEMO PURPOSES
-        * ==========================================
-        *
-        */
-
-        body {
-            background: #74ebd5;
-            background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
-            background: linear-gradient(to right, #74ebd5, #ACB6E5);
-            min-height: 100vh;
-
-        }
-
-
-    </style>
 </head>
 <body>
-<!-- Fixed header table-->
-<div class="table-responsive">
-    <table class="table table-fixed">
-        <thead>
-        <tr>
-            <th scope="col" class="col-3">#</th>
-            <th scope="col" class="col-3">First</th>
-            <th scope="col" class="col-3">Last</th>
-            <th scope="col" class="col-3">Handle</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="row" class="col-3">1</th>
-            <td class="col-3">Mark</td>
-            <td class="col-3">Otto</td>
-            <td class="col-3">@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">2</th>
-            <td class="col-3">Jacob</td>
-            <td class="col-3">Thornton</td>
-            <td class="col-3">@fat</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">3</th>
-            <td colspan="2" class="col-6">Larry the Bird</td>
-            <td class="col-3">@twitter</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">4</th>
-            <td class="col-3">Martin</td>
-            <td class="col-3">Williams</td>
-            <td class="col-3">@Marty</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">5</th>
-            <td colspan="2" class="col-3">Sam</td>
-            <td colspan="2" class="col-3">Pascal</td>
-            <td class="col-3">@sam</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">6</th>
-            <td class="col-3">John</td>
-            <td class="col-3">Green</td>
-            <td class="col-3">@john</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">7</th>
-            <td colspan="2" class="col-3">David</td>
-            <td colspan="2" class="col-3">Bowie</td>
-            <td class="col-3">@david</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">8</th>
-            <td class="col-3">Pedro</td>
-            <td class="col-3">Rodriguez</td>
-            <td class="col-3">@rod</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">5</th>
-            <td colspan="2" class="col-3">Sam</td>
-            <td colspan="2" class="col-3">Pascal</td>
-            <td class="col-3">@sam</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">10</th>
-            <td class="col-3">Jacob</td>
-            <td class="col-3">Thornton</td>
-            <td class="col-3">@fat</td>
-        </tr>
-        <tr>
-            <th scope="row" class="col-3">11</th>
-            <td colspan="2" class="col-6">Larry the Bird</td>
-            <td class="col-3">@twitter</td>
-        </tr>
-        </tbody>
-    </table>
-</div><!-- End -->
+
+	<div style="width:800px">
+    	<canvas id="myChart"></canvas>
+	</div>
+	
 
 </body>
 </html>

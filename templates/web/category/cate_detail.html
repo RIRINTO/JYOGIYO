@@ -83,7 +83,7 @@
                             <td>{{cate.cate_name}}</td>
                         </tr>
 
-                        <tr>
+                       
                         {% if cate.attach_file %}
 							<tr>
 								<th>상세이미지</th>
@@ -92,14 +92,13 @@
 								</td>
 							</tr>
 						{% endif %}
-                        </tr>
-
+                       
+                        {% if cate.cate_content %}
                         <tr>
                             <th>설명</th>
-                            <td id="cate_content">
-                                {{cate.cate_content}}
-                            </td>
+                            <td id="cate_content">{{cate.cate_content}}</td>
                         </tr>
+                        {% endif %}
 
                         <tr>
                             <th>공개여부</th>
@@ -159,12 +158,19 @@
 	                                    <th>카테고리명</th>
 	                                    <td><input name="cate_name" type="text" class="form-control" value="{{cate.cate_name}}"></td>
 	                                </tr>
-	
+	                                
 	                                <tr>
 	                                    <th>설명</th>
+	                                    
+	                                    {% if cate.cate_content %}
 	                                    <td>
 	                                        <textarea name="cate_content" class="form-control" rows="5" cols="100">{{cate.cate_content}}</textarea>
 	                                    </td>
+	                                    {% else %}
+	                                    <td>
+	                                        <textarea name="cate_content" class="form-control" rows="5" cols="100"></textarea>
+	                                    </td>
+	                                    {% endif %}
 	                                </tr>
 	                                
 	                                <tr>

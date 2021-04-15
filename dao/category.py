@@ -17,7 +17,7 @@ def categorySort(categoryList: list):
                 "up_date": categoryList[9],
                 "up_user_id": categoryList[10]}
     else:
-        return None
+        return None 
 
 
 class DaoCategory:

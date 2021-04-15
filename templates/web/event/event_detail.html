@@ -50,7 +50,7 @@
                     $('#attach').remove();
                     console.log("a")
                 } else {
-                    aler('삭제 실패!!');
+                    alert('삭제 실패!!');
                 }
             }
         });
@@ -58,6 +58,7 @@
         $('input[name=attach_path]').val('');
         $('input[name=attach_file]').val('');
     }
+
 </script>
 
 <!-- Begin Page Content -->
@@ -85,11 +86,14 @@
                             <th>제목</th>
                             <td>{{event.event_title}}</td>
                         </tr>
-
+						
+						{% if event.event_content %}
                         <tr>
                             <th>내용</th>
                             <td>{{event.event_content}}</td>
                         </tr>
+                        {% endif %}
+                         
                         {% if event.attach_file %}
                         <tr>
                             <th>이미지</th>

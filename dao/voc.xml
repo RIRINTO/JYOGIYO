@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+    <select id="select">
+    	select
+    		voc_seq, 
+    		owner_seq, 
+    		content, 
+    		in_date, 
+    		in_user_id, 
+    		up_date, 
+    		up_user_id
+    	from
+    		voice_of_customer
+    	where
+    		owner_seq = :v_owner_seq
+    	order by 
+    		voc_seq
+    </select>
+    <update id="insert">
+    	insert into
+    		voice_of_customer
+	    		(
+	    		voc_seq, 
+	    		owner_seq, 
+	    		content, 
+	    		in_date, 
+	    		in_user_id, 
+	    		up_date, 
+	    		up_user_id
+	    		)
+	    values
+	    	(
+				voc_seq.nextval, 
+				:1, 
+				:2, 
+				to_char(sysdate, 'YYYY-MM-DD'), 
+				:3,
+				to_char(sysdate, 'YYYY-MM-DD'), 
+				:4
+			)
+    </update>
+</mapper>

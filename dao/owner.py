@@ -96,13 +96,33 @@ class DaoOwner:
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "id_check_list")
         record = self.cs.execute(sql, (owner_id, owner_str_num)).fetchone()
         return dict({'owner_seq': record[0], 'owner_name': record[1], 'owner_id': record[2], 'owner_pwd': record[3],
-                         'owner_str_name': record[4], 'owner_str_num': record[5], 'owner_str_tel': record[6], 'owner_add1': record[7],
-                         'owner_add2': record[8], 'logo_path': record[9], 'logo_file': record[10], 'admin_yn': record[11],
-                         'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]})
+                     'owner_str_name': record[4], 'owner_str_num': record[5], 'owner_str_tel': record[6], 'owner_add1': record[7],
+                     'owner_add2': record[8], 'logo_path': record[9], 'logo_file': record[10], 'admin_yn': record[11],
+                     'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]})
+
+    def dayschart(self, days):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "lastdays")
+        rs = self.cs.execute(sql, (days,))
+        list = []
+        for record in rs:
+            list.append({'tr_in_date': record[0], 'own_cnt': record[1]})
+        return list
+
+    def monthschart(self, months):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "lastmonths")
+        rs = self.cs.execute(sql, (months,))
+        list = []
+        for record in rs:
+            list.append({'tr_in_date': record[0], 'own_cnt': record[1]})
+        return list
+
 if __name__ == '__main__':
     daoOwner = DaoOwner(config_path='../config.ini', xml_path='owner.xml')
+
 #     list = dao.selectAll()
 #     cnt = daoOwner.insert("3", "김현주", "khj@naver.com", "1234", "홍콩반점", "123434123", "01023121231", "12344", "대전 중구", "은행동", "", "", "y", "in_date", "khj", "", "khj")
 #     cnt = dao.update("2", "3", "3","3","3","3","3","3","3","3","3","3","3","3")
 #     cnt = dao.delete("2")
 #     print(cnt)
+#     list = daoOwner.dayschart(30)
+#     print(list)

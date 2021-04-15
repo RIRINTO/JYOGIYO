@@ -6,7 +6,9 @@ import configparser
 import re
 import ssl
 
+
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from flask import Flask, render_template, redirect, request, session, escape
 from flask.json import jsonify
 from flask.helpers import send_file, url_for
@@ -20,7 +22,9 @@ from dao.owner import DaoOwner
 from dao.notice import DaoNotice
 from dao.sys_ques import DaoSysQues
 from dao.sys_ans import DaoSysAns
+from dao.voc import DaoVoc
 
+daoVoc = DaoVoc()
 daoBuy = DaoBuy()
 daoCategory = DaoCategory()
 daoEvent = DaoEvent()
@@ -87,8 +91,9 @@ def owner_str_num_check_ajax():
 def login():
     owner_id = request.form["owner_id"]
     owner_pwd = request.form["owner_pwd"]
-
     obj = daoOwner.select_login(owner_id, owner_pwd)
+    
+    
     if obj:
         session["owner_seq"] = obj["owner_seq"]
         session["owner_id"] = obj["owner_id"]
@@ -96,7 +101,7 @@ def login():
         session["owner_name"] = obj["owner_name"]
         session["logo_path"] = obj["logo_path"]
         session["logo_file"] = obj["logo_file"]
-        return render_template('web/dashboard/dashboard.html', obj=obj)
+        return redirect('dashboard')
     return "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.');history.back()</script>"
 
 
@@ -163,12 +168,41 @@ def temp_pwd_send_ajax():
     return str(cnt)
 
 
+##################   dashboard   ######################
+
 @app.route('/')
 @app.route('/dashboard')
 def dashboard():
     if 'owner_seq' not in session:
         return redirect('login.html')
-    return render_template('web/dashboard/dashboard.html')
+    owner_seq = escape(session['owner_seq'])
+
+    if session['admin_yn'] == 'Y' or session['admin_yn'] == 'y':
+        dayschart = daoOwner.dayschart(30)
+        monthschart = daoOwner.monthschart(6)
+        yearchart = daoOwner.monthschart(12)
+        return render_template('web/dashboard/admin_dashboard.html', dayschart=dayschart , monthschart=monthschart, yearschart=yearchart)
+
+    thismonth = datetime.now().strftime("%Y-%m")
+    lastmonth = (datetime.now()-relativedelta(months=1)).strftime("%Y-%m")
+
+    menuCntChart_this = daoMenu.menuCntChart(owner_seq, thismonth)
+    menuCntChart_last = daoMenu.menuCntChart(owner_seq, lastmonth)
+    print(owner_seq)
+    print(lastmonth)
+
+    menuSalesChart_this = daoMenu.menuSalesChart(owner_seq, thismonth)
+    print(menuSalesChart_this)
+    menuSalesChart_last = daoMenu.menuSalesChart(owner_seq, lastmonth)
+
+    salesChart = daoMenu.salesChart(owner_seq,12)
+    return render_template('web/dashboard/owner_dashboard.html',
+                           menuCntChart_this=menuCntChart_this,
+                           menuCntChart_last=menuCntChart_this,
+                           menuSalesChart_this=menuSalesChart_this,
+                           menuSalesChart_last=menuSalesChart_this,
+                           salesChart=salesChart
+                           )
 
 
 @app.route('/account_manage')
@@ -254,23 +288,25 @@ def noti_detail():
 def noti_add():
     if 'owner_seq' not in session:
         return redirect('login.html')
+    
     owner_id = escape(session['owner_id'])
-
     noti_title = request.form['noti_title']
     noti_content = request.form['noti_content']
+
+    attach_path = ""
+    attach_file = ""
 
     noti_file = request.files['noti_file']
     if noti_file:
         attach_path, attach_file = saveFile(noti_file)
-        print('noti_add', attach_path)
-        print('noti_add', attach_file)
 
     try:
-        cnt = daoNotice.insert(noti_title, noti_content, attach_path, attach_file, None, owner_id, None, owner_id)
+        cnt = daoNotice.insert(noti_title, noti_content, attach_path, attach_file, owner_id)
         if cnt:
             return redirect('noti_list')
     except:
         pass
+    
     return '<script>alert("글 작성에 실패하였습니다.");history.back()</script>'
 
 
@@ -285,9 +321,6 @@ def noti_mod():
     attach_path = request.form['attach_path']
     attach_file = request.form['attach_file']
 
-    if noti_file == "None":
-        attach_path = ""
-        attach_file = ""
 
     if noti_file:
         attach_path, attach_file = saveFile(noti_file)
@@ -527,7 +560,10 @@ def event_addact():
     event_content = request.form["event_content"]
     event_start = request.form["event_start"]
     event_end = request.form["event_end"]
-
+    attach_path = ""
+    attach_file = ""
+    
+    
     event_file = request.files['event_file']
     if event_file:
         attach_path, attach_file = saveFile(event_file)
@@ -750,11 +786,6 @@ def password_change_failed():
     return render_template('web/account/password_change_failed.html')
 
 
-@app.route("/voice")
-def voice():
-    return render_template('kiosk/voice.html')
-
-
 @app.route('/kiosk_main')
 def k_main():
     return render_template('kiosk/main.html')
@@ -805,15 +836,26 @@ def k_menu():
 @app.route('/select_menu.ajax', methods=["POST"])
 def select_menu():
     cate_seq = request.form["cate_seq"]
-    owner_seq = escape(session["owner_seq"])
-
     try:
+        owner_seq = escape(session["owner_seq"])
+
         menu_list = daoMenu.selectKiosk(owner_seq, cate_seq)
         return jsonify(menu_list=menu_list)
     except:
         pass
     return None
 
+
+@app.route('/select_menu_by_name.ajax', methods=['POST'])
+def owner_seq():
+    try:
+        owner_seq = escape(session["owner_seq"])
+        menu_name = request.form["menu_name"]
+        menu_list = daoMenu.selectByName(owner_seq, menu_name)
+        return jsonify(menu_list=menu_list)
+    except:
+        pass
+    return None
 
 
 @app.route('/kiosk_pay_form', methods=["POST"])
@@ -926,13 +968,10 @@ def fail():
     return render_template('kiosk/fail.html')
 
 
-
 @app.route('/downloads')
 def downloads():
     path = request.args.get('path')
     file = request.args.get('file')
-    print(path)
-    print(file)
     return send_file(path + '/' + file)
 
 
@@ -945,6 +984,41 @@ def saveFile(file, owner_seq=None):
     os.makedirs(attach_path, exist_ok=True)
     file.save(os.path.join(attach_path, attach_file))
     return attach_path, attach_file
+
+###############################voc##############################################
+@app.route('/voc_list')
+def voc_list():
+    if 'owner_seq' not in session:
+        return redirect('login.html')
+    
+    owner_seq = escape(session['owner_seq'])
+    list = daoVoc.select(owner_seq)
+    return render_template('web/voc/voc_list.html', list=list)
+
+@app.route('/voc_addact', methods=['POST'])
+def voc_addact():
+    owner_seq = escape(session['owner_seq'])
+    content = request.form['content']
+    try:
+        cnt = daoVoc.insert(owner_seq,content,'','')
+        if cnt:
+            return redirect("kiosk_menu?owner_seq=" + owner_seq)
+    except:
+        pass
+    return '<script>alert("소리함 작성에 실패하였습니다.");history.back()</script>'
+
+
+
+@app.route('/search_menu.ajax', methods=['POST'])
+def search_menu_ajax():
+    owner_seq = escape(session['owner_seq'])
+    msg = request.form['msg']
+    menu_list = daoMenu.selectByName(owner_seq,msg)
+    return jsonify(menu_list=menu_list)
+
+
+
+
 
 
 if __name__ == '__main__':
