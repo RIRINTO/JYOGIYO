@@ -41,7 +41,26 @@
             fn_cate('{{cate_list[0].cate_seq}}');
         });
 
+        function menu_render(data) {
+            let menu = ''
+
+            for (var i = 0; i < data.menu_list.length; i++) {
+                menu += '       <div class="col-sm-3">'
+                menu += '            <div class="card" onclick="add_to_bucket(\'' + data.menu_list[i].menu_seq + '\', \'' + data.menu_list[i].menu_name + '\', \'' + data.menu_list[i].menu_price + '\')">'
+                menu += '              <div class="card_body">'
+                menu += '                <img class="card-img-top" src="downloads?path=' + data.menu_list[i].attach_path + '&file=' + data.menu_list[i].attach_file + '">'
+                menu += '                <p>' + data.menu_list[i].menu_name + '</p>'
+                menu += '                </div>'
+                menu += '          	  </div>'
+                menu += '          </div>'
+            }
+            $('#menu_list').html(menu);
+        }
+
         function fn_cate(cate_seq) {
+            if (cate_seq === 0) {
+                search_menu_ajax('')
+            } else {
             let param = Math.random()
             param += "&cate_seq=" + cate_seq
 
@@ -57,21 +76,8 @@
                     $("nav a").each(function () {
                         $(this).removeClass("active");
                     });
+                    menu_render(data)
 
-                    let menu = ''
-
-                    for (var i = 0; i < data.menu_list.length; i++) {
-                        menu += '       <div class="col-sm-3">'
-                        menu += '            <div class="card" onclick="add_to_bucket(\'' + data.menu_list[i].menu_seq + '\', \'' + data.menu_list[i].menu_name + '\', \'' + data.menu_list[i].menu_price + '\')">'
-                        menu += '              <div class="card_body">'
-                        menu += '                <img class="card-img-top" src="downloads?path=' + data.menu_list[i].attach_path + '&file=' + data.menu_list[i].attach_file + '">'
-                        menu += '                <p>' + data.menu_list[i].menu_name + '</p>'
-                        menu += '                </div>'
-                        menu += '          	  </div>'
-                        menu += '          </div>'
-
-                    }
-                    $('#menu_list').html(menu);
                     $("nav a").each(function () {
                         if (cate_seq === $(this).attr('rel')) {
                             $(this).addClass("active");
@@ -79,6 +85,7 @@
                     });
                 }
             });
+            }
         };
 
         function add_to_bucket(menu_seq, menu_name, menu_price) {
@@ -126,14 +133,18 @@
             }
         }
 
-        let flag_siri = false;
-        $(document).ready(function () {
-            $('#pay').on('click', function () {
-                if ($.trim($('#bucket').html()) === "") {
-                    alert("메뉴를 선택하세요.")
+        function click_pay_button() {
+            if ($.trim($('#bucket').html()) === "") {
+                    $('#bucket_empty').modal('show');
                 } else {
                     $('#payment_tool').modal('show');
                 }
+        }
+
+        let flag_siri = false;
+        $(document).ready(function () {
+            $('#pay').on('click', function () {
+                click_pay_button();
             });
 
             $('#siri').popover({
@@ -151,7 +162,7 @@
                     $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
                     $('#siri').attr('data-content', '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>');
                     $('#siri').popover('show');
-                    speak_to_siri()
+                    speak_to_siri();
                 }
             });
         });
@@ -185,8 +196,14 @@
                 $('#siri').popover('show');
                 $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
                 flag_siri = false;
-                search_menu_ajax(transcript)
-                // 여기에 메서드 만들어서 ajax로 받으러 가라
+                setTimeout(function() {
+                        $('#siri').popover('hide');
+                    }, 3000);
+                if (transcript === '결제' || transcript === '주문') {
+                    click_pay_button();
+                } else {
+                    search_menu_ajax(transcript);
+                }
             }
         }
 
@@ -204,14 +221,37 @@
                     alert('통신 실패!!');
                 },
                 success: function (data) {
-                    if (data.msg == 'ok') {
-                        alert("OOO")
-                    } else {
-                        alert('XXX');
-                    }
+                    $("nav a").each(function () {
+                        $(this).removeClass("active");
+                    });
+                    menu_render(data)
+
+                    $("nav a").each(function () {
+                        if ('0' === $(this).attr('rel')) {
+                            $(this).addClass("active");
+                        }
+                    });
+
                 }
             });
         }
+
+
+
+        function fn_add() {
+        	if($("textarea[name='content']").val()==""){
+	   			alert("작성한 글이 없습니다.")
+	   			$("textarea[name='content']").focus();
+	   		} else {
+	            document.voc_add.submit();
+	   		}	 
+        }
+        
+        $(function(){
+        	$("#vocaddModal").on("shown.bs.modal", function () {
+        		$("textarea[name='content']").focus();
+        	});
+        })
     </script>
 </head>
 
@@ -219,7 +259,10 @@
 <body>
 
 <form action="kiosk_pay_form" method="post" class="h-100" style="text-align: center">
-    <img src="downloads?path={{logo_path}}&file={{logo_file}}" width="auto" height="10%">
+    <img src="downloads?path={{logo_path}}&file={{logo_file}}" width="auto" height="10%" style="margin-left:5%">
+    <nav style="float: right; margin-right:3%; margin-top: 1%">
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#vocaddModal">고객소리함</button>
+    </nav>
     <div class="container-fluid" style="height: 90%">
         <div class="row h-100">
             <div class="col-sm-7 h-100">
@@ -227,14 +270,16 @@
                     {% for c in cate_list %}
                     <a class="nav-item nav-link" rel="{{c.cate_seq}}" href="javascript:fn_cate('{{c.cate_seq}}')">{{c.cate_name}}</a>
                     {% endfor %}
+                    <a class="nav-item nav-link" rel='0' href="javascript:fn_cate(0)">검색</a>
                 </nav>
+
                 <hr>
 
                 <div class="row menu" id="menu_list">
                 </div>
             </div>
 
-            <!-- 계산서 -->
+            <!-- 장바구니 -->
 
             <div class="col-sm-5 h-100">
                 <div class="h-75" style="overflow-x: hidden;overflow-y: auto">
@@ -275,10 +320,62 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="bucket_empty" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">장바구니가 비었습니다</div>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">메뉴를 선택해주세요</div>
+            </div>
+        </div>
+    </div>
+
 </form>
 
 <div id="voice">
     <img src="downloads?path=W:/uploads/img&file=siri.png" class="rounded-circle" width="150px" height="auto" id="siri">
 </div>
+<!-- voc_add-->
+<div class="modal fade" id="vocaddModal" tabindex="-1" role="dialog" aria-labelledby="vocaddmod" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="vocaddmod">소리함 추가</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <!-- voc add Modal content -->
+
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <form action="voc_addact" method="post" name="voc_add" enctype="multipart/form-data">
+                                <table class="table" style="text-align: center">
+                                    <tr>
+                                        <th>내용</th>
+                                        <td>
+                                            <textarea class="form-control" rows="5" cols="100" name="content" required></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of voc Modal content -->
+            </div>
+            <div style="text-align: right" class="modal-footer">
+                <button type="button" class="btn btn-outline-warning" onclick="fn_add()">등록 완료</button>
+            </div>
 </body>
 </html>
