@@ -35,7 +35,9 @@
                     <!-- Card Body -->
                     <div class="card-body">
                         <div style="text-align: right">
+                        	{% if session.owner.owner_id != 'admin@kakao.com' %}
                             <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#sys_qna_add">추가</button>
+                            {% endif %}
                         </div><br>
                         <table class="table table-hover" style="text-align: center">
                             <thead class="bg-warning font-weight-bold text-light">
@@ -105,7 +107,7 @@
 						<tr>
 							<th>표시여부</th>
 							<td>
-								<input type="radio" name="display_yn" value="y" >표시
+								<input type="radio" name="display_yn" value="y" checked>표시
 								<input type="radio" name="display_yn" value="n">비표시
 							</td>
 						</tr>	

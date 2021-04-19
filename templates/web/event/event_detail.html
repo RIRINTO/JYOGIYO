@@ -58,6 +58,11 @@
         $('input[name=attach_path]').val('');
         $('input[name=attach_file]').val('');
     }
+    	$(function() {
+		$('#e_content').html(
+				$('#e_content').html().replaceAll('\r', '').replaceAll('\n',
+						'<br>'))
+	})
 
 </script>
 
@@ -74,43 +79,27 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <br>
-
-                    <table class="table" style="text-align: center">
-                        <tr>
-                            <th>순번</th>
-                            <td>{{event.event_seq}}</td>
-                        </tr>
-
-                        <tr>
-                            <th>제목</th>
-                            <td>{{event.event_title}}</td>
-                        </tr>
-						
-						{% if event.event_content %}
-                        <tr>
-                            <th>내용</th>
-                            <td>{{event.event_content}}</td>
-                        </tr>
+                    <div class="row text-center">
+                        <div class="col-4"><p><b>순번</b></p></div>
+                        <div class="col-8"><p>{{event.event_seq}}</p></div>
+                        <div class="col-4"><p><b>제목</b></p></div>
+                        <div class="col-8"><p>{{event.event_title}}</p></div>
+                        {% if event.event_content %}
+                        <div class="col-4"><p><b>내용</b></p></div>
+                        <div class="col-8"><p>{{event.event_content}}</p></div>
                         {% endif %}
-                         
                         {% if event.attach_file %}
-                        <tr>
-                            <th>이미지</th>
-                            <td>
-                                <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}" width="300px" height="300px">
-                            </td>
-                        </tr>
+                        <div class="col-4"><p><b>이미지</b></p></div>
+                        <div class="card col-8">
+                                <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}">
+                        </div>
                         {% endif %}
-                        <tr>
-                            <th>이벤트기간</th>
-                            <td>{{event.event_start}} ~ {{event.event_end}}</td>
-                        </tr>
-
-                    </table>
+                        <div class="col-4"><p><b>이벤트기간</b></p></div>
+                        <div class="col-8"><p>{{event.event_start}} ~ {{event.event_end}}</p></div>
+                    </div>
                     <div style="text-align: right">
                         <button type="button" class="btn btn-outline-success" onclick="fn_event_list()">목록</button>
-                        {% if session.admin_yn!="y" %}
+                        {% if session.owner.admin_yn!="y" %}
                         <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#EventModModal">수정</button>
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#EventDelModal">삭제</button>
                         {% endif %}

@@ -48,53 +48,43 @@
                           OR ADMIN_YN = 'y')))
     </select>
     <update id="insert">
-         INSERT INTO event
-        (
-   	 		owner_seq,
-            event_seq,
-            event_title,
-            event_content,
-            event_start,
-            event_end,
-            attach_path,
-            attach_file,
-            in_date,
-            in_user_id,
-            up_date,
-            up_user_id
-        )
-        VALUES
-        (
-	        :1,
-	        event_seq.nextval,
-	        :2,
-	        :3,
-	        to_date(:4, 'YYYY-MM-DD'),
-	        to_date(:5, 'YYYY-MM-DD') + 1 - 1/24/60/60,
-            :6,
-            :7,
-	        to_char(sysdate, 'YYYYMMDD.HHMISS'),
-	        :8,
-	        to_char(sysdate, 'YYYYMMDD.HHMISS'),
-            :9
-        )
+        INSERT INTO EVENT(EVENT_SEQ,
+                          OWNER_SEQ,
+                          EVENT_TITLE,
+                          EVENT_CONTENT,
+                          EVENT_START,
+                          EVENT_END,
+                          ATTACH_PATH,
+                          ATTACH_FILE,
+                          IN_DATE,
+                          IN_USER_ID,
+                          UP_DATE,
+                          UP_USER_ID)
+        VALUES (EVENT_SEQ.NEXTVAL,
+                :V_OWNER_SEQ,
+                :V_EVENT_TITLE,
+                :V_EVENT_CONTENT,
+                :V_EVENT_START,
+                :V_EVENT_END,
+                :V_ATTACH_PATH,
+                :V_ATTACH_FILE,
+                TO_CHAR(SYSDATE, 'YYYYMMDD.HHMISS'),
+                :V_IN_USER_ID,
+                TO_CHAR(SYSDATE, 'YYYYMMDD.HHMISS'),
+                :V_UP_USER_ID)
     </update>
     <update id="update">
-        UPDATE
-        	event
-       	SET
-	        event_title			=:1,
-	        event_content		=:2,
-	        event_start			=:3,
-	        event_end			=:4,
-            attach_path         =:5,
-            attach_file         =:6,
-	        up_date				=to_char(sysdate, 'YYYYMMDD.HHMISS'),
-	        up_user_id			=:7
-         WHERE
-         	owner_seq=:8
-         AND
-            event_seq=:9
+        UPDATE EVENT
+        SET EVENT_TITLE   = :V_EVENT_TITLE,
+            EVENT_CONTENT = :V_EVENT_CONTENT,
+            EVENT_START   = :V_EVENT_START,
+            EVENT_END     = :V_EVENT_END,
+            ATTACH_PATH   = :V_ATTACH_PATH,
+            ATTACH_FILE   = :V_ATTACH_FILE,
+            UP_DATE       = TO_CHAR(SYSDATE, 'YYYYMMDD.HHMISS'),
+            UP_USER_ID    = :V_UP_USER_ID
+        WHERE EVENT_SEQ = :V_EVENT_SEQ
+          AND OWNER_SEQ = :V_OWNER_SEQ
     </update>
     
     <update id="del_img">

@@ -1,6 +1,8 @@
 import cx_Oracle
 import mybatis_mapper2sql
 import configparser
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 def buySort(buyList: list):
@@ -43,13 +45,43 @@ class DaoBuy:
             count += self.cs.rowcount
         self.conn.commit()
         return count
-    
+
     def delete(self, buy_seq, menu_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "delete")
         self.cs.execute(sql, (buy_seq, menu_seq))
         self.conn.commit()
         return self.cs.rowcount
 
+    def store_sales(self):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "store_sales")
+        rs = self.cs.execute(sql)
+        list = []
+        for record in rs:
+            list.append({'store_name': record[0],
+                         'store_sales': record[1]})
+        return list
+
+    def sixMonthStoreSales(self):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "sixMonthStoreSales")
+        self.cs.execute(sql)
+        res = self.cs.fetchall()
+
+        if not res:
+            return None
+        saleList = [['월'], [res[0][2]], [res[1][2]], [res[2][2]], [res[3][2]], [res[4][2]], [res[5][2]]]
+        for i in range(0, len(res), 6):
+            saleList[0].append(res[i][1])
+            saleList[1].append(res[i][3])
+            saleList[2].append(res[i+1][3])
+            saleList[3].append(res[i+2][3])
+            saleList[4].append(res[i+3][3])
+            saleList[5].append(res[i+4][3])
+            saleList[6].append(res[i+5][3])
+
+        return saleList
+
 
 if __name__ == "__main__":
     dao = DaoBuy(config_path='../config.ini', xml_path='buy.xml')
+    saleList = dao.sixMonthStoreSales()
+

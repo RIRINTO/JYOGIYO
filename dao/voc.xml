@@ -3,42 +3,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="User">
     <select id="select">
-    	select
-    		voc_seq, 
-    		owner_seq, 
-    		content, 
-    		in_date, 
-    		in_user_id, 
-    		up_date, 
-    		up_user_id
-    	from
-    		voice_of_customer
-    	where
-    		owner_seq = :v_owner_seq
-    	order by 
-    		voc_seq
+		SELECT VOC_SEQ,
+			   OWNER_SEQ,
+			   CONTENT,
+			   TO_CHAR(TO_DATE(IN_DATE,'YYYYMMDD.HH24MISS'),'YYYY-MM-DD') AS IN_DATE,
+			   IN_USER_ID,
+			   UP_DATE,
+			   UP_USER_ID
+		FROM VOICE_OF_CUSTOMER
+		WHERE OWNER_SEQ = :V_OWNER_SEQ
+		ORDER BY VOC_SEQ DESC
     </select>
     <update id="insert">
-    	insert into
-    		voice_of_customer
-	    		(
-	    		voc_seq, 
-	    		owner_seq, 
-	    		content, 
-	    		in_date, 
-	    		in_user_id, 
-	    		up_date, 
-	    		up_user_id
-	    		)
-	    values
-	    	(
-				voc_seq.nextval, 
-				:1, 
-				:2, 
-				to_char(sysdate, 'YYYY-MM-DD'), 
-				:3,
-				to_char(sysdate, 'YYYY-MM-DD'), 
-				:4
-			)
+		INSERT INTO VOICE_OF_CUSTOMER(VOC_SEQ,
+									  OWNER_SEQ,
+									  CONTENT,
+									  IN_DATE,
+									  IN_USER_ID,
+									  UP_DATE,
+									  UP_USER_ID)
+		VALUES (VOC_SEQ.NEXTVAL,
+				:V_OWNER_SEQ,
+				:V_CONTENT,
+				TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+				:V_IN_USER_ID,
+				TO_CHAR(SYSDATE, 'YYYYMMDD.HH24MISS'),
+				:V_UP_USER_ID)
     </update>
 </mapper>

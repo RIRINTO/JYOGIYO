@@ -166,14 +166,14 @@
         <![CDATA[
         SELECT BUY.MENU_SEQ,
                MENU.MENU_NAME,
-               SUM(BUY_CNT)
+               SUM(BUY_CNT) AS CNT
         FROM BUY
                  INNER JOIN MENU ON BUY.MENU_SEQ = MENU.MENU_SEQ
         WHERE OWNER_SEQ = :V_OWNER_SEQ
           AND TO_CHAR(TO_DATE(BUY.IN_DATE, 'YYYYMMDD.HH24MISS'), 'YYYY-MM') = :V_IN_DATE
         GROUP BY BUY.MENU_SEQ,
                  MENU.MENU_NAME
-        ORDER BY MENU_SEQ
+        ORDER BY CNT DESC
         ]]>
     </select>
 
@@ -181,21 +181,21 @@
     <![CDATA[
         SELECT BUY.MENU_SEQ,
                MENU.MENU_NAME,
-               SUM(BUY_CNT * MENU_PRICE)
+               SUM(BUY_CNT * MENU_PRICE) AS SALES
         FROM BUY
                  INNER JOIN MENU ON BUY.MENU_SEQ = MENU.MENU_SEQ
         WHERE OWNER_SEQ = :V_OWNER_SEQ
           AND TO_CHAR(TO_DATE(BUY.IN_DATE, 'YYYYMMDD.HH24MISS'), 'YYYY-MM') = :V_IN_DATE
         GROUP BY BUY.MENU_SEQ,
                  MENU.MENU_NAME
-        ORDER BY MENU_SEQ
+        ORDER BY SALES DESC
         ]]>
     </select>
 
     <select id="salesChart">
     <![CDATA[
         SELECT DT,
-               NVL(SUM(BUY_CNT * MENU_PRICE), 0)
+               NVL(SUM(BUY_CNT * MENU_PRICE), 0) AS SALES
         FROM (SELECT BUY.IN_DATE, BUY_CNT, MENU_PRICE
               FROM BUY
                        INNER JOIN MENU

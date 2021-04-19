@@ -18,6 +18,10 @@
         google.charts.load('current', {packages: ['corechart', 'bar']});
         google.charts.setOnLoadCallback(drawChart);
 
+        
+        colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+        
+        
         function drawChart() {
             //이번 달 메뉴별 판매량
             var data = google.visualization.arrayToDataTable([
@@ -27,7 +31,10 @@
                 {% endfor %}
             ])
             var options = {
-                is3D: true
+                is3D: true,
+                colors: [
+                	'#ff6384', '#ff9f40' , '#ffcd56', '#4bc0c0','#36a2eb','#9966ff' 	
+                ],
             };
             var chart = new google.visualization.PieChart(document.getElementById('menucnt_this'));
             chart.draw(data, options);
@@ -41,6 +48,14 @@
             ])
             options = {
                  pieHole: 0.4,
+                 colors: [
+					'#ff6384',
+                	'#9966ff',
+					'#36a2eb' 	,	
+					'#ff9f40' ,
+					'#ffcd56',
+					'#4bc0c0',
+                 ],
             };
             chart = new google.visualization.PieChart(document.getElementById('menusales_this'));
             chart.draw(data, options);
@@ -55,6 +70,15 @@
             ])
             options = {
                  pieHole: 0.4,
+                 colors: [
+                 	'#9966ff',
+ 					'#ff9f40' ,
+ 					'#4bc0c0',
+ 					'#ff6384',
+ 					'#ffcd56',
+ 					'#36a2eb' 	,	
+                  ],
+                 
             };
             chart = new google.visualization.PieChart(document.getElementById('menucnt_last'));
             chart.draw(data, options);
@@ -69,6 +93,14 @@
             ])
             options = {
                  is3D: true,
+                 colors: [
+ 					'#ff9f40' ,
+                 	'#9966ff',
+ 					'#36a2eb' 	,	
+ 					'#4bc0c0',
+ 					'#ffcd56',
+ 					'#ff6384',
+                  ],
             };
             chart = new google.visualization.PieChart(document.getElementById('menusales_last'));
             chart.draw(data, options);
@@ -84,6 +116,7 @@
                 hAxis: {title: '월',  titleTextStyle: {color: '#333'}},
                 vAxis: {minValue: 0},
                 legend: { position: 'top' },
+                lineWidth: 3,
                 colors : ['#5eb8ff']
             };
             chart = new google.visualization.LineChart(document.getElementById('salesChart'));
@@ -159,7 +192,7 @@
              <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-dark">최근 6개월 매출 추이</h6>
+                    <h6 class="m-0 font-weight-bold text-dark">최근 1년 매출 추이</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body w-100">

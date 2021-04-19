@@ -25,6 +25,7 @@
                 hAxis: {title: '일',  titleTextStyle: {color: '#333'}},
                 vAxis: {minValue: 0},
                 legend: { position: 'top' },
+                lineWidth: 3,
                 colors : ['#ffc400']
             };
             var chart = new google.visualization.LineChart(document.getElementById('dayschart'));
@@ -42,7 +43,8 @@
                 hAxis: {title: '월',  titleTextStyle: {color: '#333'}},
                 vAxis: {minValue: 0},
                 legend: { position: 'top' },
-                colors : ['#c96f53']
+                lineWidth: 3,
+                colors : ['#4bc0c0']
 
             };
             chart = new google.visualization.LineChart(document.getElementById('monthschart'));
@@ -61,6 +63,7 @@
                 hAxis: {title: '월',  titleTextStyle: {color: '#333'}},
                 vAxis: {minValue: 0},
                 legend: { position: 'top' },
+                lineWidth: 3,
                 colors : ['#ac0800']
             };
             chart = new google.visualization.LineChart(document.getElementById('yearchart'));

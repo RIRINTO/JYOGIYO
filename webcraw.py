@@ -4,7 +4,8 @@ from urllib.parse import urlparse, unquote
 from urllib.request import urlretrieve
 import os
 
-URL = 'https://www.bbq.co.kr/menu/menuList.asp?cidx=99999&cname=%EC%82%AC%EC%9D%B4%EB%93%9C%EB%A9%94%EB%89%B4'
+
+URL = 'https://www.yupdduk.com/sub/hotmenu?mode=1'
 
 url = urlparse(URL)
 

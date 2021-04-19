@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>{{title}}</title>
     <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
     <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -11,6 +11,7 @@
     <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
     <script src="lib/js/input-spinner.js"></script>
+    <link rel="icon" href="favicon-16x16.png" type = "image/x-icon">
     <style>
         html, body {
             margin: 0;
@@ -91,6 +92,7 @@
         function add_to_bucket(menu_seq, menu_name, menu_price) {
             if (document.getElementById('menu_seq_' + menu_seq) === null) {
                 let item = '            <div class="row" id="menu_seq_' + menu_seq + '">'
+                item += '            <p class="col-12"></p>'
                 item += '                <input type="hidden" name="menu_price_' + menu_seq + '" value="' + menu_price + '" disabled >'
                 item += '                <div class="col-4">' + menu_name + '</div>'
                 item += '                <div class="col-5"><input name="menuseq_' + menu_seq + '" type="number" value="1" min="1"></div>'
@@ -157,9 +159,9 @@
                 if (flag_siri) {
                     recognition.stop();
                     flag_siri = false;
-                    $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
+                    $('#siri').attr("src", "downloads?path=uploads/img&file=siri.png");
                 } else {
-                    $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri_ing.gif");
+                    $('#siri').attr("src", "downloads?path=uploads/img&file=siri_ing.gif");
                     $('#siri').attr('data-content', '<p id="message">원하시는 메뉴를 말해주세요.</p><div id=\'korea\' class=\'textbox\'></div>');
                     $('#siri').popover('show');
                     speak_to_siri();
@@ -194,7 +196,7 @@
                 $('#siri').attr('data-content', transcript);
                 $('#siri').data('popover');
                 $('#siri').popover('show');
-                $('#siri').attr("src", "downloads?path=W:/uploads/img&file=siri.png");
+                $('#siri').attr("src", "downloads?path=uploads/img&file=siri.png");
                 flag_siri = false;
                 setTimeout(function() {
                         $('#siri').popover('hide');
@@ -239,7 +241,7 @@
 
 
         function fn_add() {
-        	if($("textarea[name='content']").val()==""){
+        	if($("textarea[name='content']").val().replace(" ","") < 1){
 	   			alert("작성한 글이 없습니다.")
 	   			$("textarea[name='content']").focus();
 	   		} else {
@@ -339,7 +341,7 @@
 </form>
 
 <div id="voice">
-    <img src="downloads?path=W:/uploads/img&file=siri.png" class="rounded-circle" width="150px" height="auto" id="siri">
+    <img src="downloads?path=uploads/img&file=siri.png" class="rounded-circle" width="150px" height="auto" id="siri">
 </div>
 <!-- voc_add-->
 <div class="modal fade" id="vocaddModal" tabindex="-1" role="dialog" aria-labelledby="vocaddmod" aria-hidden="true">

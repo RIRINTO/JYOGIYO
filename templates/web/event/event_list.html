@@ -1,32 +1,33 @@
 {% extends 'web/layout.html' %}
 
 {% block content %}
-    <script>
-        $('span').each(function () {
-            if ($(this).html() === "이벤트 관리") {
-                $(this).parents('li').addClass('active');
-                return false;
-            }
+<script>
+    $('span').each(function () {
+        if ($(this).html() === "이벤트 관리") {
+            $(this).parents('li').addClass('active');
+            return false;
+        }
+    });
+    $(document).ready(function () {
+        $('.menumodify').hide();
+        $('.menumodify').css({
+            height: '25px',
+            fontSize: '10px'
         });
-        $(document).ready(function () {
-            $('.menumodify').hide();
-            $('.menumodify').css({
-                height: '25px',
-                fontSize: '10px'
-            });
-            $('.menu').hover(function () {
-                $(this).find('.menumodify').show();
-            }, function () {
-                $(this).find('.menumodify').hide();
-            });
+        $('.menu').hover(function () {
+            $(this).find('.menumodify').show();
+        }, function () {
+            $(this).find('.menumodify').hide();
         });
+    });
 
-        function fn_event_detail(event_seq){
-        	location.href="event_detail?event_seq="+event_seq;
-        }
-        function fn_add(){
-            document.event_add.submit();
-        }
+    function fn_event_detail(event_seq) {
+        location.href = "event_detail?event_seq=" + event_seq;
+    }
+
+    function fn_add() {
+        document.event_add.submit();
+    }
 
     </script>
 

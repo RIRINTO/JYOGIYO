@@ -100,7 +100,7 @@ class DaoOwner:
                      'owner_add2': record[8], 'logo_path': record[9], 'logo_file': record[10], 'admin_yn': record[11],
                      'in_date': record[12], 'in_user_id': record[13], 'up_date': record[14], 'up_user_id': record[15]})
 
-    def dayschart(self, days):
+    def daysChart(self, days):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "lastdays")
         rs = self.cs.execute(sql, (days,))
         list = []
@@ -108,7 +108,7 @@ class DaoOwner:
             list.append({'tr_in_date': record[0], 'own_cnt': record[1]})
         return list
 
-    def monthschart(self, months):
+    def monthsChart(self, months):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "lastmonths")
         rs = self.cs.execute(sql, (months,))
         list = []

@@ -3,19 +3,20 @@ import mybatis_mapper2sql
 import configparser
 
 
-def menusort(munuList : list):
-    return {'sys_ques_seq': munuList[0], 
-            'owner_seq': munuList[1], 
-            'sys_ques_title': munuList[2], 
-            'sys_ques_content': munuList[3], 
+def menusort(munuList: list):
+    return {'sys_ques_seq': munuList[0],
+            'owner_seq': munuList[1],
+            'sys_ques_title': munuList[2],
+            'sys_ques_content': munuList[3],
             'sys_ques_display_yn': munuList[4],
-            'attach_path': munuList[5], 
-            'attach_file': munuList[6], 
-            'in_date': munuList[7], 
-            'in_user_id': munuList[8], 
-            'up_date': munuList[9], 
+            'attach_path': munuList[5],
+            'attach_file': munuList[6],
+            'in_date': munuList[7],
+            'in_user_id': munuList[8],
+            'up_date': munuList[9],
             'up_user_id': munuList[10],
             'reply_in_date': munuList[11]}
+
 
 class DaoSysQues:
     def __init__(self, config_path='config.ini', xml_path='dao/sys_ques.xml'):
@@ -26,10 +27,10 @@ class DaoSysQues:
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
 
-    def selectAll(self, owner_id):
+    def selectAll(self, owner_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "selectAll")
         #         MyLog().getLogger().debug(sql)
-        rs = self.cs.execute(sql,(owner_id,))
+        rs = self.cs.execute(sql, (owner_seq,))
         return list(map(menusort, rs.fetchall()))
 
     def select(self, sys_ques_seq):
@@ -41,10 +42,11 @@ class DaoSysQues:
     def insert(self, owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
         #         mylog().getlogger().debug(sql)
-        self.cs.execute(sql, (owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, owner_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
+
     def update(self, sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         #         mylog().getlogger().debug(sql)
@@ -55,8 +57,8 @@ class DaoSysQues:
 
     def delete_img(self, sys_ques_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "delete_img")
-#         MyLog().getLogger().debug(sql)
-        self.cs.execute(sql,('', '', sys_ques_seq))
+        #         MyLog().getLogger().debug(sql)
+        self.cs.execute(sql, ('', '', sys_ques_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         print(cnt)
@@ -69,6 +71,7 @@ class DaoSysQues:
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
+
 
 if __name__ == '__main__':
     dao = DaoSysQues(config_path='../config.ini', xml_path='sys_ques.xml')

@@ -101,6 +101,26 @@ class DaoMenu:
                          'sales': record[1]})
         return list
 
+    def multiInsert(self, owner_seq, insertDictList):
+        sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
+
+        res = 0
+        for insertDict in insertDictList:
+            self.cs.execute(sql, (owner_seq,
+                                  insertDict['cate_seq'],
+                                  insertDict['menu_name'],
+                                  insertDict['menu_price'],
+                                  insertDict['menu_content'],
+                                  insertDict['menu_display_yn'],
+                                  insertDict['attach_path'],
+                                  insertDict['attach_file'],
+                                  owner_seq,
+                                  owner_seq))
+            res += self.cs.rowcount
+
+        self.conn.commit()
+        return res
+
 
 if __name__ == '__main__':
     daoMenu = DaoMenu(config_path='../config.ini', xml_path='menu.xml')

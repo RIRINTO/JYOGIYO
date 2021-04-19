@@ -88,8 +88,7 @@
     		sys_ques_display_yn = :3,
     		attach_path = :4,
     		attach_file = :5,
-    		up_date = to_char(sysdate,'yyyymmdd.hh24miss'),
-    		up_user_id = in_user_id
+    		up_date = to_char(sysdate,'yyyymmdd.hh24miss')
 		WHERE
 			sys_ques_seq = :6
     

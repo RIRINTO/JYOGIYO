@@ -30,7 +30,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    {% if session.admin_yn == "y" %}
+                    {% if session.owner.admin_yn == "y" %}
                     <div style="text-align: right">
                         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#NotiAddModal">추가</button>
                     </div>

@@ -173,7 +173,7 @@
                 <div class="card-body">
                     <table class="table" style="text-align: center">
                         <tr>
-                            <th>공지번호</th>
+                            <th>문의번호</th>
                             <td>{{ques.sys_ques_seq}}</td>
                         </tr>
                         <tr>
@@ -211,12 +211,12 @@
                         <button type="button" class="btn btn-outline-success" onclick="fn_ques_list()">목록</button>
 					                        
                         <!-- 관리자만 볼수있음 -->
-                        {% if session.owner_id == 'admin@kakao.com' %}
+                        {% if session.owner.owner_id == 'admin@kakao.com' %}
                         <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#sys_reply">답변달기</button>
 						{% endif %}
 						
                         <!-- 작성자만 볼수있음 -->
-                         {% if session.owner_id == ques.in_user_id %}
+                         {% if session.owner.owner_seq == ques.in_user_id|int %}
                         <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#sys_ques_mod">수정</button>
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#sys_ques_del">삭제</button>
                          {% endif %}
@@ -236,7 +236,7 @@
                         <tr>
                             <td colspan="2">{{reply.sys_ans_reply}}</td>
                         </tr>
-                        {% if session.owner_id == 'admin@kakao.com' %}
+                        {% if session.owner.owner_id == 'admin@kakao.com' %}
 	                        <tr>
 	                            <td><button type="button" class="btn btn-outline-danger" onclick="fn_reply_del()">삭제</button></td>
 	                        </tr>

@@ -38,7 +38,8 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#MenuAddModal">추가</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="location.href='multi_menu_add'">여러 메뉴 추가</button>
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#MenuAddModal">메뉴 하나 추가</button>
                     </div>
                     <br>
                     <table class="table table-hover" style="text-align: center">
@@ -62,7 +63,7 @@
                             <td>{{menu.menu_price}}</td>
                             <td>
                                 {% if menu.attach_file %}
-                                <img src="downloads?path=W:/uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}" data-placement="left">
+                                <img src="downloads?path=uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}" data-placement="left">
                                 {% endif %}
                             </td>
                             {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
@@ -91,7 +92,7 @@
         <div class="modal-content">
             <form action="menu_add_form" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="MenuAddModalLabel">메뉴 수정</h5>
+                    <h5 class="modal-title" id="MenuAddModalLabel">메뉴 하나 추가</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -133,7 +134,7 @@
                     <!-- end of menu modify  Modal content -->
                 </div>
                 <div style="text-align: right" class="modal-footer">
-                    <button type="submit" class="btn btn-outline-warning">수정 완료</button>
+                    <button type="submit" class="btn btn-outline-warning">추가하기</button>
                 </div>
             </form>
         </div>
