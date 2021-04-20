@@ -8,6 +8,7 @@
             return false;
         }
     });
+
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover({
             trigger: 'hover',
@@ -21,8 +22,6 @@
     function fn_menu_detail(ord) {
         location.href = "menu_detail?ord=" + ord;
     }
-
-
 </script>
 
 <!-- Begin Page Content -->
@@ -111,7 +110,6 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-
                                     <div class="col-6"><p>메뉴명</p></div>
                                     <div class="col-6"><input type="text" class="form-control" name="menu_name" required></div>
                                     <div class="col-6"><p>가격</p></div>

@@ -11,7 +11,7 @@
     <script src="lib/Chart.js/3.0.2/chart.min.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
     <script src="lib/js/input-spinner.js"></script>
-    <link rel="icon" href="favicon-16x16.png" type = "image/x-icon">
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
     <style>
         html, body {
             margin: 0;
@@ -27,7 +27,6 @@
         }
     </style>
     <script type="text/javascript">
-
         function fn_k_home() {
             location.href = "kiosk_home"
         }
@@ -44,7 +43,6 @@
 
         function menu_render(data) {
             let menu = ''
-
             for (var i = 0; i < data.menu_list.length; i++) {
                 menu += '       <div class="col-sm-3">'
                 menu += '            <div class="card" onclick="add_to_bucket(\'' + data.menu_list[i].menu_seq + '\', \'' + data.menu_list[i].menu_name + '\', \'' + data.menu_list[i].menu_price + '\')">'
@@ -62,32 +60,32 @@
             if (cate_seq === 0) {
                 search_menu_ajax('')
             } else {
-            let param = Math.random()
-            param += "&cate_seq=" + cate_seq
+                let param = Math.random()
+                param += "&cate_seq=" + cate_seq
 
-            $.ajax({
-                type: "post",
-                url: "select_menu.ajax",
-                dataType: "json",
-                data: param,
-                error: function () {
-                    alert('통신 실패!!');
-                },
-                success: function (data) {
-                    $("nav a").each(function () {
-                        $(this).removeClass("active");
-                    });
-                    menu_render(data)
+                $.ajax({
+                    type: "post",
+                    url: "select_menu.ajax",
+                    dataType: "json",
+                    data: param,
+                    error: function () {
+                        alert('통신 실패!!');
+                    },
+                    success: function (data) {
+                        $("nav a").each(function () {
+                            $(this).removeClass("active");
+                        });
+                        menu_render(data)
 
-                    $("nav a").each(function () {
-                        if (cate_seq === $(this).attr('rel')) {
-                            $(this).addClass("active");
-                        }
-                    });
-                }
-            });
+                        $("nav a").each(function () {
+                            if (cate_seq === $(this).attr('rel')) {
+                                $(this).addClass("active");
+                            }
+                        });
+                    }
+                });
             }
-        };
+        }
 
         function add_to_bucket(menu_seq, menu_name, menu_price) {
             if (document.getElementById('menu_seq_' + menu_seq) === null) {
@@ -137,10 +135,10 @@
 
         function click_pay_button() {
             if ($.trim($('#bucket').html()) === "") {
-                    $('#bucket_empty').modal('show');
-                } else {
-                    $('#payment_tool').modal('show');
-                }
+                $('#bucket_empty').modal('show');
+            } else {
+                $('#payment_tool').modal('show');
+            }
         }
 
         let flag_siri = false;
@@ -198,9 +196,9 @@
                 $('#siri').popover('show');
                 $('#siri').attr("src", "downloads?path=uploads/img&file=siri.png");
                 flag_siri = false;
-                setTimeout(function() {
-                        $('#siri').popover('hide');
-                    }, 3000);
+                setTimeout(function () {
+                    $('#siri').popover('hide');
+                }, 3000);
                 if (transcript === '결제' || transcript === '주문') {
                     click_pay_button();
                 } else {
@@ -233,33 +231,28 @@
                             $(this).addClass("active");
                         }
                     });
-
                 }
             });
         }
 
-
-
         function fn_add() {
-        	if($("textarea[name='content']").val().replace(" ","") < 1){
-	   			alert("작성한 글이 없습니다.")
-	   			$("textarea[name='content']").focus();
-	   		} else {
-	            document.voc_add.submit();
-	   		}	 
+            if ($("textarea[name='content']").val().replace(" ", "") < 1) {
+                alert("작성한 글이 없습니다.")
+                $("textarea[name='content']").focus();
+            } else {
+                document.voc_add.submit();
+            }
         }
-        
-        $(function(){
-        	$("#vocaddModal").on("shown.bs.modal", function () {
-        		$("textarea[name='content']").focus();
-        	});
+
+        $(function () {
+            $("#vocaddModal").on("shown.bs.modal", function () {
+                $("textarea[name='content']").focus();
+            });
         })
     </script>
 </head>
 
-
 <body>
-
 <form action="kiosk_pay_form" method="post" class="h-100" style="text-align: center">
     <img src="downloads?path={{logo_path}}&file={{logo_file}}" width="auto" height="10%" style="margin-left:5%">
     <nav style="float: right; margin-right:3%; margin-top: 1%">
@@ -274,15 +267,11 @@
                     {% endfor %}
                     <a class="nav-item nav-link" rel='0' href="javascript:fn_cate(0)">검색</a>
                 </nav>
-
                 <hr>
-
                 <div class="row menu" id="menu_list">
                 </div>
             </div>
-
             <!-- 장바구니 -->
-
             <div class="col-sm-5 h-100">
                 <div class="h-75" style="overflow-x: hidden;overflow-y: auto">
                     <div class="row" style="padding-top: 8px; padding-bottom: 8px">
@@ -323,7 +312,6 @@
         </div>
     </div>
 
-
     <div class="modal fade" id="bucket_empty" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
@@ -337,7 +325,6 @@
             </div>
         </div>
     </div>
-
 </form>
 
 <div id="voice">
@@ -354,9 +341,7 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <!-- voc add Modal content -->
-
                 <div class="row">
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
@@ -379,5 +364,8 @@
             <div style="text-align: right" class="modal-footer">
                 <button type="button" class="btn btn-outline-warning" onclick="fn_add()">등록 완료</button>
             </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

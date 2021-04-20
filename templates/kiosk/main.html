@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>{{title}}</title>
-<link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
-<link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
-<link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-<script src="lib/jquery/jquery-3.6.0.min.js"></script>
-<script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-<script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
-<link rel="icon" href="favicon-16x16.png" type = "image/x-icon">
-<script>
-	function fn_find_pw(){
-		location.href = "find_pw"
-	}
-
-</script>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
+    <script>
+        function fn_find_pw() {
+            location.href = "find_pw"
+        }
+    </script>
 </head>
 <body>
-
 <br>
 <div class="container">
     <!-- Outer Row -->
@@ -42,8 +40,8 @@
                                         <input type="password" class="form-control form-control-user" name="owner_pwd" placeholder="Password" value="Asdf123!">
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
-										Login                                    
-                                    </button> 
+                                        Login
+                                    </button>
                                     <br>
                                     <button type="button" class="btn btn-outline-success" onclick="fn_find_pw()">비밀번호 찾기</button>
                                 </form>

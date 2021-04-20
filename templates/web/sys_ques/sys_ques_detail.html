@@ -1,12 +1,10 @@
 {% extends 'web/layout.html' %}
 
 {% block content %}
-
 <style>
-	#reply{
-		background : pink;
-	}
-
+    #reply {
+        background: pink;
+    }
 </style>
 
 <script>
@@ -16,7 +14,7 @@
             return false;
         }
     });
-    
+
     $(document).ready(function () {
         $('.menumodify').hide();
         $('.menumodify').css({
@@ -37,25 +35,22 @@
         });
     });
 
-   
     function fn_ques_list() {
         location.href = "sys_ques_list";
     }
-    
-    
-    function fn_ques_mod(){
-		document.sysmod.submit();
-    	location.href = 'sys_ques_detail?sys_ques_seq={{ques.sys_ques_seq}}';
+
+    function fn_ques_mod() {
+        document.sysmod.submit();
+        location.href = 'sys_ques_detail?sys_ques_seq={{ques.sys_ques_seq}}';
     }
-    
-    
-    function fn_ques_del(){
-    	if(!confirm("정말 삭제하시겠습니까?")){
-    		return;
-    	}
-    	sys_ques_seq = '{{ques.sys_ques_seq}}'
-    	console.log(sys_ques_seq)
-        
+
+    function fn_ques_del() {
+        if (!confirm("정말 삭제하시겠습니까?")) {
+            return;
+        }
+        sys_ques_seq = '{{ques.sys_ques_seq}}'
+        console.log(sys_ques_seq)
+
         var param = "";
         param += "dummy=" + Math.random();
         param += '&sys_ques_seq=' + sys_ques_seq;
@@ -73,34 +68,31 @@
             },
             success: function (data) {
                 if (data["msg"] === "ok") {
-                    location.href="sys_ques_list"
+                    location.href = "sys_ques_list"
                 } else {
                     alert("삭제 도중 문제가 발생하였습니다.");
                 }
             }
         });
     }
-    
-    
-    function fn_img_del(){
-    	$('input[name=attach_path]').val('');
+
+    function fn_img_del() {
+        $('input[name=attach_path]').val('');
         $('input[name=attach_file]').val('');
         $('#sys_mod_td').html('<input type="file" name="file">')
     }
-    
-    
 
-    function fn_reply(){
-    	sys_ques_seq = '{{ques.sys_ques_seq}}'
-    	sys_ans_reply = $("textarea[name=reply_content]").val();
-		
-    	var param = "";
+    function fn_reply() {
+        sys_ques_seq = '{{ques.sys_ques_seq}}'
+        sys_ans_reply = $("textarea[name=reply_content]").val();
+
+        var param = "";
         param += "dummy=" + Math.random();
         param += '&sys_ques_seq=' + sys_ques_seq;
         param += '&sys_ans_reply=' + sys_ans_reply;
 
         console.log(param)
-        
+
         $.ajax({
             url: 'reply_add.ajax',
             data: param,
@@ -115,22 +107,21 @@
             success: function (data) {
                 if (data.msg == 'ok') {
                     alert("댓글 추가되었습니다");
-                    location.href="sys_ques_detail?sys_ques_seq=" + sys_ques_seq;
+                    location.href = "sys_ques_detail?sys_ques_seq=" + sys_ques_seq;
                 } else {
                     alert("댓글 추가 도중 문제가 발생하였습니다.");
                 }
             }
         });
     }
-    
-    
+
     function fn_reply_del() {
-    	if(!confirm("정말 삭제하시겠습니까?")){
-    		return;
-    	}
-    	sys_ques_seq = '{{ques.sys_ques_seq}}'
-   		
-       	var param = "";
+        if (!confirm("정말 삭제하시겠습니까?")) {
+            return;
+        }
+        sys_ques_seq = '{{ques.sys_ques_seq}}'
+
+        var param = "";
         param += "dummy=" + Math.random();
         param += '&sys_ques_seq=' + sys_ques_seq;
 
@@ -154,9 +145,7 @@
                 }
             }
         });
-     }
-
-
+    }
 </script>
 
 <!-- Begin Page Content -->
@@ -187,42 +176,42 @@
                         <tr>
                             <th>이미지</th>
                             <td>
-	                            {% if ques.attach_file %}
-	                            <img src="downloads?path={{ques.attach_path}}&file={{ques.attach_file}}" width="200px">
-	                            {% else %}
-	                            첨부파일없음
-	                            {% endif %}
+                                {% if ques.attach_file %}
+                                <img src="downloads?path={{ques.attach_path}}&file={{ques.attach_file}}" width="200px">
+                                {% else %}
+                                첨부파일없음
+                                {% endif %}
                             </td>
                         </tr>
                         <tr>
                             <th>공개여부</th>
                             <td>
-                            	{% if ques.sys_ques_display_yn == 'y' %}
-                            	공개
-                            	{% else %}
-                            	비공개
-                            	{% endif %}
+                                {% if ques.sys_ques_display_yn == 'y' %}
+                                공개
+                                {% else %}
+                                비공개
+                                {% endif %}
                             </td>
                         </tr>
-                        
                     </table>
-                    
+
                     <div style="text-align: right">
                         <button type="button" class="btn btn-outline-success" onclick="fn_ques_list()">목록</button>
-					                        
+
                         <!-- 관리자만 볼수있음 -->
                         {% if session.owner.owner_id == 'admin@kakao.com' %}
                         <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#sys_reply">답변달기</button>
-						{% endif %}
-						
+                        {% endif %}
+
                         <!-- 작성자만 볼수있음 -->
-                         {% if session.owner.owner_seq == ques.in_user_id|int %}
+                        {% if session.owner.owner_seq == ques.in_user_id|int %}
                         <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#sys_ques_mod">수정</button>
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#sys_ques_del">삭제</button>
-                         {% endif %}
+                        {% endif %}
                     </div>
-                    <br><br>
-                    
+                    <br>
+                    <br>
+
                     {% if reply %}
                     <table class="table table-hover" style="text-align: center">
                         <thead class="thead-dark">
@@ -237,13 +226,14 @@
                             <td colspan="2">{{reply.sys_ans_reply}}</td>
                         </tr>
                         {% if session.owner.owner_id == 'admin@kakao.com' %}
-	                        <tr>
-	                            <td><button type="button" class="btn btn-outline-danger" onclick="fn_reply_del()">삭제</button></td>
-	                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger" onclick="fn_reply_del()">삭제</button>
+                            </td>
+                        </tr>
                         {% endif %}
                     </table>
-                    {% endif %}    	
-                    
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -251,12 +241,12 @@
 </div>
 
 <!-- sys_ques_mod Modal-->
-<div class="modal fade" id="sys_ques_mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="sys_ques_mod" tabindex="-1" role="dialog" aria-labelledby="sys_ques_modLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">문의사항을 수정해주세요</h5>
+                <h5 class="modal-title" id="sys_ques_modLabel">문의사항을 수정해주세요</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -264,15 +254,15 @@
 
             <div class="modal-body">
                 <form name="sys_mod" action="sys_ques_mod" method="post" enctype="multipart/form-data">
-					{% if ques.attach_file %}
-	                   <input type="hidden" name="attach_path" value="{{ques.attach_path}}" >
-	                   <input type="hidden" name="attach_file" value="{{ques.attach_file}}">
-	                {% else %}   
-	                   <input type="hidden" name="attach_path" value="" >
-	                   <input type="hidden" name="attach_file" value="">
-	                {% endif %} 
+                    {% if ques.attach_file %}
+                    <input type="hidden" name="attach_path" value="{{ques.attach_path}}">
+                    <input type="hidden" name="attach_file" value="{{ques.attach_file}}">
+                    {% else %}
+                    <input type="hidden" name="attach_path" value="">
+                    <input type="hidden" name="attach_file" value="">
+                    {% endif %}
                     <table class="table" style="text-align: center">
-                    	<input type="hidden" name="sys_ques_seq" value="{{ques.sys_ques_seq}}">
+                        <input type="hidden" name="sys_ques_seq" value="{{ques.sys_ques_seq}}">
                         <tr>
                             <th>공지번호</th>
                             <td>{{ques.sys_ques_seq}}</td>
@@ -293,34 +283,33 @@
                             <th>첨부파일</th>
                             <td id="sys_mod_td">
                                 {% if ques.attach_file %}
-                                	<img src="downloads?path={{ques.attach_path}}&file={{ques.attach_file}}" width="200px"><br>
-                                	<a href="javascript:fn_img_del()">&times;</a>  
-									<input type = "file" class="form-control-file border invisible" name = "file" />
+                                <img src="downloads?path={{ques.attach_path}}&file={{ques.attach_file}}" width="200px"><br>
+                                <a href="javascript:fn_img_del()">&times;</a>
+                                <input type="file" class="form-control-file border invisible" name="file"/>
                                 {% else %}
-									<input type = "file" name = "file" />
+                                <input type="file" name="file"/>
                                 {% endif %}
                             </td>
                         </tr>
                         <tr>
                             <th>공개여부</th>
                             <td>
-                            	{% if ques.sys_ques_display_yn == 'y' %}
-	                                <input type="radio" name="display_yn" value="y" checked>공개
-	                                <input type="radio" name="display_yn" value="n">비공개
-	                            {% else %}
-	                                <input type="radio" name="display_yn" value="y">공개
-	                                <input type="radio" name="display_yn" value="n" checked>비공개
-	                            {% endif %}
+                                {% if ques.sys_ques_display_yn == 'y' %}
+                                <input type="radio" name="display_yn" value="y" checked>공개
+                                <input type="radio" name="display_yn" value="n">비공개
+                                {% else %}
+                                <input type="radio" name="display_yn" value="y">공개
+                                <input type="radio" name="display_yn" value="n" checked>비공개
+                                {% endif %}
                             </td>
                         </tr>
                     </table>
                     <hr>
                     <div align="right">
-		                <input type="submit" class="btn btn-dark" value="수정완료">
+                        <input type="submit" class="btn btn-dark" value="수정완료">
                     </div>
                 </form>
             </div>
-
             <div class="modal-footer">
             </div>
         </div>
@@ -328,15 +317,13 @@
 </div>
 <!-- sys_ques_mod Modal end-->
 
-
-
 <!-- sys_ques_delete Modal-->
-<div class="modal fade" id="sys_ques_del" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="sys_ques_del" tabindex="-1" role="dialog" aria-labelledby="sys_ques_delLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">삭제 하시겠습니까?</h5>
+                <h5 class="modal-title" id="sys_ques_delLabel">삭제 하시겠습니까?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -350,14 +337,13 @@
     </div>
 </div>
 
-
 <!-- sys_reply Modal-->
-<div class="modal fade" id="sys_reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="sys_reply" tabindex="-1" role="dialog" aria-labelledby="sys_replyLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">답변을 작성하시오</h5>
+                <h5 class="modal-title" id="sys_replyLabel">답변을 작성하시오</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -365,7 +351,7 @@
 
             <div class="modal-body">
                 <table class="table" style="text-align: center">
-                	<tr>
+                    <tr>
                         <th>내용</th>
                         <td>{{ques.sys_ques_content}}</td>
                     </tr>
@@ -380,7 +366,6 @@
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-dark" onclick="fn_reply()">답변완료</a>
             </div>
-
             <div class="modal-footer">
             </div>
         </div>

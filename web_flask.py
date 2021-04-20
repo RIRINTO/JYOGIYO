@@ -260,6 +260,7 @@ def noti_list():
                            title=f"공지사항 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
+
 @app.route('/noti_detail')
 def noti_detail():
     if 'owner' not in session:
@@ -494,7 +495,7 @@ def menu_detail():
     menu_seq = request.args.get('menu_seq')
     owner_seq = escape(session['owner']['owner_seq'])
     menu = daoMenu.select(menu_seq, owner_seq)
-    if menu.get('owner_seq', '') == escape(session['owner']['owner_seq']):
+    if menu:
         categoryList = daoCategory.selectYList(owner_seq)
         return render_template('web/menu/menu_detail.html', menu=menu, categoryList=categoryList, title=f"메뉴 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
     return '<script>alert("권한이 없습니다.");history.back()</script>'

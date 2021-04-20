@@ -9,28 +9,28 @@
     <script src="lib/jquery/jquery-3.6.0.min.js"></script>
     <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
-    <link rel="icon" href="favicon-16x16.png" type = "image/x-icon">
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
     <script>
-    
-    	$(document).ready(function(){
-    		$(".user_login").on("click",function(){
-    			val = $(this).val();
-				if(val == "관리자"){
-					$("input[type='email']").val("admin@kakao.com")
-		    		$("input[type='password']").val("p@ssW0rd")
-    			}else if(val == "스타벅스"){
-					$("input[type='email']").val("za_or@naver.com")
-		    		$("input[type='password']").val("Asdf123!")
-    			}else if(val == "맘스터치"){
-					$("input[type='email']").val("hyun_on@naver.com")
-		    		$("input[type='password']").val("p@ssW0rd")
-    			}else if(val == "파파존스"){
-					$("input[type='email']").val("hihidaeho@naver.com")
-		    		$("input[type='password']").val("p@ssW0rd")
-    			}
-    		})
-    	})
-    		
+
+        $(document).ready(function () {
+            $(".user_login").on("click", function () {
+                val = $(this).val();
+                if (val == "관리자") {
+                    $("input[type='email']").val("admin@kakao.com")
+                    $("input[type='password']").val("p@ssW0rd")
+                } else if (val == "스타벅스") {
+                    $("input[type='email']").val("za_or@naver.com")
+                    $("input[type='password']").val("Asdf123!")
+                } else if (val == "맘스터치") {
+                    $("input[type='email']").val("hyun_on@naver.com")
+                    $("input[type='password']").val("p@ssW0rd")
+                } else if (val == "파파존스") {
+                    $("input[type='email']").val("hihidaeho@naver.com")
+                    $("input[type='password']").val("p@ssW0rd")
+                }
+            })
+        })
+
     </script>
 </head>
 <body>
@@ -62,7 +62,7 @@
                                             <label class="custom-control-label" for="customCheck">Remember Me</label>
                                         </div>
                                         <div>
-                                        	<input type="button" class="user_login btn btn-sm btn-outline-primary" value="관리자">
+                                            <input type="button" class="user_login btn btn-sm btn-outline-primary" value="관리자">
                                             <input type="button" class="user_login btn btn-sm btn-outline-success" value="스타벅스">
                                             <input type="button" class="user_login btn btn-sm btn-outline-success" value="맘스터치">
                                             <input type="button" class="user_login btn btn-sm btn-outline-success" value="파파존스">
