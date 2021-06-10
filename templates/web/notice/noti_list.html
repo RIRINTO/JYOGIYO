@@ -45,6 +45,7 @@
                         </tr>
                         </thead>
                         <tbody>
+
                         {% for n in list %}
                         <tr class="menu" onclick="fn_noti_detail('{{n.noti_seq}}')">
                             <td>{{loop.index}}</td>
@@ -52,6 +53,7 @@
                             <td>{{n.in_date}}</td>
                         </tr>
                         {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
@@ -71,17 +73,21 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <!-- notice modify Modal content -->
+
                 <div class="row">
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <form name="noti_add_form" action="noti_add" method="post" enctype="multipart/form-data">
                                 <table class="table" style="text-align: center">
+
                                     <tr>
                                         <th>제목</th>
                                         <td><input type="text" name="noti_title" class="form-control" placeholder="공지사항의 제목을 입력해주세요." required></td>
                                     </tr>
+
                                     <tr>
                                         <th>내용</th>
                                         <td>
@@ -94,11 +100,13 @@
                                             <input type="file" name="noti_file">
                                         </td>
                                     </tr>
+
                                 </table>
-                                <div style="text-align: right" class="modal-footer">
-                                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_noti_add()">추가완료</button>
-                                </div>
+					            <div style="text-align: right" class="modal-footer">
+					                <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_noti_add()">추가완료</button>
+					            </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -108,4 +116,5 @@
     </div>
 </div>
 <!-- end of notice add Modal-->
+
 {% endblock %}

@@ -8,7 +8,6 @@
             return false;
         }
     });
-
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover({
             trigger: 'hover',
@@ -59,15 +58,16 @@
         $('input[name=attach_path]').val('');
         $('input[name=attach_file]').val('');
     }
+    	$(function() {
+		$('#e_content').html(
+				$('#e_content').html().replaceAll('\r', '').replaceAll('\n',
+						'<br>'))
+	})
 
-    $(function () {
-        $('#e_content').html(
-            $('#e_content').html().replaceAll('\r', '').replaceAll('\n',
-                '<br>'))
-    })
 </script>
 
 <!-- Begin Page Content -->
+
 <div class="container-fluid">
     <!-- Content Row -->
     <div class="row">
@@ -91,7 +91,7 @@
                         {% if event.attach_file %}
                         <div class="col-4"><p><b>이미지</b></p></div>
                         <div class="card col-8">
-                            <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}">
+                                <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}">
                         </div>
                         {% endif %}
                         <div class="col-4"><p><b>이벤트기간</b></p></div>
@@ -110,6 +110,7 @@
     </div>
 </div>
 
+
 <!-- event modify Modal-->
 <div class="modal fade" id="EventModModal" tabindex="-1" role="dialog" aria-labelledby="eventmodmodalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -121,7 +122,9 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <!-- event modify Modal content -->
+
                 <div class="row">
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
@@ -135,10 +138,12 @@
                                         <th>순번</th>
                                         <td>{{event.event_seq}}</td>
                                     </tr>
+
                                     <tr>
                                         <th>제목</th>
                                         <td><input type="text" class="form-control" value="{{event.event_title}}" name="event_title" style="text-align: center;"></td>
                                     </tr>
+
                                     <tr>
                                         <th>내용</th>
                                         <td>
@@ -148,12 +153,12 @@
                                     <tr>
                                         <th>이미지</th>
                                         <td>
-                                            {% if event.attach_file %}
+                                          {% if event.attach_file %}
                                             <a id="attach" href="javascript:fn_del_ajax()">{{event.attach_file}} x</a>
                                             <input type="file" class="form-control-file border invisible" name="event_file">
                                             {% else %}
                                             <input type="file" class="form-control-file border" name="event_file">
-                                            {% endif %}
+                                          {% endif %}
                                         </td>
                                     </tr>
                                     <tr>
@@ -180,6 +185,7 @@
     </div>
 </div>
 <!-- end of event modify  Modal-->
+
 
 <!-- event delete Modal-->
 <div class="modal fade" id="EventDelModal" tabindex="-1" role="dialog" aria-labelledby="eventmodalDel"

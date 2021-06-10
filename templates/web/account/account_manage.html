@@ -7,7 +7,7 @@
         $('input[name=logo_file]').val('');
         $('#logo_image').html('<input type="file" name="logo" class="form-control-file border" required>');
     }
-
+    
     function getaddress() {
         $.ajax({
             url: 'https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent($('#add1').val()) + '&size=30',
@@ -40,10 +40,11 @@
     }
 
     function select_address(kakaoadd_id) {
-        $('input[name=owner_add1]').val($('#' + kakaoadd_id).html());
+        $('input[name=owner_add1]').val($('#'+kakaoadd_id).html());
         $('#AddSearchModal').modal('hide');
     }
-
+    
+    
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover({
             trigger: 'hover',
@@ -54,6 +55,7 @@
         });
     });
 
+    
     $(function () {
         $('input[name=owner_pwd]').keyup(function () {
             if (pw_check()) {
@@ -78,7 +80,7 @@
                 $('input[name=owner_pwd_check]').next().html('');
             }
         });
-
+        
         $('input[name=owner_str_tel]').keyup(function () {
             if (str_tel_check()) {
                 $('input[name=owner_str_tel]').next().removeClass('badge-danger').html('사용할 수 있는 전화번호입니다.').addClass('badge-success');
@@ -90,6 +92,7 @@
                 $('input[name=owner_str_tel]').next().html('');
             }
         });
+        
 
         $('input').keyup(function () {
             field_fill_check();
@@ -98,35 +101,31 @@
         });
     });
 
-    function pw_check() {
-        const regPwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-        return regPwd.test($('input[name=owner_pwd]').val())
-    }
-
-    function pw_double_check() {
-        return $('input[name=owner_pwd]').val() === $('input[name=owner_pwd_check]').val()
-    }
-
-    function str_tel_check() {
-        const regTel = /^\d{2,3}-\d{3,4}-\d{4}$/;
-        return regTel.test($('input[name=owner_str_tel]').val())
-    }
-
-    function field_fill_check() {
-        if (pw_check()
-            && pw_double_check()
-            && str_tel_check()) {
-            $('#submit').attr('disabled', false);
-        } else {
-            $('#submit').attr('disabled', true);
+        function pw_check() {
+            const regPwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+            return regPwd.test($('input[name=owner_pwd]').val())
         }
-    }
 
-    function smit() {
-        if (confirm("정말 수정하시겠습니까?")) {
-            $('#frm').submit();
+        function pw_double_check() {
+            return $('input[name=owner_pwd]').val() === $('input[name=owner_pwd_check]').val()
         }
-    }
+        
+        function str_tel_check() {
+            const regTel = /^\d{2,3}-\d{3,4}-\d{4}$/;
+            return regTel.test($('input[name=owner_str_tel]').val())
+        }
+        
+        function field_fill_check() {
+            if (pw_check()
+                && pw_double_check()
+                && str_tel_check()){
+                $('#submit').attr('disabled', false);
+            } else {
+                $('#submit').attr('disabled', true);
+            }
+        }
+        
+    
 </script>
 
 <!-- Begin Page Content -->
@@ -141,7 +140,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <form class="user" action="account_mod_form" method="post" enctype="multipart/form-data" id="frm">
+                    <form class="user" action="account_mod_form" method="post" enctype="multipart/form-data">
                         {% if owner.logo_file %}
                         <input type="hidden" name="logo_path" value="{{owner.logo_path}}">
                         <input type="hidden" name="logo_file" value="{{owner.logo_file}}">
@@ -156,14 +155,14 @@
                             <input type="email" class="form-control form-control-user" name="owner_id" placeholder="아이디 ( 이메일 )" value="{{owner.owner_id}}" readonly required>
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="password" class="form-control form-control-user" name="owner_pwd" placeholder="비밀번호" value="{{owner.owner_pwd}}">
-                                <span class="badge badge-pill"></span>
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control form-control-user" name="owner_pwd_check" placeholder="비밀번호 확인" value="{{owner.owner_pwd}}">
-                                <span class="badge badge-pill"></span>
-                            </div>
+            	            <div class="col-sm-6 mb-3 mb-sm-0">
+                	            <input type="password" class="form-control form-control-user" name="owner_pwd" placeholder="비밀번호"  value="{{owner.owner_pwd}}" >
+                    	        <span class="badge badge-pill"></span>
+                        	</div>
+                        	<div class="col-sm-6">
+                            	<input type="password" class="form-control form-control-user" name="owner_pwd_check" placeholder="비밀번호 확인" value="{{owner.owner_pwd}}">
+                            	<span class="badge badge-pill"></span>
+                        	</div>
                         </div>
                         <hr>
 
@@ -186,8 +185,8 @@
                             <div class="col-8" id="logo_image">
                                 {% if owner.logo_file %}
                                 <p>
-                                    <img src="downloads?path=uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{owner.logo_path}}&file={{owner.logo_file}}" data-placement="left">
-
+                                	<img src="downloads?path=uploads/img&file=img.svg" alt="img" width="25px" height="auto" data-toggle="popover" data-img="downloads?path={{owner.logo_path}}&file={{owner.logo_file}}" data-placement="left">
+                                    
                                     <a href="javascript:del_images()">×</a>
                                 </p>
                                 <input type="file" name="logo" class="form-control-file border invisible">
@@ -208,16 +207,19 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-8">
-                                <input type="text" name="owner_add2" class="form-control form-control-user" placeholder="상세주소" value="{{owner.owner_add2}}" required>
+                                <input type="text" name="owner_add2" class="form-control form-control-user" placeholder="상세주소" value="{{owner.owner_add2}}" required required>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-user btn-block" onclick="smit()">수정</button>
+                        <button type="submit" id="submit" class="btn btn-primary btn-user btn-block">수정</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
 
 <!-- address search Modal-->
 <div class="modal fade" id="AddSearchModal" tabindex="-1" role="dialog" aria-labelledby="AddSearchModalLabel"
@@ -235,11 +237,14 @@
                 <input type="text" id="add1">
                 <input type="button" value="검색" onclick="getaddress()">
                 <div id="result" class="row">
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- end of address modify Modal-->
+
+
 {% endblock %}
    
