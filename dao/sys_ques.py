@@ -1,6 +1,6 @@
+import configparser
 import cx_Oracle
 import mybatis_mapper2sql
-import configparser
 
 
 def menusort(munuList: list):
@@ -22,7 +22,8 @@ class DaoSysQues:
     def __init__(self, config_path='config.ini', xml_path='dao/sys_ques.xml'):
         config = configparser.ConfigParser()
         config.read(config_path)
-        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database']['hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
+        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database'][
+            'hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
         self.conn = cx_Oracle.connect(database)
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
@@ -39,18 +40,23 @@ class DaoSysQues:
         rs = self.cs.execute(sql, (sys_ques_seq,))
         return menusort(rs.fetchone())
 
-    def insert(self, owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def insert(self, owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file,
+               in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
         #         mylog().getlogger().debug(sql)
-        self.cs.execute(sql, (owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, owner_seq, owner_seq))
+        self.cs.execute(sql, (
+        owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, owner_seq,
+        owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
 
-    def update(self, sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def update(self, sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file,
+               in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         #         mylog().getlogger().debug(sql)
-        self.cs.execute(sql, (sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, sys_ques_seq))
+        self.cs.execute(sql,
+                        (sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, sys_ques_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

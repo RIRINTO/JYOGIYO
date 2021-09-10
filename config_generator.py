@@ -9,7 +9,7 @@ config['database'] = {'type': 'oracle',
                       'password': 'java'}
 config['DIR_UPLOAD'] = {'DIR_UPLOAD': "W:/uploads"}
 config['Kakao'] = {'KakaoAK': '47c87e7944c1f57028905bf3ca39502b'}
-config['network'] = {'HOST':'0.0.0.0',
-                     'PORT':5004}
+config['network'] = {'HOST': '0.0.0.0',
+                     'PORT': 5004}
 with open('config.ini', 'w') as configfile:
     config.write(configfile)

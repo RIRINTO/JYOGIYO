@@ -4,12 +4,9 @@ import random
 import re
 import requests
 import smtplib
-# import ssl
-
 from datetime import datetime
-from email.mime.text import MIMEText
-
 from dateutil.relativedelta import relativedelta
+from email.mime.text import MIMEText
 from flask import Flask, render_template, redirect, request, session, escape
 from flask.helpers import send_file
 from flask.json import jsonify
@@ -25,6 +22,8 @@ from dao.sys_ans import DaoSysAns
 from dao.sys_ques import DaoSysQues
 from dao.voc import DaoVoc
 
+# import ssl
+
 daoBuy = DaoBuy()
 daoCategory = DaoCategory()
 daoEvent = DaoEvent()
@@ -38,7 +37,8 @@ daoVoc = DaoVoc()
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-DIR_UPLOAD, KakaoAK, HOST, PORT = config['DIR_UPLOAD']['DIR_UPLOAD'], config['Kakao']['KakaoAK'], config['network']['HOST'], config['network']['PORT']
+DIR_UPLOAD, KakaoAK, HOST, PORT = config['DIR_UPLOAD']['DIR_UPLOAD'], config['Kakao']['KakaoAK'], config['network'][
+    'HOST'], config['network']['PORT']
 
 app = Flask(__name__, static_url_path="", static_folder="static/")
 app.secret_key = os.urandom(24)
@@ -69,7 +69,8 @@ def register():
     attach_path, attach_file = saveFile(logo, owner_seq)
 
     try:
-        if daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel, owner_add1, owner_add2, attach_path, attach_file):
+        if daoOwner.insert(owner_seq, owner_name, owner_id, owner_pwd, owner_str_name, owner_str_num, owner_str_tel,
+                           owner_add1, owner_add2, attach_path, attach_file):
             return redirect("login.html")
     except Exception as e:
         print(e)
@@ -125,8 +126,10 @@ def temp_pwd_send_ajax():
     password = "shingoha2848"
     recvEmail = owner_id
 
-    pwd_list = ['!', '@', '#', '$', '%', '^', '&', '+', '=', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-                'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+    pwd_list = ['!', '@', '#', '$', '%', '^', '&', '+', '=', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                'M', 'N', 'O', 'P', 'Q',
+                'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                'm', 'n', 'o', 'p', 'q',
                 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     regPwd = '.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*'
     match = None
@@ -203,7 +206,8 @@ def account_manage():
         owner_str_num.insert(3, '-')
         owner_str_num.insert(6, '-')
         owner['owner_str_num'] = ''.join(owner_str_num)
-    return render_template('web/account/account_manage.html', owner=owner, title=f"정보 수정 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/account/account_manage.html', owner=owner,
+                           title=f"정보 수정 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/account_show')
@@ -217,7 +221,8 @@ def account_show():
         owner_str_num.insert(3, '-')
         owner_str_num.insert(6, '-')
         owner['owner_str_num'] = ''.join(owner_str_num)
-    return render_template('web/account/account_show.html', owner=owner, title=f"마이페이지 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/account/account_show.html', owner=owner,
+                           title=f"마이페이지 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/account_mod_form', methods=["POST"])
@@ -239,7 +244,8 @@ def account_mod_form():
         logo_path, logo_file = saveFile(logo)
 
     try:
-        if daoOwner.update(owner_name, owner_pwd, owner_str_name, owner_str_tel, owner_add1, owner_add2, logo_path, logo_file, owner_seq):
+        if daoOwner.update(owner_name, owner_pwd, owner_str_name, owner_str_tel, owner_add1, owner_add2, logo_path,
+                           logo_file, owner_seq):
             owner = daoOwner.select(owner_seq)
             del (owner['owner_pwd'])
             session['owner'] = owner
@@ -258,7 +264,6 @@ def noti_list():
     list = daoNotice.selectlist()
     return render_template('web/notice/noti_list.html', list=list,
                            title=f"공지사항 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
-
 
 
 @app.route('/noti_detail')
@@ -358,7 +363,8 @@ def cate_list():
     owner_seq = escape(session['owner']['owner_seq'])
     list = daoCategory.selectAll(owner_seq)
 
-    return render_template('web/category/cate_list.html', list=list, title=f"카테고리 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/category/cate_list.html', list=list,
+                           title=f"카테고리 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/cate_detail')
@@ -368,7 +374,8 @@ def cate_detail():
     owner_seq = escape(session['owner']['owner_seq'])
     cate_seq = request.args.get('cate_seq')
     obj = daoCategory.select(owner_seq, cate_seq)
-    return render_template('web/category/cate_detail.html', cate=obj, title=f"카테고리 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/category/cate_detail.html', cate=obj,
+                           title=f"카테고리 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/cate_add', methods=['POST'])
@@ -416,7 +423,8 @@ def cate_mod():
     if cate_file:
         attach_path, attach_file = saveFile(cate_file)
 
-    cnt = daoCategory.myupdate(cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, None, owner_seq, None, owner_seq)
+    cnt = daoCategory.myupdate(cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file,
+                               None, owner_seq, None, owner_seq)
 
     if cnt:
         return redirect("cate_detail?cate_seq=" + cate_seq)
@@ -444,7 +452,8 @@ def menu_list():
     owner_seq = escape(session['owner']['owner_seq'])
     menu_list = daoMenu.selectAll(owner_seq)
     categoryList = daoCategory.selectYList(owner_seq)
-    return render_template('web/menu/menu_list.html', menu_list=menu_list, categoryList=categoryList, title=f"메뉴 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/menu/menu_list.html', menu_list=menu_list, categoryList=categoryList,
+                           title=f"메뉴 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/multi_menu_add')
@@ -453,7 +462,8 @@ def multi_menu_add():
         return redirect('login.html')
     owner_seq = escape(session['owner']['owner_seq'])
     categoryList = daoCategory.selectYList(owner_seq)
-    return render_template('web/menu/multi_menu_add.html', categoryList=categoryList, title=f"여러 메뉴 추가 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/menu/multi_menu_add.html', categoryList=categoryList,
+                           title=f"여러 메뉴 추가 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/multi_menu_add_form', methods=['POST'])
@@ -497,7 +507,8 @@ def menu_detail():
     menu = daoMenu.select(menu_seq, owner_seq)
     if menu:
         categoryList = daoCategory.selectYList(owner_seq)
-        return render_template('web/menu/menu_detail.html', menu=menu, categoryList=categoryList, title=f"메뉴 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+        return render_template('web/menu/menu_detail.html', menu=menu, categoryList=categoryList,
+                               title=f"메뉴 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
     return '<script>alert("권한이 없습니다.");history.back()</script>'
 
 
@@ -519,7 +530,8 @@ def menu_add_form():
         attach_path, attach_file = saveFile(file)
 
     try:
-        if daoMenu.insert(owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file):
+        if daoMenu.insert(owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path,
+                          attach_file):
             return "<script>alert('성공적으로 추가되었습니다.');location.href='menu_list'</script>"
     except Exception as e:
         print(e)
@@ -546,7 +558,8 @@ def menu_mod_form():
         attach_path, attach_file = saveFile(file)
 
     try:
-        if daoMenu.update(cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq, menu_seq):
+        if daoMenu.update(cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file,
+                          owner_seq, menu_seq):
             return f"<script>alert('성공적으로 수정되었습니다.');location.href='menu_detail?menu_seq={menu_seq}'</script>"
     except Exception as e:
         print(e)
@@ -561,7 +574,8 @@ def event_list():
         return redirect('login.html')
     owner_seq = escape(session['owner']['owner_seq'])
     list = daoEvent.selectAll(owner_seq)
-    return render_template('web/event/event_list.html', list=list, title=f"이벤트 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/event/event_list.html', list=list,
+                           title=f"이벤트 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/event_detail')
@@ -571,7 +585,8 @@ def event_detail():
     owner_seq = escape(session['owner']['owner_seq'])
     event_seq = request.args.get('event_seq')
     obj = daoEvent.select(owner_seq, event_seq)
-    return render_template('web/event/event_detail.html', event=obj, title=f"이벤트 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/event/event_detail.html', event=obj,
+                           title=f"이벤트 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/event_addact', methods=['POST'])
@@ -591,7 +606,8 @@ def event_addact():
     if event_file:
         attach_path, attach_file = saveFile(event_file)
     try:
-        cnt = daoEvent.insert(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, owner_seq, None, owner_seq)
+        cnt = daoEvent.insert(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path,
+                              attach_file, None, owner_seq, None, owner_seq)
         if cnt:
             return redirect('event_list')
     except Exception as e:
@@ -621,7 +637,8 @@ def event_modact():
         attach_path, attach_file = saveFile(event_file)
 
     try:
-        cnt = daoEvent.update(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, None, owner_seq, None, owner_seq)
+        cnt = daoEvent.update(owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path,
+                              attach_file, None, owner_seq, None, owner_seq)
         if cnt:
             return f'<script>location.href="event_detail?owner_seq={owner_seq}&event_seq={event_seq}"</script>'
     except Exception as e:
@@ -666,7 +683,8 @@ def sys_ques_list():
         return redirect('login.html')
     owner_seq = escape(session['owner']['owner_seq'])
     list = daoSysQues.selectAll(owner_seq)
-    return render_template('web/sys_ques/sys_ques_list.html', list=list, enumerate=enumerate, title=f"시스템 문의사항 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/sys_ques/sys_ques_list.html', list=list, enumerate=enumerate,
+                           title=f"시스템 문의사항 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/sys_ques_detail')
@@ -677,7 +695,8 @@ def sys_ques_detail():
     sys_ques_seq = request.args.get('sys_ques_seq')
     ques = daoSysQues.select(sys_ques_seq)
     reply = daoSysAns.select(sys_ques_seq)
-    return render_template('web/sys_ques/sys_ques_detail.html', ques=ques, reply=reply, title=f"시스템 문의사항 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/sys_ques/sys_ques_detail.html', ques=ques, reply=reply,
+                           title=f"시스템 문의사항 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/sys_ques_add', methods=['POST'])
@@ -703,7 +722,8 @@ def sys_ques_add():
     print(attach_path)
     print(attach_file)
     try:
-        if daoSysQues.insert(owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, "", owner_seq, "", owner_seq):
+        if daoSysQues.insert(owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file,
+                             "", owner_seq, "", owner_seq):
             return "<script>alert('성공적으로 추가되었습니다.');location.href='sys_ques_list'</script>"
     except Exception as e:
         print(e)
@@ -729,7 +749,8 @@ def sys_ques_mod():
         attach_path, attach_file = saveFile(file)
 
     try:
-        if daoSysQues.update(sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, "", owner_seq, "", owner_seq):
+        if daoSysQues.update(sys_ques_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path,
+                             attach_file, "", owner_seq, "", owner_seq):
             return f"<script>alert('성공적으로 수정되었습니다.');location.href='sys_ques_detail?sys_ques_seq={sys_ques_seq}'</script>"
     except Exception as e:
         print(e)
@@ -800,7 +821,8 @@ def store_list():
 
     store_sales = daoBuy.store_sales()
     saleList = daoBuy.sixMonthStoreSales()
-    return render_template('web/store/store_list.html', storeschart=store_sales, saleList=saleList, title=f"가맹점 관리 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/store/store_list.html', storeschart=store_sales, saleList=saleList,
+                           title=f"가맹점 관리 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 #########################################################
@@ -845,7 +867,8 @@ def k_home():
     logo_file = escape(session['owner']["logo_file"])
     owner_seq = escape(session['owner']["owner_seq"])
     list = daoEvent.selectAll(owner_seq)
-    return render_template('kiosk/home.html', logo_path=logo_path, logo_file=logo_file, list=list, title=escape(session['owner']['owner_str_name']))
+    return render_template('kiosk/home.html', logo_path=logo_path, logo_file=logo_file, list=list,
+                           title=escape(session['owner']['owner_str_name']))
 
 
 @app.route('/kiosk_menu')
@@ -856,7 +879,8 @@ def k_menu():
     logo_path = escape(session['owner']["logo_path"])
     logo_file = escape(session['owner']["logo_file"])
     cate_list = daoCategory.selectKiosk(owner_seq)
-    return render_template('kiosk/menu.html', cate_list=cate_list, logo_path=logo_path, logo_file=logo_file, title=escape(session['owner']['owner_str_name']))
+    return render_template('kiosk/menu.html', cate_list=cate_list, logo_path=logo_path, logo_file=logo_file,
+                           title=escape(session['owner']['owner_str_name']))
 
 
 @app.route('/select_menu.ajax', methods=["POST"])
@@ -962,7 +986,8 @@ def pay_success():
 
     daoBuy.insert(buyList['buy_seq'], buyList['menu'], owner_seq)
 
-    return render_template('kiosk/success.html', owner=owner, res=res, buyList=buyList, title=escape(session['owner']['owner_seq']))
+    return render_template('kiosk/success.html', owner=owner, res=res, buyList=buyList,
+                           title=escape(session['owner']['owner_seq']))
 
 
 @app.route("/kakaopay/fail", methods=['POST', 'GET'])
@@ -984,7 +1009,8 @@ def saveFile(file, owner_seq=None):
         attach_path = 'uploads/' + str(owner_seq)
     else:
         attach_path = f"uploads/{escape(session['owner']['owner_seq'])}"
-    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + str(random.random()) + '.' + secure_filename(file.filename).split('.')[-1]
+    attach_file = str(datetime.today().strftime("%Y%m%d%H%M%S")) + str(random.random()) + '.' + \
+                  secure_filename(file.filename).split('.')[-1]
     os.makedirs(attach_path, exist_ok=True)
     file.save(os.path.join(DIR_UPLOAD + attach_path, attach_file))
     return attach_path, attach_file
@@ -999,7 +1025,8 @@ def voc_list():
 
     owner_seq = escape(session['owner']['owner_seq'])
     list = daoVoc.select(owner_seq)
-    return render_template('web/voc/voc_list.html', list=list, title=f"고객소리함 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
+    return render_template('web/voc/voc_list.html', list=list,
+                           title=f"고객소리함 - {escape(session['owner']['owner_str_name'])} :: JYOGIYO")
 
 
 @app.route('/voc_addact', methods=['POST'])

@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/f9954cbb85.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    <script crossorigin="anonymous"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/f9954cbb85.js"></script>
+    <script crossorigin="anonymous"
             integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
     <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
     <script src="lib/js/input-spinner.js"></script>
-    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
+    <link href="favicon-16x16.png" rel="icon" type="image/x-icon">
     <style>
         html, body {
             margin: 0;
@@ -270,19 +270,19 @@
 
 <body>
 
-<form action="kiosk_pay_form" method="post" class="h-100" style="text-align: center">
-    <img src="downloads?path={{logo_path}}&file={{logo_file}}" width="auto" height="10%" style="margin-left:5%">
+<form action="kiosk_pay_form" class="h-100" method="post" style="text-align: center">
+    <img height="10%" src="downloads?path={{logo_path}}&file={{logo_file}}" style="margin-left:5%" width="auto">
     <nav style="float: right; margin-right:3%; margin-top: 1%">
-        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#vocaddModal">고객소리함</button>
+        <button class="btn btn-info btn-lg" data-target="#vocaddModal" data-toggle="modal" type="button">고객소리함</button>
     </nav>
     <div class="container-fluid" style="height: 90%">
         <div class="row h-100">
             <div class="col-sm-7 h-100">
                 <nav class="nav nav-pills nav-fill">
                     {% for c in cate_list %}
-                    <a class="nav-item nav-link" rel="{{c.cate_seq}}" href="javascript:fn_cate('{{c.cate_seq}}')">{{c.cate_name}}</a>
+                    <a class="nav-item nav-link" href="javascript:fn_cate('{{c.cate_seq}}')" rel="{{c.cate_seq}}">{{c.cate_name}}</a>
                     {% endfor %}
-                    <a class="nav-item nav-link" rel='0' href="javascript:fn_cate(0)">검색</a>
+                    <a class="nav-item nav-link" href="javascript:fn_cate(0)" rel='0'>검색</a>
                 </nav>
 
                 <hr>
@@ -301,45 +301,45 @@
                         <div class="col-3">가격</div>
                     </div>
                     <hr>
-                    <div class="h-75" style="overflow-x: hidden;overflow-y: auto" id="bucket"></div>
+                    <div class="h-75" id="bucket" style="overflow-x: hidden;overflow-y: auto"></div>
                 </div>
 
                 <div class="w-100 h-25">
                     <div class="btn-group-vertical h-100 w-100">
-                        <button type="button" class="btn btn-warning btn-lg btn-block" id="pay"><span></span>결제</button>
-                        <button type="button" class="btn btn-danger btn-lg btn-block" onclick="fn_k_home()">취소</button>
+                        <button class="btn btn-warning btn-lg btn-block" id="pay" type="button"><span></span>결제</button>
+                        <button class="btn btn-danger btn-lg btn-block" onclick="fn_k_home()" type="button">취소</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="payment_tool" tabindex="-1" role="dialog" aria-labelledby="kakaopay"
-         aria-hidden="true">
+    <div aria-hidden="true" aria-labelledby="kakaopay" class="modal fade" id="payment_tool" role="dialog"
+         tabindex="-1">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="kakaopay">결제하기</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">결제를 진행하시겠습니까?</div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="submit">결제하기</button>
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">취소</button>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="modal fade" id="bucket_empty" tabindex="-1" role="dialog">
+    <div class="modal fade" id="bucket_empty" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">장바구니가 비었습니다</div>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -351,15 +351,15 @@
 </form>
 
 <div id="voice">
-    <img src="downloads?path=uploads/img&file=siri.png" class="rounded-circle" width="150px" height="auto" id="siri">
+    <img class="rounded-circle" height="auto" id="siri" src="downloads?path=uploads/img&file=siri.png" width="150px">
 </div>
 <!-- voc_add-->
-<div class="modal fade" id="vocaddModal" tabindex="-1" role="dialog" aria-labelledby="vocaddmod" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="vocaddmod" class="modal fade" id="vocaddModal" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="vocaddmod">소리함 추가</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -371,13 +371,13 @@
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
-                            <form action="voc_addact" method="post" name="voc_add" enctype="multipart/form-data">
+                            <form action="voc_addact" enctype="multipart/form-data" method="post" name="voc_add">
                                 <table class="table" style="text-align: center">
                                     <tr>
                                         <th>내용</th>
                                         <td>
-                                            <textarea class="form-control" rows="5" cols="100" name="content"
-                                                      required></textarea>
+                                            <textarea class="form-control" cols="100" name="content" required
+                                                      rows="5"></textarea>
                                         </td>
                                     </tr>
                                 </table>
@@ -387,8 +387,8 @@
                 </div>
                 <!-- end of voc Modal content -->
             </div>
-            <div style="text-align: right" class="modal-footer">
-                <button type="button" class="btn btn-outline-warning" onclick="fn_add()">등록 완료</button>
+            <div class="modal-footer" style="text-align: right">
+                <button class="btn btn-outline-warning" onclick="fn_add()" type="button">등록 완료</button>
             </div>
 </body>
 </html>

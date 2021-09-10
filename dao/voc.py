@@ -1,6 +1,6 @@
+import configparser
 import cx_Oracle
 import mybatis_mapper2sql
-import configparser
 
 
 def vocSort(vocList: list):
@@ -20,7 +20,8 @@ class DaoVoc:
     def __init__(self, config_path='config.ini', xml_path='dao/voc.xml'):
         config = configparser.ConfigParser()
         config.read(config_path)
-        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database']['hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
+        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database'][
+            'hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
         self.conn = cx_Oracle.connect(database)
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
@@ -31,7 +32,8 @@ class DaoVoc:
         list = []
         for record in rs:
             list.append({'voc_seq': record[0], 'owner_seq': record[1], 'content': record[2]
-                            , 'in_date': record[3], 'in_user_id': record[4], 'up_date': record[5], 'up_user_id': record[6]})
+                            , 'in_date': record[3], 'in_user_id': record[4], 'up_date': record[5],
+                         'up_user_id': record[6]})
         return list
 
     def insert(self, owner_seq, content, in_user_id, up_user_id):

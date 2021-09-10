@@ -96,19 +96,25 @@
                         <div class="col-4"><p><b>이미지</b></p></div>
                         <div class="col-8 row">
                             <a href="downloads?path={{noti.attach_path}}&file={{noti.attach_file}}" target="_blank">
-                                <img class="col-12 h-auto" src="downloads?path={{noti.attach_path}}&file={{noti.attach_file}}" width="500px" height="500px">
+                                <img class="col-12 h-auto"
+                                     height="500px" src="downloads?path={{noti.attach_path}}&file={{noti.attach_file}}"
+                                     width="500px">
                             </a>
                         </div>
                         {% endif %}
                     </div>
 
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-outline-success" onclick="fn_noti_list()">목록</button>
+                        <button class="btn btn-outline-success" onclick="fn_noti_list()" type="button">목록</button>
 
                         <!-- 관리자만 볼수있음 -->
                         {% if session.owner.admin_yn == 'Y' or session.owner.admin_yn == 'y' %}
-                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#NotiModModal">수정</button>
-                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#NotiDelModal">삭제</button>
+                        <button class="btn btn-outline-warning" data-target="#NotiModModal" data-toggle="modal"
+                                type="button">수정
+                        </button>
+                        <button class="btn btn-outline-danger" data-target="#NotiDelModal" data-toggle="modal"
+                                type="button">삭제
+                        </button>
                         {% endif %}
                     </div>
                 </div>
@@ -119,14 +125,14 @@
 
 
 <!-- notice modify Modal-->
-<div class="modal fade" id="NotiModModal" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="NotiModModal"
+     role="dialog" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="NotiModModalLabel">공지사항 수정</h5>
-                <button class="close" type="button" data-dismiss="modal"
-                        aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -138,11 +144,11 @@
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
-                            <form name="noti_mod_form" action="noti_mod" method="post"
-                                  enctype="multipart/form-data">
-                                <input type="hidden" name="noti_seq" value="{{noti.noti_seq}}">
-                                <input type="hidden" name="attach_path" value="{{noti.attach_path}}">
-                                <input type="hidden" name="attach_file" value="{{noti.attach_file}}">
+                            <form action="noti_mod" enctype="multipart/form-data" method="post"
+                                  name="noti_mod_form">
+                                <input name="noti_seq" type="hidden" value="{{noti.noti_seq}}">
+                                <input name="attach_path" type="hidden" value="{{noti.attach_path}}">
+                                <input name="attach_file" type="hidden" value="{{noti.attach_file}}">
 
                                 <table class="table" style="text-align: center">
                                     <tr>
@@ -152,24 +158,26 @@
 
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" name="noti_title"
-                                                   class="form-control" value="{{noti.noti_title}}"></td>
+                                        <td><input class="form-control" name="noti_title"
+                                                   type="text" value="{{noti.noti_title}}"></td>
                                     </tr>
 
                                     <tr>
                                         <th>내용</th>
-                                        <td><textarea name="noti_content" class="form-control"
-                                                      rows="5" cols="100">{{noti.noti_content}}</textarea></td>
+                                        <td><textarea class="form-control" cols="100"
+                                                      name="noti_content" rows="5">{{noti.noti_content}}</textarea></td>
                                     </tr>
 
                                     <tr>
                                         <th>첨부파일</th>
                                         <td>
                                             {% if noti.attach_file %}
-                                            <a id="attach" href="javascript:fn_noti_img_del()">{{noti.attach_file}} x </a>
-                                            <input type="file" class="form-control-file border invisible" name="noti_file">
+                                            <a href="javascript:fn_noti_img_del()" id="attach">{{noti.attach_file}}
+                                                x </a>
+                                            <input class="form-control-file border invisible" name="noti_file"
+                                                   type="file">
                                             {% else %}
-                                            <input type="file" class="form-control-file border" name="noti_file">
+                                            <input class="form-control-file border" name="noti_file" type="file">
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -180,9 +188,9 @@
                 </div>
                 <!-- end of notice modify  Modal content -->
             </div>
-            <div style="text-align: right" class="modal-footer">
-                <button type="button" class="btn btn-outline-warning"
-                        data-dismiss="modal" onclick="fn_noti_mod()">수정 완료
+            <div class="modal-footer" style="text-align: right">
+                <button class="btn btn-outline-warning" data-dismiss="modal"
+                        onclick="fn_noti_mod()" type="button">수정 완료
                 </button>
             </div>
         </div>
@@ -193,23 +201,23 @@
 
 
 <!-- notice delete Modal-->
-<div class="modal fade" id="NotiDelModal" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="NotiDelModal"
+     role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="NotiDelModalLabel">공지사항을 삭제 하시겠습니까?</h5>
-                <button class="close" type="button" data-dismiss="modal"
-                        aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">하단의 "삭제" 버튼을 누르시면 삭제됩니다.</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger"
-                        data-dismiss="modal" onclick="fn_noti_del()">삭제
+                <button class="btn btn-outline-danger" data-dismiss="modal"
+                        onclick="fn_noti_del()" type="button">삭제
                 </button>
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">취소</button>
             </div>
         </div>
     </div>

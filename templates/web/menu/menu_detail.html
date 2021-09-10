@@ -50,7 +50,8 @@
                         {% if menu.attach_file %}
                         <div class="col-4"><p><b>이미지</b></p></div>
                         <div class="card col-8">
-                            <img class="card-img-top" src="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}">
+                            <img class="card-img-top"
+                                 src="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}">
                         </div>
                         {% endif %}
                         <div class="col-4"><p><b>표시여부</b></p></div>
@@ -62,8 +63,11 @@
                     </div>
 
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-outline-success" onclick="location.href='menu_list'">목록</button>
-                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#MenuModModal">수정</button>
+                        <button class="btn btn-outline-success" onclick="location.href='menu_list'" type="button">목록
+                        </button>
+                        <button class="btn btn-outline-warning" data-target="#MenuModModal" data-toggle="modal"
+                                type="button">수정
+                        </button>
                     </div>
                 </div>
             </div>
@@ -73,20 +77,21 @@
 
 
 <!-- menu modify Modal-->
-<div class="modal fade" id="MenuModModal" tabindex="-1" role="dialog" aria-labelledby="MenuModModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="MenuModModalLabel" class="modal fade" id="MenuModModal" role="dialog"
+     tabindex="-1">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <form action="menu_mod_form" method="post" enctype="multipart/form-data">
+            <form action="menu_mod_form" enctype="multipart/form-data" method="post">
                 {% if menu.attach_file %}
-                <input type="hidden" name="attach_path" value="{{menu.attach_path}}">
-                <input type="hidden" name="attach_file" value="{{menu.attach_file}}">
+                <input name="attach_path" type="hidden" value="{{menu.attach_path}}">
+                <input name="attach_file" type="hidden" value="{{menu.attach_file}}">
                 {% else %}
-                <input type="hidden" name="attach_path" value="">
-                <input type="hidden" name="attach_file" value="">
+                <input name="attach_path" type="hidden" value="">
+                <input name="attach_file" type="hidden" value="">
                 {% endif %}
                 <div class="modal-header">
                     <h5 class="modal-title" id="MenuModModalLabel">메뉴 수정</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -110,39 +115,47 @@
                                         </select>
                                     </div>
                                     <div class="col-6"><p>메뉴명</p></div>
-                                    <div class="col-6"><input type="text" class="form-control" name="menu_name" value="{{menu.menu_name}}" required></div>
+                                    <div class="col-6"><input class="form-control" name="menu_name" required
+                                                              type="text" value="{{menu.menu_name}}"></div>
                                     <div class="col-6"><p>가격</p></div>
-                                    <div class="col-6"><input type="number" class="form-control" name="menu_price" value="{{menu.menu_price}}" min="0" required></div>
+                                    <div class="col-6"><input class="form-control" min="0" name="menu_price"
+                                                              required type="number" value="{{menu.menu_price}}"></div>
                                     <div class="col-6"><p>설명</p></div>
-                                    <div class="col-6"><textarea class="form-control" name="menu_content" rows="5" cols="100" required>{{menu.menu_content}}</textarea></div>
+                                    <div class="col-6"><textarea class="form-control" cols="100" name="menu_content"
+                                                                 required rows="5">{{menu.menu_content}}</textarea>
+                                    </div>
                                     <div class="col-6"><p>이미지</p></div>
                                     <div class="col-6">
                                         <div class="card" id="image_card">
                                             {% if menu.attach_file %}
-                                            <img class="card-img-top" src="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}">
-                                            <button type="button" class="close" aria-label="Close" onclick="del_images()">
+                                            <img class="card-img-top"
+                                                 src="downloads?path={{menu.attach_path}}&file={{menu.attach_file}}">
+                                            <button aria-label="Close" class="close" onclick="del_images()"
+                                                    type="button">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
-                                            <input type="file" class="form-control-file border invisible" name="file">
+                                            <input class="form-control-file border invisible" name="file" type="file">
                                             {% else %}
-                                            <input type="file" name="file" class="form-control-file border">
+                                            <input class="form-control-file border" name="file" type="file">
                                             {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-6"><p>공개여부</p></div>
                                     {% if menu.menu_display_yn == 'Y' or menu.menu_display_yn =='y' %}
                                     <div class="col-3">
-                                        <label><input type="radio" name="menu_display_yn" value="y" checked required> 공개</label>
+                                        <label><input checked name="menu_display_yn" required type="radio" value="y"> 공개</label>
                                     </div>
                                     <div class="col-3">
-                                        <label><input type="radio" name="menu_display_yn" value="n" required> 비공개</label>
+                                        <label><input name="menu_display_yn" required type="radio" value="n">
+                                            비공개</label>
                                     </div>
                                     {% else %}
                                     <div class="col-3">
-                                        <label><input type="radio" name="menu_display_yn" value="y" required> 공개</label>
+                                        <label><input name="menu_display_yn" required type="radio" value="y"> 공개</label>
                                     </div>
                                     <div class="col-3">
-                                        <label><input type="radio" name="menu_display_yn" value="n" checked required> 비공개</label>
+                                        <label><input checked name="menu_display_yn" required type="radio" value="n">
+                                            비공개</label>
                                     </div>
                                     {% endif %}
                                 </div>
@@ -151,8 +164,8 @@
                     </div>
                     <!-- end of menu modify  Modal content -->
                 </div>
-                <div style="text-align: right" class="modal-footer">
-                    <button type="submit" class="btn btn-outline-warning">수정 완료</button>
+                <div class="modal-footer" style="text-align: right">
+                    <button class="btn btn-outline-warning" type="submit">수정 완료</button>
                 </div>
             </form>
         </div>

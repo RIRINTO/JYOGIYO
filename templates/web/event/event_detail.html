@@ -58,11 +58,12 @@
         $('input[name=attach_path]').val('');
         $('input[name=attach_file]').val('');
     }
-    	$(function() {
-		$('#e_content').html(
-				$('#e_content').html().replaceAll('\r', '').replaceAll('\n',
-						'<br>'))
-	})
+
+    $(function () {
+        $('#e_content').html(
+            $('#e_content').html().replaceAll('\r', '').replaceAll('\n',
+                '<br>'))
+    })
 
 </script>
 
@@ -91,17 +92,21 @@
                         {% if event.attach_file %}
                         <div class="col-4"><p><b>이미지</b></p></div>
                         <div class="card col-8">
-                                <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}">
+                            <img src="downloads?path={{event.attach_path}}&file={{event.attach_file}}">
                         </div>
                         {% endif %}
                         <div class="col-4"><p><b>이벤트기간</b></p></div>
                         <div class="col-8"><p>{{event.event_start}} ~ {{event.event_end}}</p></div>
                     </div>
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-outline-success" onclick="fn_event_list()">목록</button>
+                        <button class="btn btn-outline-success" onclick="fn_event_list()" type="button">목록</button>
                         {% if session.owner.admin_yn!="y" %}
-                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#EventModModal">수정</button>
-                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#EventDelModal">삭제</button>
+                        <button class="btn btn-outline-warning" data-target="#EventModModal" data-toggle="modal"
+                                type="button">수정
+                        </button>
+                        <button class="btn btn-outline-danger" data-target="#EventDelModal" data-toggle="modal"
+                                type="button">삭제
+                        </button>
                         {% endif %}
                     </div>
                 </div>
@@ -112,12 +117,13 @@
 
 
 <!-- event modify Modal-->
-<div class="modal fade" id="EventModModal" tabindex="-1" role="dialog" aria-labelledby="eventmodmodalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="eventmodmodalLabel" class="modal fade" id="EventModModal" role="dialog"
+     tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="eventmodmodalLabel">이벤트 수정</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -129,10 +135,10 @@
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
-                            <form action="event_modact" method="post" name="event_mod" enctype="multipart/form-data">
-                                <input type="hidden" value="{{event.event_seq}}" name="event_seq">
-                                <input type="hidden" value="{{event.attach_path}}" name="attach_path">
-                                <input type="hidden" value="{{event.attach_file}}" name="attach_file">
+                            <form action="event_modact" enctype="multipart/form-data" method="post" name="event_mod">
+                                <input name="event_seq" type="hidden" value="{{event.event_seq}}">
+                                <input name="attach_path" type="hidden" value="{{event.attach_path}}">
+                                <input name="attach_file" type="hidden" value="{{event.attach_file}}">
                                 <table class="table" style="text-align: center">
                                     <tr>
                                         <th>순번</th>
@@ -141,34 +147,38 @@
 
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" class="form-control" value="{{event.event_title}}" name="event_title" style="text-align: center;"></td>
+                                        <td><input class="form-control" name="event_title" style="text-align: center;"
+                                                   type="text" value="{{event.event_title}}"></td>
                                     </tr>
 
                                     <tr>
                                         <th>내용</th>
                                         <td>
-                                            <textarea class="form-control" rows="5" name="event_content">{{event.event_content}}</textarea>
+                                            <textarea class="form-control" name="event_content" rows="5">{{event.event_content}}</textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>이미지</th>
                                         <td>
-                                          {% if event.attach_file %}
-                                            <a id="attach" href="javascript:fn_del_ajax()">{{event.attach_file}} x</a>
-                                            <input type="file" class="form-control-file border invisible" name="event_file">
+                                            {% if event.attach_file %}
+                                            <a href="javascript:fn_del_ajax()" id="attach">{{event.attach_file}} x</a>
+                                            <input class="form-control-file border invisible" name="event_file"
+                                                   type="file">
                                             {% else %}
-                                            <input type="file" class="form-control-file border" name="event_file">
-                                          {% endif %}
+                                            <input class="form-control-file border" name="event_file" type="file">
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>이벤트기간</th>
                                         <td>
                                             시작일
-                                            <input type="date" class="form-control" value="{{event.event_start}}" name="event_start">
+                                            <input class="form-control" name="event_start" type="date"
+                                                   value="{{event.event_start}}">
                                             <br>
                                             마감일
-                                            <input type="date" class="form-control" value="{{event.event_end}}" name="event_end">
+                                            <input class="form-control" name="event_end" type="date"
+                                                   value="{{event.event_end}}">
                                         </td>
                                     </tr>
                                 </table>
@@ -178,8 +188,9 @@
                 </div>
                 <!-- end of event modify  Modal content -->
             </div>
-            <div style="text-align: right" class="modal-footer">
-                <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_mod()">수정 완료</button>
+            <div class="modal-footer" style="text-align: right">
+                <button class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_mod()" type="button">수정 완료
+                </button>
             </div>
         </div>
     </div>
@@ -188,20 +199,20 @@
 
 
 <!-- event delete Modal-->
-<div class="modal fade" id="EventDelModal" tabindex="-1" role="dialog" aria-labelledby="eventmodalDel"
-     aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="eventmodalDel" class="modal fade" id="EventDelModal" role="dialog"
+     tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="eventmodalDel">이벤트를 삭제 하시겠습니까?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">하단의 "삭제" 버튼을 누르시면 삭제됩니다.</div>
             <div class="modal-footer">
-                <a class="btn btn-danger" href="#" data-dismiss="modal" onclick="fn_del()">삭제</a>
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                <a class="btn btn-danger" data-dismiss="modal" href="#" onclick="fn_del()">삭제</a>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">취소</button>
             </div>
         </div>
     </div>

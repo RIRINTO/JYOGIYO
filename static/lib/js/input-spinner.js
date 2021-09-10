@@ -11,7 +11,7 @@
     var I18nEditor = function (props, element) {
         var locale = props.locale || "en-US"
 
-        this.parse = function(customFormat) {
+        this.parse = function (customFormat) {
             var numberFormat = new Intl.NumberFormat(locale)
             var thousandSeparator = numberFormat.format(11111).replace(/1/g, '') || '.'
             var decimalSeparator = numberFormat.format(1.1).replace(/1/g, '')
@@ -22,7 +22,7 @@
             )
         }
 
-        this.render = function(number) {
+        this.render = function (number) {
             var decimals = parseInt(element.getAttribute("data-decimals")) || 0
             var digitGrouping = !(element.getAttribute("data-digit-grouping") === "false")
             var numberFormat = new Intl.NumberFormat(locale, {

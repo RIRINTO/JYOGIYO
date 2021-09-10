@@ -1,6 +1,6 @@
+import configparser
 import cx_Oracle
 import mybatis_mapper2sql
-import configparser
 
 
 def menuSort(menuList: list):
@@ -26,7 +26,8 @@ class DaoMenu:
     def __init__(self, config_path='config.ini', xml_path='dao/menu.xml'):
         config = configparser.ConfigParser()
         config.read(config_path)
-        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database']['hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
+        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database'][
+            'hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
         self.conn = cx_Oracle.connect(database)
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
@@ -59,20 +60,24 @@ class DaoMenu:
         self.cs.execute(sql, (menu_seq, owner_seq))
         return menuSort(self.cs.fetchone())
 
-    def insert(self, owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file):
+    def insert(self, owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path,
+               attach_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq, owner_seq))
+        self.cs.execute(sql, (
+        owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq,
+        owner_seq))
         self.conn.commit()
         return self.cs.rowcount
 
-    def update(self, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, up_user_id, menu_seq):
+    def update(self, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file,
+               up_user_id, menu_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
-        self.cs.execute(sql, (cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, up_user_id, menu_seq))
+        self.cs.execute(sql, (
+        cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, up_user_id, menu_seq))
         self.conn.commit()
         return self.cs.rowcount
 
-
-    def menuCntChart(self,owner_seq, month):
+    def menuCntChart(self, owner_seq, month):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "menuCntChart")
         rs = self.cs.execute(sql, (owner_seq, month,))
         list = []
@@ -82,7 +87,7 @@ class DaoMenu:
                          'menu_cnt': record[2]})
         return list
 
-    def menuSalesChart(self,owner_seq,month):
+    def menuSalesChart(self, owner_seq, month):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "menuSalesChart")
         rs = self.cs.execute(sql, (owner_seq, month,))
         list = []
@@ -92,7 +97,7 @@ class DaoMenu:
                          'menu_sales': record[2]})
         return list
 
-    def salesChart(self,owner_seq, months):
+    def salesChart(self, owner_seq, months):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "salesChart")
         rs = self.cs.execute(sql, (owner_seq, months,))
         list = []
@@ -130,6 +135,7 @@ if __name__ == '__main__':
 
     from dateutil.relativedelta import relativedelta
     from datetime import datetime
+
     thismonth = datetime.now().strftime("%Y-%m")
     lastmonth = (datetime.now() - relativedelta(months=1)).strftime("%Y-%m")
     print(thismonth, lastmonth)

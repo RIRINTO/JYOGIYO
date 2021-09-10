@@ -19,9 +19,12 @@
         div += '                                    <p class="col-12"></p>\n'
         div += '                                    <div class="col-2">\n'
         div += '                                        <select class="form-control" name="cateseq_' + menunum + '" required>\n'
-        {% for category in categoryList %}
+        {%
+            for category in categoryList %}
         div += '                                            <option value="{{category.cate_seq}}">{{category.cate_name}}</option>\n'
-        {% endfor %}
+        {%
+            endfor %
+        }
         div += '                                        </select>\n'
         div += '                                    </div>\n'
         div += '                                    <div class="col-2"><input type="text" class="form-control" name="menuname_' + menunum + '" required></div>\n'
@@ -56,7 +59,7 @@
                     <h6 class="m-0 font-weight-bold text-dark">여러 메뉴 추가</h6>
                 </div>
                 <!-- Card Body -->
-                <form action="multi_menu_add_form" method="post" enctype="multipart/form-data">
+                <form action="multi_menu_add_form" enctype="multipart/form-data" method="post">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -78,18 +81,24 @@
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <div class="col-2"><input type="text" class="form-control" name="menuname_0" required></div>
-                                        <div class="col-2"><input type="number" class="form-control" name="menu_price_0" min="0" required></div>
-                                        <div class="col-2"><input type="text" class="form-control" name="menu_content_0" required></div>
-                                        <div class="col-2"><input type="file" name="file_0" class="form-control-file border" required></div>
+                                        <div class="col-2"><input class="form-control" name="menuname_0" required
+                                                                  type="text"></div>
+                                        <div class="col-2"><input class="form-control" min="0" name="menu_price_0"
+                                                                  required type="number"></div>
+                                        <div class="col-2"><input class="form-control" name="menu_content_0" required
+                                                                  type="text"></div>
+                                        <div class="col-2"><input class="form-control-file border" name="file_0"
+                                                                  required type="file"></div>
                                         <div class="col-1">
                                             <select class="form-control" name="menu_display_yn_0" required>
-                                                <option value="y" selected>공개</option>
+                                                <option selected value="y">공개</option>
                                                 <option value="n">비공개</option>
                                             </select>
                                         </div>
                                         <div class="col-1">
-                                            <button type="button" class="btn btn-outline-primary" onclick="add_menu()">+</button>
+                                            <button class="btn btn-outline-primary" onclick="add_menu()" type="button">
+                                                +
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -97,8 +106,8 @@
                         </div>
                         <!-- end of menu modify  Modal content -->
                     </div>
-                    <div style="text-align: right" class="modal-footer">
-                        <button type="submit" class="btn btn-outline-warning">추가하기</button>
+                    <div class="modal-footer" style="text-align: right">
+                        <button class="btn btn-outline-warning" type="submit">추가하기</button>
                     </div>
                 </form>
             </div>

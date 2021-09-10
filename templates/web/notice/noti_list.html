@@ -32,7 +32,9 @@
                 <div class="card-body">
                     {% if session.owner.admin_yn == "y" %}
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#NotiAddModal">추가</button>
+                        <button class="btn btn-outline-primary" data-target="#NotiAddModal" data-toggle="modal"
+                                type="button">추가
+                        </button>
                     </div>
                     {% endif %}
                     <br>
@@ -63,12 +65,13 @@
 </div>
 
 <!-- notice modify Modal-->
-<div class="modal fade" id="NotiAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="NotiAddModal" role="dialog"
+     tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="NotiAddModalLabel">공지사항 추가</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -80,31 +83,35 @@
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
-                            <form name="noti_add_form" action="noti_add" method="post" enctype="multipart/form-data">
+                            <form action="noti_add" enctype="multipart/form-data" method="post" name="noti_add_form">
                                 <table class="table" style="text-align: center">
 
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" name="noti_title" class="form-control" placeholder="공지사항의 제목을 입력해주세요." required></td>
+                                        <td><input class="form-control" name="noti_title" placeholder="공지사항의 제목을 입력해주세요."
+                                                   required type="text"></td>
                                     </tr>
 
                                     <tr>
                                         <th>내용</th>
                                         <td>
-                                            <textarea class="form-control" name="noti_content" rows="5" cols="100" placeholder="공지사항의 내용을 입력해주세요." required></textarea>
+                                            <textarea class="form-control" cols="100" name="noti_content" placeholder="공지사항의 내용을 입력해주세요."
+                                                      required rows="5"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>첨부파일</th>
                                         <td>
-                                            <input type="file" name="noti_file">
+                                            <input name="noti_file" type="file">
                                         </td>
                                     </tr>
 
                                 </table>
-					            <div style="text-align: right" class="modal-footer">
-					                <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_noti_add()">추가완료</button>
-					            </div>
+                                <div class="modal-footer" style="text-align: right">
+                                    <button class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_noti_add()"
+                                            type="button">추가완료
+                                    </button>
+                                </div>
                             </form>
 
                         </div>

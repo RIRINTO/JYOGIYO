@@ -1,6 +1,6 @@
+import configparser
 import cx_Oracle
 import mybatis_mapper2sql
-import configparser
 
 
 def categorySort(categoryList: list):
@@ -17,14 +17,15 @@ def categorySort(categoryList: list):
                 "up_date": categoryList[9],
                 "up_user_id": categoryList[10]}
     else:
-        return None 
+        return None
 
 
 class DaoCategory:
     def __init__(self, config_path='config.ini', xml_path='dao/category.xml'):
         config = configparser.ConfigParser()
         config.read(config_path)
-        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database']['hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
+        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database'][
+            'hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
         self.conn = cx_Oracle.connect(database)
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
@@ -44,8 +45,6 @@ class DaoCategory:
         self.cs.execute(sql, (owner_seq,))
         return list(map(categorySort, self.cs.fetchall()))
 
-
-
     def select(self, owner_seq, cate_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select")
         self.cs.execute(sql, (owner_seq, cate_seq))
@@ -53,14 +52,17 @@ class DaoCategory:
 
     def myinsert(self, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, owner_seq, owner_seq))
+        self.cs.execute(sql, (
+        owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, owner_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
 
-    def myupdate(self, cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def myupdate(self, cate_seq, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, in_date,
+                 in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
-        self.cs.execute(sql, (owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, up_user_id, cate_seq))
+        self.cs.execute(sql, (
+        owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, up_user_id, cate_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

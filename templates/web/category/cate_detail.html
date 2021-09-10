@@ -29,35 +29,35 @@
     function fn_cate_mod() {
         document.cate_mod_form.submit()
     }
-    
-	function fn_cate_img_del() {
-		var cate_seq = "{{cate.cate_seq}}"
 
-		var param = "";
-		param += "dummy=" + Math.random();
-		param += "&cate_seq=" + cate_seq;
+    function fn_cate_img_del() {
+        var cate_seq = "{{cate.cate_seq}}"
 
-		$.ajax({
-			type : "post", 
-			url : "cate_del_img.ajax",
-			dataType : "json",
-			data : param,
-			error : function() {
-				alert('통신 불가');
-			},
-			success : function(data) {
-				if (data.msg == 'ok') {
-					$('#attach').next().removeClass('invisible')
-					$('#attach').remove();
-				} else {
-					alert('삭제 도중 문제가 발생하였습니다.');
-				}
-			}
-		});
-		
+        var param = "";
+        param += "dummy=" + Math.random();
+        param += "&cate_seq=" + cate_seq;
+
+        $.ajax({
+            type: "post",
+            url: "cate_del_img.ajax",
+            dataType: "json",
+            data: param,
+            error: function () {
+                alert('통신 불가');
+            },
+            success: function (data) {
+                if (data.msg == 'ok') {
+                    $('#attach').next().removeClass('invisible')
+                    $('#attach').remove();
+                } else {
+                    alert('삭제 도중 문제가 발생하였습니다.');
+                }
+            }
+        });
+
         $('input[name=attach_path]').val('');
         $('input[name=attach_file]').val('');
-	}
+    }
 </script>
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -83,16 +83,17 @@
                             <td>{{cate.cate_name}}</td>
                         </tr>
 
-                       
+
                         {% if cate.attach_file %}
-							<tr>
-								<th>상세이미지</th>
-								<td>
-									<img src="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}" width="200px" height="200px">
-								</td>
-							</tr>
-						{% endif %}
-                       
+                        <tr>
+                            <th>상세이미지</th>
+                            <td>
+                                <img height="200px" src="downloads?path={{cate.attach_path}}&file={{cate.attach_file}}"
+                                     width="200px">
+                            </td>
+                        </tr>
+                        {% endif %}
+
                         {% if cate.cate_content %}
                         <tr>
                             <th>설명</th>
@@ -102,18 +103,20 @@
 
                         <tr>
                             <th>공개여부</th>
-							{% if cate.cate_display_yn == "y" %}
-                                <td>표시</td>
+                            {% if cate.cate_display_yn == "y" %}
+                            <td>표시</td>
                             {% else %}
-                                <td>비표시</td>
-							{% endif %}
+                            <td>비표시</td>
+                            {% endif %}
                             </td>
                         </tr>
 
                     </table>
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-outline-success" onclick="fn_cate_list()">목록</button>
-                        <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#CateModModal">수정</button>
+                        <button class="btn btn-outline-success" onclick="fn_cate_list()" type="button">목록</button>
+                        <button class="btn btn-outline-warning" data-target="#CateModModal" data-toggle="modal"
+                                type="button">수정
+                        </button>
                     </div>
 
                 </div>
@@ -125,12 +128,13 @@
 
 <!-- category modify Modal-->
 
-<div class="modal fade" id="CateModModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="CateModModal" role="dialog"
+     tabindex="-1">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="CateModalLabel">카테고리 수정</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -141,63 +145,67 @@
                 <div class="row">
                     <div class="col-xl-12 col-lg-12">
                         <div class="card shadow mb-4">
-							<!-- Card Header - Dropdown -->
-                        	<form name="cate_mod_form" action="cate_mod" method="post" enctype="multipart/form-data">
-                        	<input type="hidden" name="cate_seq" value="{{cate.cate_seq}}">
-                        	<input type="hidden" name="attach_path" value="{{cate.attach_path}}">
-                        	<input type="hidden" name="attach_file" value="{{cate.attach_file}}">
-                        
-                        
-	                            <table class="table" style="text-align: center">
-	                                <tr>
-	                                    <th>순번</th>
-	                                    <td>{{cate.cate_seq}}</td>
-	                                </tr>
-	
-	                                <tr>
-	                                    <th>카테고리명</th>
-	                                    <td><input name="cate_name" type="text" class="form-control" value="{{cate.cate_name}}"></td>
-	                                </tr>
-	                                
-	                                <tr>
-	                                    <th>설명</th>
-	                                    
-	                                    {% if cate.cate_content %}
-	                                    <td>
-	                                        <textarea name="cate_content" class="form-control" rows="5" cols="100">{{cate.cate_content}}</textarea>
-	                                    </td>
-	                                    {% else %}
-	                                    <td>
-	                                        <textarea name="cate_content" class="form-control" rows="5" cols="100"></textarea>
-	                                    </td>
-	                                    {% endif %}
-	                                </tr>
-	                                
-	                                <tr>
-	                                    <th>첨부파일</th>
-	                                    <td>
-	                                    {% if cate.attach_file %} 
-											<a id="attach" href="javascript:fn_cate_img_del()">{{cate.attach_file}} x</a> 
-											<input type="file" class="form-control-file border invisible" name="cate_file">
-										{% else %} 
-											<input type="file" class="form-control-file border" name="cate_file"> 
-										{% endif %}
-	                                    </td>
-	                                </tr>
-	
-	                                <tr>
-	                                    <th>공개여부</th>
-	                                    <td>
-	                                        {% if cate.cate_display_yn == 'y' %}
-	                                        <input type="radio" name="cate_display_yn" value="y" checked required> 표시
-	                                        <input type="radio" name="cate_display_yn" value="n" required> 비표시
-	                                        {% else %}
-	                                        <input type="radio" name="cate_display_yn" value="y" required> 표시
-	                                        <input type="radio" name="cate_display_yn" value="n" checked required> 비표시
-	                                        {% endif %}
-	                                    </td>
-	                                </tr>
-	                            </table>
+                            <!-- Card Header - Dropdown -->
+                            <form action="cate_mod" enctype="multipart/form-data" method="post" name="cate_mod_form">
+                                <input name="cate_seq" type="hidden" value="{{cate.cate_seq}}">
+                                <input name="attach_path" type="hidden" value="{{cate.attach_path}}">
+                                <input name="attach_file" type="hidden" value="{{cate.attach_file}}">
+
+
+                                <table class="table" style="text-align: center">
+                                    <tr>
+                                        <th>순번</th>
+                                        <td>{{cate.cate_seq}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>카테고리명</th>
+                                        <td><input class="form-control" name="cate_name" type="text"
+                                                   value="{{cate.cate_name}}"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>설명</th>
+
+                                        {% if cate.cate_content %}
+                                        <td>
+                                            <textarea class="form-control" cols="100" name="cate_content" rows="5">{{cate.cate_content}}</textarea>
+                                        </td>
+                                        {% else %}
+                                        <td>
+                                            <textarea class="form-control" cols="100" name="cate_content"
+                                                      rows="5"></textarea>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+
+                                    <tr>
+                                        <th>첨부파일</th>
+                                        <td>
+                                            {% if cate.attach_file %}
+                                            <a href="javascript:fn_cate_img_del()" id="attach">{{cate.attach_file}}
+                                                x</a>
+                                            <input class="form-control-file border invisible" name="cate_file"
+                                                   type="file">
+                                            {% else %}
+                                            <input class="form-control-file border" name="cate_file" type="file">
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>공개여부</th>
+                                        <td>
+                                            {% if cate.cate_display_yn == 'y' %}
+                                            <input checked name="cate_display_yn" required type="radio" value="y"> 표시
+                                            <input name="cate_display_yn" required type="radio" value="n"> 비표시
+                                            {% else %}
+                                            <input name="cate_display_yn" required type="radio" value="y"> 표시
+                                            <input checked name="cate_display_yn" required type="radio" value="n"> 비표시
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
                             </form>
                         </div>
                     </div>
@@ -205,8 +213,10 @@
 
                 <!-- end of category modify Modal content -->
             </div>
-            <div style="text-align: right" class="modal-footer">
-                <button type="button" class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_cate_mod()">수정 완료</button>
+            <div class="modal-footer" style="text-align: right">
+                <button class="btn btn-outline-warning" data-dismiss="modal" onclick="fn_cate_mod()" type="button">수정
+                    완료
+                </button>
             </div>
         </div>
     </div>

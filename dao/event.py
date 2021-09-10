@@ -1,13 +1,14 @@
+import configparser
 import cx_Oracle
 import mybatis_mapper2sql
-import configparser
 
 
 class DaoEvent:
     def __init__(self, config_path='config.ini', xml_path='dao/event.xml'):
         config = configparser.ConfigParser()
         config.read(config_path)
-        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database']['hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
+        database = config['database']['username'] + '/' + config['database']['password'] + '@' + config['database'][
+            'hostname'] + ':' + config['database']['port'] + '/' + config['database']['sid']
         self.conn = cx_Oracle.connect(database)
         self.cs = self.conn.cursor()
         self.mapper = mybatis_mapper2sql.create_mapper(xml=xml_path)[0]
@@ -17,9 +18,11 @@ class DaoEvent:
         rs = self.cs.execute(sql, (owner_seq,))
         list = []
         for record in rs:
-            list.append({'owner_seq': record[0], 'event_seq': record[1], 'event_title': record[2], 'event_content': record[3]
-                            , 'event_start': record[4], 'event_end': record[5], 'attach_path': record[6], 'attach_file': record[7]
-                            , 'in_date': record[8], 'in_user_id': record[9], 'up_date': record[10], 'up_user_id': record[11]})
+            list.append(
+                {'owner_seq': record[0], 'event_seq': record[1], 'event_title': record[2], 'event_content': record[3]
+                    , 'event_start': record[4], 'event_end': record[5], 'attach_path': record[6],
+                 'attach_file': record[7]
+                    , 'in_date': record[8], 'in_user_id': record[9], 'up_date': record[10], 'up_user_id': record[11]})
         return list
 
     def select(self, owner_seq, event_seq):
@@ -32,16 +35,21 @@ class DaoEvent:
                 , 'in_date': record[8], 'in_user_id': record[9], 'up_date': record[10], 'up_user_id': record[11]}
         return obj
 
-    def insert(self, owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def insert(self, owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file,
+               in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
-        self.cs.execute(sql, (owner_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, in_user_id, up_user_id))
+        self.cs.execute(sql, (
+        owner_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, in_user_id,
+        up_user_id))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
 
-    def update(self, owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, in_date, in_user_id, up_date, up_user_id):
+    def update(self, owner_seq, event_seq, event_title, event_content, event_start, event_end, attach_path, attach_file,
+               in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
-        self.cs.execute(sql, (event_title, event_content, event_start, event_end, attach_path, attach_file, owner_seq, event_seq, owner_seq))
+        self.cs.execute(sql, (
+        event_title, event_content, event_start, event_end, attach_path, attach_file, owner_seq, event_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
