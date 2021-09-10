@@ -1,18 +1,29 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="lib/bootstrap/4.6.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/f9954cbb85.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
     <link href="lib/SB-Admin-2/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="lib/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
-    <script src="lib/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="lib/charts/loader.js"></script>
     <script src="lib/SB-Admin-2/js/sb-admin-2.min.js"></script>
-    <script type="text/javascript" src="lib/Chart.js/3.1.0/chart.min.js"></script>
-    <link rel="icon" href="favicon-16x16.png" type = "image/x-icon">
-    
+
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
+
 
 </head>
 
@@ -24,34 +35,43 @@
     <!-- Sidebar -->
     <ul class="navbar-nav sidebar bg-danger sidebar-dark accordion" id="accordionSidebar">
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard"> <img src="downloads?path=uploads/img&file=logo_white.png" alt="logo_white" width="100px" height="auto"></a>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard"> <img
+                src="downloads?path=uploads/img&file=logo_white.png" alt="logo_white" width="100px" height="auto"></a>
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item"><a class="nav-link" href="dashboard"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider">
         <!-- Nav Item - Tables -->
-        <li class="nav-item"><a class="nav-link" href="noti_list"> <i class="fas fa-fw fa-table"></i> <span>공지사항</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="noti_list"> <i class="fas fa-fw fa-table"></i> <span>공지사항</span></a>
+        </li>
         <!-- Divider -->
         {% if session.owner.admin_yn == "N" or session.owner.admin_yn == "n" %}
-	        <hr class="sidebar-divider d-none d-md-block">
-	        <!-- Nav Item - Charts -->
-	        <li class="nav-item"><a class="nav-link" href="cate_list"> <i class="fas fa-fw fa-chart-area"></i> <span>카테고리 관리</span></a></li>
-	        <!-- Nav Item - Tables -->
-	        <li class="nav-item"><a class="nav-link" href="menu_list"> <i class="fas fa-fw fa-chart-area"></i> <span>메뉴 관리</span></a></li>
-	        <!-- Nav Item - Tables -->
-	        <li class="nav-item"><a class="nav-link" href="event_list"> <i class="fas fa-fw fa-table"></i> <span>이벤트 관리</span></a></li>
+        <hr class="sidebar-divider d-none d-md-block">
+        <!-- Nav Item - Charts -->
+        <li class="nav-item"><a class="nav-link" href="cate_list"> <i class="fas fa-fw fa-chart-area"></i>
+            <span>카테고리 관리</span></a></li>
+        <!-- Nav Item - Tables -->
+        <li class="nav-item"><a class="nav-link" href="menu_list"> <i class="fas fa-fw fa-chart-area"></i>
+            <span>메뉴 관리</span></a></li>
+        <!-- Nav Item - Tables -->
+        <li class="nav-item"><a class="nav-link" href="event_list"> <i class="fas fa-fw fa-table"></i>
+            <span>이벤트 관리</span></a></li>
         {% endif %}
-	        <li class="nav-item"><a class="nav-link" href="sys_ques_list"> <i class="fas fa-fw fa-chart-area"></i> <span>시스템 문의사항</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="sys_ques_list"> <i class="fas fa-fw fa-chart-area"></i> <span>시스템 문의사항</span></a>
+        </li>
         <hr class="sidebar-divider d-none d-md-block">
         <!-- Nav Item - Charts -->
         {% if session.owner.admin_yn == "N" or session.owner.admin_yn == "n" %}
-        <li class="nav-item"><a class="nav-link" href="voc_list"> <i class="fas fa-fw fa-chart-area"></i> <span>고객소리함</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="voc_list"> <i class="fas fa-fw fa-chart-area"></i>
+            <span>고객소리함</span></a></li>
         <hr class="sidebar-divider d-none d-md-block">
         {% endif %}
         <!-- Divider -->
         <!-- Nav Item - Charts -->
         {% if session.owner.admin_yn == "Y" or session.owner.admin_yn == "y" %}
-		<li class="nav-item"><a class="nav-link" href="store_list"> <i class="fas fa-fw fa-chart-area"></i> <span>가맹점 관리</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="store_list"> <i class="fas fa-fw fa-chart-area"></i>
+            <span>가맹점 관리</span></a></li>
         {% endif %}
     </ul>
     <!-- End of Sidebar -->
@@ -69,20 +89,26 @@
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
                     {% if session.owner.admin_yn == "N" %}
-					<li class="navbar nav ml-auto">
-						<button type="button" class="btn btn-warning btn-sm btn-block" onclick="location.href='kiosk_home'">키오스크</button>
-					</li>
-					{% endif %}
+                    <li class="navbar nav ml-auto">
+                        <button type="button" class="btn btn-warning btn-sm btn-block"
+                                onclick="location.href='kiosk_home'">키오스크
+                        </button>
+                    </li>
+                    {% endif %}
                     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                     <li class="nav-item dropdown no-arrow d-sm-none">
-                    	<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    		<i class="fas fa-search fa-fw"></i>
-                    	</a>
-                    <!-- Dropdown - Messages -->
-                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <!-- Dropdown - Messages -->
+                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                             aria-labelledby="searchDropdown">
                             <form class="form-inline mr-auto w-100 navbar-search">
                                 <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                    <input type="text" class="form-control bg-light border-0 small"
+                                           placeholder="Search for..." aria-label="Search"
+                                           aria-describedby="basic-addon2">
                                     <div class="input-group-append">
                                         <button class="btn btn-dark" type="button">
                                             <i class="fas fa-search fa-sm"></i>
@@ -97,20 +123,28 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
-                    	<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    		<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{session.owner.owner_name}}</span>
-                    		<img class="img-profile rounded-circle" src="downloads?path={{session.owner.logo_path}}&file={{session.owner.logo_file}}">
-                    </a> <!-- Dropdown - User Information -->
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{session.owner.owner_name}}</span>
+                            <img class="img-profile rounded-circle"
+                                 src="downloads?path={{session.owner.logo_path}}&file={{session.owner.logo_file}}">
+                        </a> <!-- Dropdown - User Information -->
                         {% if session.owner.admin_yn == "N" %}
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="account_show"> <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 정보 보기</a>
-                            <a class="dropdown-item" href="account_manage"> <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> 정보 수정</a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="account_show"> <i
+                                    class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 정보 보기</a>
+                            <a class="dropdown-item" href="account_manage"> <i
+                                    class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> 정보 수정</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i
+                                    class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
                         </div>
                         {% else %}
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i
+                                    class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> 로그아웃</a>
                         </div>
                         {% endif %}
                     </li>
