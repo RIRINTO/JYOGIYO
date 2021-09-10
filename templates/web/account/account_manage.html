@@ -163,7 +163,8 @@
                                 <span class="badge badge-pill"></span>
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control form-control-user" name="owner_pwd_check" placeholder="비밀번호 확인"
+                                <input class="form-control form-control-user" name="owner_pwd_check"
+                                       placeholder="비밀번호 확인"
                                        type="password" value="{{owner.owner_pwd}}">
                                 <span class="badge badge-pill"></span>
                             </div>
@@ -175,7 +176,8 @@
                                    required type="text" value="{{owner.owner_str_name}}">
                         </div>
                         <div class="form-group">
-                            <input class="form-control form-control-user" name="owner_str_num" placeholder="사업자등록번호 또는 가맹점번호"
+                            <input class="form-control form-control-user" name="owner_str_num"
+                                   placeholder="사업자등록번호 또는 가맹점번호"
                                    readonly required type="text" value="{{owner.owner_str_num}}">
                         </div>
 
@@ -192,7 +194,9 @@
                             <div class="col-8" id="logo_image">
                                 {% if owner.logo_file %}
                                 <p>
-                                    <img alt="img" data-img="downloads?path={{owner.logo_path}}&file={{owner.logo_file}}" data-placement="left"
+                                    <img alt="img"
+                                         data-img="downloads?path={{owner.logo_path}}&file={{owner.logo_file}}"
+                                         data-placement="left"
                                          data-toggle="popover" height="auto"
                                          src="downloads?path=uploads/img&file=img.svg"
                                          width="25px">
@@ -213,7 +217,8 @@
                                        readonly required type="text" value="{{owner.owner_add1}}">
                             </div>
                             <div class="col-4">
-                                <button class="btn btn-primary btn-user" data-target="#AddSearchModal" data-toggle="modal"
+                                <button class="btn btn-primary btn-user" data-target="#AddSearchModal"
+                                        data-toggle="modal"
                                         type="button">주소검색
                                 </button>
                             </div>

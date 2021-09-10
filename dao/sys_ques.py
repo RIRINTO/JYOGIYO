@@ -1,4 +1,5 @@
 import configparser
+
 import cx_Oracle
 import mybatis_mapper2sql
 
@@ -45,8 +46,8 @@ class DaoSysQues:
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
         #         mylog().getlogger().debug(sql)
         self.cs.execute(sql, (
-        owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, owner_seq,
-        owner_seq))
+            owner_seq, sys_ques_title, sys_ques_content, sys_ques_display_yn, attach_path, attach_file, owner_seq,
+            owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

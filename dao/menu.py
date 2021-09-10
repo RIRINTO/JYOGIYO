@@ -1,4 +1,5 @@
 import configparser
+
 import cx_Oracle
 import mybatis_mapper2sql
 
@@ -64,8 +65,9 @@ class DaoMenu:
                attach_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
         self.cs.execute(sql, (
-        owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, owner_seq,
-        owner_seq))
+            owner_seq, cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file,
+            owner_seq,
+            owner_seq))
         self.conn.commit()
         return self.cs.rowcount
 
@@ -73,7 +75,8 @@ class DaoMenu:
                up_user_id, menu_seq):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         self.cs.execute(sql, (
-        cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, up_user_id, menu_seq))
+            cate_seq, menu_name, menu_price, menu_content, menu_display_yn, attach_path, attach_file, up_user_id,
+            menu_seq))
         self.conn.commit()
         return self.cs.rowcount
 

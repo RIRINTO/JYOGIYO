@@ -1,4 +1,5 @@
 import configparser
+
 import cx_Oracle
 import mybatis_mapper2sql
 
@@ -39,8 +40,8 @@ class DaoEvent:
                in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
         self.cs.execute(sql, (
-        owner_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, in_user_id,
-        up_user_id))
+            owner_seq, event_title, event_content, event_start, event_end, attach_path, attach_file, in_user_id,
+            up_user_id))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
@@ -49,7 +50,8 @@ class DaoEvent:
                in_date, in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         self.cs.execute(sql, (
-        event_title, event_content, event_start, event_end, attach_path, attach_file, owner_seq, event_seq, owner_seq))
+            event_title, event_content, event_start, event_end, attach_path, attach_file, owner_seq, event_seq,
+            owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt

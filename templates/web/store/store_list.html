@@ -2,6 +2,8 @@
 {% block content %}
 
 
+
+
 <script>
     $('span').each(function () {
         if ($(this).html() === "Dashboard") {
@@ -11,82 +13,60 @@
     });
 
 
+
     $(function () {
         var labels = []
         var datas = []
-        {%
-            for storechart in storeschart %}
-        labels.push('{{storechart.store_name}}')
-        datas.push({
-        {
-            storechart.store_sales
-        }
-    })
-        {%
-            endfor %
-        }
+    	{% for storechart in storeschart %}
+        	labels.push('{{storechart.store_name}}')
+        	datas.push({{storechart.store_sales}})
+        {% endfor %}
 
-        new Chart(document.getElementById("store_sales"), {
-            type: 'bar',
-            data: {
-                label: '',
-                labels: labels,
-                datasets: [{
-                    data: datas,
+    	new Chart(document.getElementById("store_sales"), {
+    	    type: 'bar',
+    	    data: {
+    	    	label : '',
+    	        labels: labels,
+    	        datasets: [{
+    	            data: datas,
 
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(255, 159, 64, 0.7)',
-                        'rgba(255, 205, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(201, 203, 207, 0.7)'
-                    ],
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
+    	            backgroundColor: [
+    	                'rgba(255, 99, 132, 0.7)',
+    	                'rgba(255, 159, 64, 0.7)',
+    	                'rgba(255, 205, 86, 0.7)',
+    	                'rgba(75, 192, 192, 0.7)',
+    	                'rgba(54, 162, 235, 0.7)',
+    	                'rgba(153, 102, 255, 0.7)',
+    	                'rgba(201, 203, 207, 0.7)'
+    	              ],
+    	        }]
+    	    },
+			options : {
+				responsive: false,
+				plugins : {
+					legend : {
+						display: false
+					}
+				}
+			}
+    	});
 
 
         datas = [[
-            { %
-        for i in saleList[0] %}
+            {% for i in saleList[0] %}
         '{{i}}',
-        { % endfor %
-    }
+            {% endfor %}
 
-    ]]
+        ]]
         let temp = []
 
-        {%
-            for data in saleList[1:
-        ] %
-        }
-        temp = ['{{data[0]}}']
-        {%
-            for dat in data[1:
-        ] %
-        }
-        temp.push({
-        {
-            dat
-        }
-    })
-        {%
-            endfor %
-        }
+        {% for data in saleList[1:] %}
+            temp = ['{{data[0]}}']
+        {% for dat in data[1:] %}
+            temp.push({{dat}})
+        {% endfor %}
         datas.push(temp)
-        {%
-            endfor %
-        }
+        {% endfor %}
         console.log(datas)
 
         google.charts.load('current', {'packages': ['corechart']});
@@ -94,54 +74,54 @@
 
         function drawChart() {
             data = google.visualization.arrayToDataTable(datas)
-            options = {
-                hAxis: {title: '월', titleTextStyle: {color: '#333'}},
-                vAxis: {minValue: 0},
-                legend: 'none',
-                lineWidth: 3,
-                colors: [
-                    '#ff6384', '#ff9f40', '#ffcd56', '#4bc0c0', '#36a2eb', '#9966ff'
-                ],
-            };
-            chart = new google.visualization.LineChart(document.getElementById('months_store'));
-            chart.draw(data, options);
+                options = {
+                    hAxis: {title: '월',  titleTextStyle: {color: '#333'}},
+                    vAxis: {minValue: 0},
+                    legend: 'none',
+                    lineWidth: 3,
+                    colors: [
+                    	'#ff6384', '#ff9f40' , '#ffcd56', '#4bc0c0','#36a2eb','#9966ff'
+                    ],
+                };
+                chart = new google.visualization.LineChart(document.getElementById('months_store'));
+                chart.draw(data, options);
         }
     });
 </script>
 
-<!-- 관리자 차트  -->
-<div class="container-fluid">
-    <!-- Content Row -->
-    <div class="row">
+    <!-- 관리자 차트  -->
+        <div class="container-fluid">
+        <!-- Content Row -->
+        <div class="row">
 
-        <!-- Area Chart -->
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-dark">이번달 가맹점별 매출</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body w-100">
-                    <canvas class="w-100" id="store_sales" style="height: 35vh"></canvas>
+            <!-- Area Chart -->
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-dark">이번달 가맹점별 매출</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body w-100">
+                        <canvas id="store_sales" class="w-100" style="height: 35vh"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-dark">최근 6개월 가맹점별 매출</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body w-100">
-                    <div class="w-100" id="months_store" style="height: 400px"></div>
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-dark">최근 6개월 가맹점별 매출</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body w-100">
+                        <div id="months_store" class="w-100" style="height: 400px"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
  

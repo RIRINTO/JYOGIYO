@@ -1,4 +1,5 @@
 import configparser
+
 import cx_Oracle
 import mybatis_mapper2sql
 
@@ -53,7 +54,7 @@ class DaoCategory:
     def myinsert(self, owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "insert")
         self.cs.execute(sql, (
-        owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, owner_seq, owner_seq))
+            owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, owner_seq, owner_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
@@ -62,7 +63,7 @@ class DaoCategory:
                  in_user_id, up_date, up_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "update")
         self.cs.execute(sql, (
-        owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, up_user_id, cate_seq))
+            owner_seq, cate_name, cate_content, cate_display_yn, attach_path, attach_file, up_user_id, cate_seq))
         self.conn.commit()
         cnt = self.cs.rowcount
         return cnt
