@@ -1,8 +1,8 @@
 import os
+from urllib.parse import urlparse
+
 import requests
 from bs4 import BeautifulSoup as bs
-from urllib.parse import urlparse, unquote
-from urllib.request import urlretrieve
 
 URL = 'https://www.yupdduk.com/sub/hotmenu?mode=1'
 

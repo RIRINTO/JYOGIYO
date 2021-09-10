@@ -1,8 +1,6 @@
 import configparser
 import cx_Oracle
 import mybatis_mapper2sql
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 
 def buySort(buyList: list):

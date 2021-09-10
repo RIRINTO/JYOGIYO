@@ -5,7 +5,6 @@ import re
 import requests
 import smtplib
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from email.mime.text import MIMEText
 from flask import Flask, render_template, redirect, request, session, escape
 from flask.helpers import send_file
@@ -1053,7 +1052,4 @@ def search_menu_ajax():
 
 
 if __name__ == '__main__':
-    # ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-    # ssl_context.load_cert_chain(certfile='ssl/rootCA.pem', keyfile='ssl/rootCA.key', password='java')
-    # app.run(host=HOST, port=PORT, debug=True, ssl_context=ssl_context)
     app.run(host=HOST, port=PORT, debug=True)
